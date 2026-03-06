@@ -105,18 +105,7 @@ main :: proc() {
     fmt.printf("source: %dx%d  pix_fmt=%s\n", src_w, src_h, avutil.get_pix_fmt_name(src_fmt))
 
     // Create a scaling context.
-    sws_ctx := sws.getContext(
-        src_w,
-        src_h,
-        src_fmt,
-        dst_w,
-        dst_h,
-        dst_fmt,
-        sws.Flags{.Bilinear},
-        nil,
-        nil,
-        nil,
-    )
+    sws_ctx := sws.getContext(src_w, src_h, src_fmt, dst_w, dst_h, dst_fmt, sws.Flags{.Bilinear}, nil, nil, nil)
     if sws_ctx == nil {
         fmt.eprintln("could not create sws context")
         os.exit(1)

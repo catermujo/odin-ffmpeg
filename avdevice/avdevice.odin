@@ -4,24 +4,28 @@ import avformat "../avformat"
 import avutil "../avutil"
 import "core:c"
 
+LINK :: #config(FFMPEG_LINK, "system")
+
 when ODIN_OS == .Windows {
-    when #config(FFMPEG_LINK, "shared") == "static" {
-        foreign import avdevice "avdevice_static.lib"
+    when LINK == "static" {
+        foreign import avdevice "../avdevice_static.lib"
+    } else when LINK == "shared" {
+        foreign import avdevice "../avdevice.lib"
     } else {
         foreign import avdevice "avdevice.lib"
     }
 } else when ODIN_OS == .Darwin {
-    when #config(FFMPEG_LINK, "system") == "static" {
+    when LINK == "static" {
         foreign import avdevice "../libavdevice.darwin.a"
-    } else when #config(FFMPEG_LINK, "system") == "shared" {
+    } else when LINK == "shared" {
         foreign import avdevice "../libavdevice.dylib"
     } else {
         foreign import avdevice "system:avdevice"
     }
 } else when ODIN_OS == .Linux {
-    when #config(FFMPEG_LINK, "system") == "static" {
+    when LINK == "static" {
         foreign import avdevice "../libavdevice.linux.a"
-    } else when #config(FFMPEG_LINK, "system") == "shared" {
+    } else when LINK == "shared" {
         foreign import avdevice "../libavdevice.so"
     } else {
         foreign import avdevice "system:avdevice"

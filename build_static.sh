@@ -28,6 +28,10 @@ TARGET_ARCH="${1:-$HOST_ARCH}"
 case "$HOST_OS" in
     Darwin) OS_EXT=darwin; CPUS=$(sysctl -n hw.ncpu) ;;
     Linux)  OS_EXT=linux;  CPUS=$(nproc) ;;
+    MINGW*|MSYS*|CYGWIN*)
+        echo "Error: Windows host detected. Use build_static.bat." >&2
+        exit 1
+        ;;
     *)
         echo "Error: Unsupported OS: $HOST_OS" >&2
         exit 1

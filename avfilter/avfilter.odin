@@ -3,24 +3,50 @@ package avfilter
 import avutil "../avutil"
 import "core:c"
 
+LINK :: #config(FFMPEG_LINK, "system")
+
 when ODIN_OS == .Windows {
-    when #config(FFMPEG_LINK, "shared") == "static" {
-        foreign import avfilter "avfilter_static.lib"
+    when LINK == "static" {
+        foreign import avfilter "../avfilter_static.lib"
+    } else when LINK == "shared" {
+        foreign import avfilter "../avfilter.lib"
     } else {
         foreign import avfilter "avfilter.lib"
     }
 } else when ODIN_OS == .Darwin {
-    when #config(FFMPEG_LINK, "system") == "static" {
+    when LINK == "static" {
+        // Extra system frameworks/libs required by static libavfilter.
+        @(require) foreign import "system:Foundation.framework"
+        @(require) foreign import "system:AudioToolbox.framework"
+        @(require) foreign import "system:CoreAudio.framework"
+        @(require) foreign import "system:OpenGL.framework"
+        @(require) foreign import "system:Metal.framework"
+        @(require) foreign import "system:VideoToolbox.framework"
+        @(require) foreign import "system:CoreImage.framework"
+        @(require) foreign import "system:AppKit.framework"
+        @(require) foreign import "system:CoreFoundation.framework"
+        @(require) foreign import "system:CoreMedia.framework"
+        @(require) foreign import "system:CoreVideo.framework"
+        @(require) foreign import "system:CoreServices.framework"
+        @(require) foreign import "system:Security.framework"
+        @(require) foreign import "system:bz2"
+        @(require) foreign import "system:z"
+        // Pull static transitive deps explicitly for stable link order.
+        @(require) foreign import _avf "../libavformat.darwin.a"
+        @(require) foreign import _avc "../libavcodec.darwin.a"
+        @(require) foreign import _avu "../libavutil.darwin.a"
+        @(require) foreign import _swr "../libswresample.darwin.a"
+        @(require) foreign import _sws "../libswscale.darwin.a"
         foreign import avfilter "../libavfilter.darwin.a"
-    } else when #config(FFMPEG_LINK, "system") == "shared" {
+    } else when LINK == "shared" {
         foreign import avfilter "../libavfilter.dylib"
     } else {
         foreign import avfilter "system:avfilter"
     }
 } else when ODIN_OS == .Linux {
-    when #config(FFMPEG_LINK, "system") == "static" {
+    when LINK == "static" {
         foreign import avfilter "../libavfilter.linux.a"
-    } else when #config(FFMPEG_LINK, "system") == "shared" {
+    } else when LINK == "shared" {
         foreign import avfilter "../libavfilter.so"
     } else {
         foreign import avfilter "system:avfilter"
@@ -41,7 +67,7 @@ FilterFlag :: enum c.int {
     Support_Timeline_Generic  = 16,
     Support_Timeline_Internal = 17,
 }
-FilterFlags :: distinct bit_set[FilterFlag; c.int]
+FilterFlags :: distinct bit_set[FilterFlag;c.int]
 FILTER_FLAG_SUPPORT_TIMELINE :: FilterFlags{.Support_Timeline_Generic, .Support_Timeline_Internal}
 
 FilterPad :: struct {} // opaque; accessed only through avfilter_pad_* functions
@@ -137,8 +163,11 @@ AVFILTER_AUTO_CONVERT_NONE :: -1
 // buffersink.h
 // ---------------------------------------------------------------------------
 
-BufferSinkFlag :: enum c.int { Peek = 0, No_Request = 1 }
-BufferSinkFlags :: distinct bit_set[BufferSinkFlag; c.int]
+BufferSinkFlag :: enum c.int {
+    Peek       = 0,
+    No_Request = 1,
+}
+BufferSinkFlags :: distinct bit_set[BufferSinkFlag;c.int]
 
 // ---------------------------------------------------------------------------
 // buffersrc.h
@@ -149,7 +178,7 @@ BufferSrcFlag :: enum c.int {
     Push            = 2,
     Keep_Ref        = 3,
 }
-BufferSrcFlags :: distinct bit_set[BufferSrcFlag; c.int]
+BufferSrcFlags :: distinct bit_set[BufferSrcFlag;c.int]
 
 BufferSrcParameters :: struct {
     format:              c.int,

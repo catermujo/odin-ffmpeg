@@ -116,8 +116,7 @@ main :: proc() {
     for i: c.int = 0;; i += 1 {
         config := avcodec.get_hw_config(dec, i)
         if config == nil { break }
-        if .HW_Device_Ctx in config.methods &&
-           config.device_type == hw_device_type {
+        if .HW_Device_Ctx in config.methods && config.device_type == hw_device_type {
             hw_pix_fmt = config.pix_fmt
             break
         }

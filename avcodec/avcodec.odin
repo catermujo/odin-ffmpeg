@@ -3,24 +3,41 @@ package avcodec
 import avutil "../avutil"
 import "core:c"
 
+LINK :: #config(FFMPEG_LINK, "system")
+
 when ODIN_OS == .Windows {
-    when #config(FFMPEG_LINK, "shared") == "static" {
-        foreign import avcodec "avcodec_static.lib"
+    when LINK == "static" {
+        foreign import avcodec "../avcodec_static.lib"
+    } else when LINK == "shared" {
+        foreign import avcodec "../avcodec.lib"
     } else {
         foreign import avcodec "avcodec.lib"
     }
 } else when ODIN_OS == .Darwin {
-    when #config(FFMPEG_LINK, "system") == "static" {
+    when LINK == "static" {
+        // Extra system frameworks/libs required by static libavcodec.
+        @(require) foreign import "system:AudioToolbox.framework"
+        @(require) foreign import "system:VideoToolbox.framework"
+        @(require) foreign import "system:CoreFoundation.framework"
+        @(require) foreign import "system:CoreMedia.framework"
+        @(require) foreign import "system:CoreVideo.framework"
+        @(require) foreign import "system:CoreServices.framework"
+        @(require) foreign import "system:bz2"
+        @(require) foreign import "system:z"
+        // Static libavcodec depends on swresample/swscale and avutil.
+        @(require) foreign import _swr "../libswresample.darwin.a"
+        @(require) foreign import _sws "../libswscale.darwin.a"
+        @(require) foreign import _avu "../libavutil.darwin.a"
         foreign import avcodec "../libavcodec.darwin.a"
-    } else when #config(FFMPEG_LINK, "system") == "shared" {
+    } else when LINK == "shared" {
         foreign import avcodec "../libavcodec.dylib"
     } else {
         foreign import avcodec "system:avcodec"
     }
 } else when ODIN_OS == .Linux {
-    when #config(FFMPEG_LINK, "system") == "static" {
+    when LINK == "static" {
         foreign import avcodec "../libavcodec.linux.a"
-    } else when #config(FFMPEG_LINK, "system") == "shared" {
+    } else when LINK == "shared" {
         foreign import avcodec "../libavcodec.so"
     } else {
         foreign import avcodec "system:avcodec"
@@ -624,7 +641,7 @@ ErrFlag :: enum c.int {
     Compliant  = 17,
     Aggressive = 18,
 }
-ErrFlags :: distinct bit_set[ErrFlag; c.int]
+ErrFlags :: distinct bit_set[ErrFlag;c.int]
 
 // Compliance constants
 FF_COMPLIANCE_VERY_STRICT :: 2
@@ -829,7 +846,7 @@ PacketFlag :: enum c.int {
     Trusted    = 3,
     Disposable = 4,
 }
-PacketFlags :: distinct bit_set[PacketFlag; c.int]
+PacketFlags :: distinct bit_set[PacketFlag;c.int]
 
 // ---------------------------------------------------------------------------
 // codec.h — AVCodec capabilities and struct
@@ -855,7 +872,7 @@ CodecCap :: enum c.int {
     Encoder_Flush            = 21,
     Encoder_Recon_Frame      = 22,
 }
-CodecCaps :: distinct bit_set[CodecCap; c.int]
+CodecCaps :: distinct bit_set[CodecCap;c.int]
 
 // HW config methods
 HWConfigMethod :: enum c.int {
@@ -864,7 +881,7 @@ HWConfigMethod :: enum c.int {
     Internal      = 2,
     Ad_Hoc        = 3,
 }
-HWConfigMethods :: distinct bit_set[HWConfigMethod; c.int]
+HWConfigMethods :: distinct bit_set[HWConfigMethod;c.int]
 
 Profile :: struct {
     profile: c.int,
@@ -967,7 +984,7 @@ CodecFlag :: enum c.uint {
     Interlaced_ME  = 29,
     Closed_GOP     = 31,
 }
-CodecFlags :: distinct bit_set[CodecFlag; c.uint]
+CodecFlags :: distinct bit_set[CodecFlag;c.uint]
 
 // Codec flags2 (AV_CODEC_FLAG2_*)
 CodecFlag2 :: enum c.uint {
@@ -982,7 +999,7 @@ CodecFlag2 :: enum c.uint {
     RO_Flush_Noop = 30,
     ICC_Profiles  = 31,
 }
-CodecFlags2 :: distinct bit_set[CodecFlag2; c.uint]
+CodecFlags2 :: distinct bit_set[CodecFlag2;c.uint]
 
 // Export side data flags
 ExportDataFlag :: enum c.int {
@@ -992,11 +1009,13 @@ ExportDataFlag :: enum c.int {
     Film_Grain       = 3,
     Enhancements     = 4,
 }
-ExportDataFlags :: distinct bit_set[ExportDataFlag; c.int]
+ExportDataFlags :: distinct bit_set[ExportDataFlag;c.int]
 
 // Buffer flags (get_buffer2 / get_encode_buffer callbacks)
-GetBufferFlag :: enum c.int { Ref = 0 }
-GetBufferFlags :: distinct bit_set[GetBufferFlag; c.int]
+GetBufferFlag :: enum c.int {
+    Ref = 0,
+}
+GetBufferFlags :: distinct bit_set[GetBufferFlag;c.int]
 AV_CODEC_RECEIVE_FRAME_FLAG_SYNCHRONOUS :: 1 << 0
 
 // Motion estimation compare functions
@@ -1022,11 +1041,18 @@ CmpFunc :: enum c.int {
 CMP_CHROMA :: 256
 
 // Macroblock decision mode
-MBDecision :: enum c.int { Simple = 0, Bits = 1, RD = 2 }
+MBDecision :: enum c.int {
+    Simple = 0,
+    Bits   = 1,
+    RD     = 2,
+}
 
 // Thread types (OR-able)
-ThreadType :: enum c.int { Frame = 0, Slice = 1 }
-ThreadTypes :: distinct bit_set[ThreadType; c.int]
+ThreadType :: enum c.int {
+    Frame = 0,
+    Slice = 1,
+}
+ThreadTypes :: distinct bit_set[ThreadType;c.int]
 
 // HWAccel flags
 HWAccelFlag :: enum c.int {
@@ -1035,7 +1061,7 @@ HWAccelFlag :: enum c.int {
     Allow_Profile_Mismatch = 2,
     Unsafe_Output          = 3,
 }
-HWAccelFlags :: distinct bit_set[HWAccelFlag; c.int]
+HWAccelFlags :: distinct bit_set[HWAccelFlag;c.int]
 HWACCEL_CODEC_CAP_EXPERIMENTAL :: 0x0200
 
 // Opaque internal codec type
@@ -1129,7 +1155,11 @@ CodecContext :: struct {
     initial_padding:             c.int,
     trailing_padding:            c.int,
     seek_preroll:                c.int,
-    get_buffer2:                 #type proc "c" (s: ^CodecContext, frame: ^avutil.Frame, flags: GetBufferFlags) -> c.int,
+    get_buffer2:                 #type proc "c" (
+        s: ^CodecContext,
+        frame: ^avutil.Frame,
+        flags: GetBufferFlags,
+    ) -> c.int,
     bit_rate_tolerance:          c.int,
     global_quality:              c.int,
     compression_level:           c.int,

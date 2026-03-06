@@ -184,7 +184,7 @@ main :: proc() {
         // Pull all available output frames and accumulate into MD5
         for {
             ret2 := avfilt.get_frame(buffersink_ctx, out_frame)
-            if ret2 == avutil.AVERROR_EOF || ret2 == avutil.AVERROR_EAGAIN{
+            if ret2 == avutil.AVERROR_EOF || ret2 == avutil.AVERROR_EAGAIN {
                 break
             }
             if ret2 < 0 {
@@ -211,7 +211,7 @@ main :: proc() {
     avfilt.add_frame_flags(buffersrc_ctx, nil, {.Push})
     for {
         ret := avfilt.get_frame(buffersink_ctx, out_frame)
-        if ret == avutil.AVERROR_EOF || ret == avutil.AVERROR_EAGAIN{
+        if ret == avutil.AVERROR_EOF || ret == avutil.AVERROR_EAGAIN {
             break
         }
         if ret < 0 {

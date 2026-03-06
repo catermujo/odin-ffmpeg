@@ -2,24 +2,34 @@ package avutil
 
 import "core:c"
 
+LINK :: #config(FFMPEG_LINK, "system")
+
 when ODIN_OS == .Windows {
-    when #config(FFMPEG_LINK, "shared") == "static" {
-        foreign import avutil "avutil_static.lib"
+    when LINK == "static" {
+        foreign import avutil "../avutil_static.lib"
+    } else when LINK == "shared" {
+        foreign import avutil "../avutil.lib"
     } else {
         foreign import avutil "avutil.lib"
     }
 } else when ODIN_OS == .Darwin {
-    when #config(FFMPEG_LINK, "system") == "static" {
+    when LINK == "static" {
+        // Extra system frameworks required by static libavutil.
+        @(require) foreign import "system:VideoToolbox.framework"
+        @(require) foreign import "system:CoreFoundation.framework"
+        @(require) foreign import "system:CoreMedia.framework"
+        @(require) foreign import "system:CoreVideo.framework"
+        @(require) foreign import "system:CoreServices.framework"
         foreign import avutil "../libavutil.darwin.a"
-    } else when #config(FFMPEG_LINK, "system") == "shared" {
+    } else when LINK == "shared" {
         foreign import avutil "../libavutil.dylib"
     } else {
         foreign import avutil "system:avutil"
     }
 } else when ODIN_OS == .Linux {
-    when #config(FFMPEG_LINK, "system") == "static" {
+    when LINK == "static" {
         foreign import avutil "../libavutil.linux.a"
-    } else when #config(FFMPEG_LINK, "system") == "shared" {
+    } else when LINK == "shared" {
         foreign import avutil "../libavutil.so"
     } else {
         foreign import avutil "system:avutil"
@@ -703,7 +713,7 @@ LogFlag :: enum c.int {
     Print_Time     = 2,
     Print_Datetime = 3,
 }
-LogFlags :: distinct bit_set[LogFlag; c.int]
+LogFlags :: distinct bit_set[LogFlag;c.int]
 
 // Forward declarations for Class
 Option :: struct {} // defined in opt.h — opaque to callers
@@ -766,8 +776,10 @@ BufferRef :: struct {
     size:   c.size_t,
 }
 
-BufferFlag :: enum c.int { Readonly = 0 }
-BufferFlags :: distinct bit_set[BufferFlag; c.int]
+BufferFlag :: enum c.int {
+    Readonly = 0,
+}
+BufferFlags :: distinct bit_set[BufferFlag;c.int]
 
 // ---------------------------------------------------------------------------
 // dict.h — AVDictionaryEntry, Dictionary, flags
@@ -783,7 +795,7 @@ DictFlag :: enum c.int {
     Multikey        = 6,
     Dedup           = 7,
 }
-DictFlags :: distinct bit_set[DictFlag; c.int]
+DictFlags :: distinct bit_set[DictFlag;c.int]
 
 DictionaryEntry :: struct {
     key:   cstring,
@@ -872,7 +884,7 @@ FrameFlag :: enum c.int {
     Top_Field_First = 4,
     Lossless        = 5,
 }
-FrameFlags :: distinct bit_set[FrameFlag; c.int]
+FrameFlags :: distinct bit_set[FrameFlag;c.int]
 
 FF_DECODE_ERROR_INVALID_BITSTREAM :: 1
 FF_DECODE_ERROR_MISSING_REFERENCE :: 2

@@ -3,24 +3,28 @@ package swscale
 import avutil "../avutil"
 import "core:c"
 
+LINK :: #config(FFMPEG_LINK, "system")
+
 when ODIN_OS == .Windows {
-    when #config(FFMPEG_LINK, "shared") == "static" {
-        foreign import swscale "swscale_static.lib"
+    when LINK == "static" {
+        foreign import swscale "../swscale_static.lib"
+    } else when LINK == "shared" {
+        foreign import swscale "../swscale.lib"
     } else {
         foreign import swscale "swscale.lib"
     }
 } else when ODIN_OS == .Darwin {
-    when #config(FFMPEG_LINK, "system") == "static" {
+    when LINK == "static" {
         foreign import swscale "../libswscale.darwin.a"
-    } else when #config(FFMPEG_LINK, "system") == "shared" {
+    } else when LINK == "shared" {
         foreign import swscale "../libswscale.dylib"
     } else {
         foreign import swscale "system:swscale"
     }
 } else when ODIN_OS == .Linux {
-    when #config(FFMPEG_LINK, "system") == "static" {
+    when LINK == "static" {
         foreign import swscale "../libswscale.linux.a"
-    } else when #config(FFMPEG_LINK, "system") == "shared" {
+    } else when LINK == "shared" {
         foreign import swscale "../libswscale.so"
     } else {
         foreign import swscale "system:swscale"
@@ -71,7 +75,7 @@ Flag :: enum c.int {
     Unstable        = 20,
     Error_Diffusion = 23,
 }
-Flags :: distinct bit_set[Flag; c.int]
+Flags :: distinct bit_set[Flag;c.int]
 
 Intent :: enum c.int {
     Perceptual = 0,
@@ -94,9 +98,9 @@ ColorSpace :: enum c.int {
     SMPTE240M = 7,
     BT2020    = 9,
 }
-CS_ITU624    :: ColorSpace.ITU601
+CS_ITU624 :: ColorSpace.ITU601
 CS_SMPTE170M :: ColorSpace.ITU601
-CS_Default   :: ColorSpace.ITU601
+CS_Default :: ColorSpace.ITU601
 
 Context :: struct {
     av_class:      ^avutil.Class,

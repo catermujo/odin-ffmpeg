@@ -4,24 +4,40 @@ import avcodec "../avcodec"
 import avutil "../avutil"
 import "core:c"
 
+LINK :: #config(FFMPEG_LINK, "system")
+
 when ODIN_OS == .Windows {
-    when #config(FFMPEG_LINK, "shared") == "static" {
-        foreign import avformat "avformat_static.lib"
+    when LINK == "static" {
+        foreign import avformat "../avformat_static.lib"
+    } else when LINK == "shared" {
+        foreign import avformat "../avformat.lib"
     } else {
         foreign import avformat "avformat.lib"
     }
 } else when ODIN_OS == .Darwin {
-    when #config(FFMPEG_LINK, "system") == "static" {
+    when LINK == "static" {
+        // Extra system framework/libs and static FFmpeg deps required by
+        // static libavformat on macOS.
+        @(require) foreign import "system:CoreFoundation.framework"
+        @(require) foreign import "system:Security.framework"
+        @(require) foreign import "system:bz2"
+        @(require) foreign import "system:z"
+        // Static libavformat depends on avcodec/avutil and often pulls
+        // swresample/swscale from codec paths.
+        @(require) foreign import _avc "../libavcodec.darwin.a"
+        @(require) foreign import _avu "../libavutil.darwin.a"
+        @(require) foreign import _swr "../libswresample.darwin.a"
+        @(require) foreign import _sws "../libswscale.darwin.a"
         foreign import avformat "../libavformat.darwin.a"
-    } else when #config(FFMPEG_LINK, "system") == "shared" {
+    } else when LINK == "shared" {
         foreign import avformat "../libavformat.dylib"
     } else {
         foreign import avformat "system:avformat"
     }
 } else when ODIN_OS == .Linux {
-    when #config(FFMPEG_LINK, "system") == "static" {
+    when LINK == "static" {
         foreign import avformat "../libavformat.linux.a"
-    } else when #config(FFMPEG_LINK, "system") == "shared" {
+    } else when LINK == "shared" {
         foreign import avformat "../libavformat.so"
     } else {
         foreign import avformat "system:avformat"
@@ -32,8 +48,11 @@ when ODIN_OS == .Windows {
 // AVIO — buffered I/O layer (avio.h) — part of libavformat
 // ---------------------------------------------------------------------------
 
-SeekableFlag :: enum c.int { Normal = 0, Time = 1 }
-SeekableFlags :: distinct bit_set[SeekableFlag; c.int]
+SeekableFlag :: enum c.int {
+    Normal = 0,
+    Time   = 1,
+}
+SeekableFlags :: distinct bit_set[SeekableFlag;c.int]
 
 IOInterruptCB :: struct {
     callback: #type proc "c" (opaque: rawptr) -> c.int,
@@ -130,7 +149,7 @@ IOFlag :: enum c.int {
     Nonblock = 3,
     Direct   = 15,
 }
-IOFlags :: distinct bit_set[IOFlag; c.int]
+IOFlags :: distinct bit_set[IOFlag;c.int]
 IO_FLAG_READ_WRITE :: IOFlags{.Read, .Write}
 
 // ---------------------------------------------------------------------------
@@ -169,7 +188,7 @@ OutputFmtFlag :: enum c.int {
     TS_Negative   = 18,
     Seek_To_PTS   = 26,
 }
-OutputFmtFlags :: distinct bit_set[OutputFmtFlag; c.int]
+OutputFmtFlags :: distinct bit_set[OutputFmtFlag;c.int]
 
 CodecTag :: struct {} // opaque internal type
 
@@ -198,7 +217,7 @@ InputFmtFlag :: enum c.int {
     No_Byte_Seek  = 15,
     Seek_To_PTS   = 26,
 }
-InputFmtFlags :: distinct bit_set[InputFmtFlag; c.int]
+InputFmtFlags :: distinct bit_set[InputFmtFlag;c.int]
 
 InputFormat :: struct {
     name:       cstring,
@@ -253,13 +272,13 @@ DispositionFlag :: enum c.int {
     Still_Image      = 20,
     Multilayer       = 21,
 }
-DispositionFlags :: distinct bit_set[DispositionFlag; c.int]
+DispositionFlags :: distinct bit_set[DispositionFlag;c.int]
 
 StreamEventFlag :: enum c.int {
     Metadata_Updated = 0,
     New_Packets      = 1,
 }
-StreamEventFlags :: distinct bit_set[StreamEventFlag; c.int]
+StreamEventFlags :: distinct bit_set[StreamEventFlag;c.int]
 
 Stream :: struct {
     av_class:            ^avutil.Class,
@@ -365,7 +384,7 @@ FmtCtxFlag :: enum c.int {
     No_Header  = 0,
     Unseekable = 1,
 }
-FmtCtxFlags :: distinct bit_set[FmtCtxFlag; c.int]
+FmtCtxFlags :: distinct bit_set[FmtCtxFlag;c.int]
 
 Chapter :: struct {
     id:        c.int64_t,
@@ -398,10 +417,12 @@ FmtFlag :: enum c.int {
     Fast_Seek       = 19,
     Auto_BSF        = 21,
 }
-FmtFlags :: distinct bit_set[FmtFlag; c.int]
+FmtFlags :: distinct bit_set[FmtFlag;c.int]
 
-FmtEventFlag :: enum c.int { Metadata_Updated = 0 }
-FmtEventFlags :: distinct bit_set[FmtEventFlag; c.int]
+FmtEventFlag :: enum c.int {
+    Metadata_Updated = 0,
+}
+FmtEventFlags :: distinct bit_set[FmtEventFlag;c.int]
 
 AvoidNegTS :: enum c.int {
     Auto              = -1,
@@ -507,10 +528,13 @@ SeekFlag :: enum c.int {
     Any      = 2,
     Frame_   = 3,
 }
-SeekFlags :: distinct bit_set[SeekFlag; c.int]
+SeekFlags :: distinct bit_set[SeekFlag;c.int]
 
 // Return value of avformat_init_output
-StreamInitIn :: enum c.int { Write_Header = 0, Init_Output = 1 }
+StreamInitIn :: enum c.int {
+    Write_Header = 0,
+    Init_Output  = 1,
+}
 
 FormatCommandID :: enum c.int {
     RTSPSetParameter,
@@ -529,8 +553,11 @@ RTSPResponse :: struct {
     body:        [^]u8,
 }
 
-FrameFilenameFlag :: enum c.int { Multiple = 0, Ignore_Truncation = 1 }
-FrameFilenameFlags :: distinct bit_set[FrameFilenameFlag; c.int]
+FrameFilenameFlag :: enum c.int {
+    Multiple          = 0,
+    Ignore_Truncation = 1,
+}
+FrameFilenameFlags :: distinct bit_set[FrameFilenameFlag;c.int]
 
 // ---------------------------------------------------------------------------
 // Foreign block — libavformat (includes avio)

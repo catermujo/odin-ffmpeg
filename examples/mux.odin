@@ -182,12 +182,7 @@ fill_video_frame :: proc(frame: ^avutil.Frame, n: int) {
 
 // encode_video_frame fills and encodes one video frame, writes all resulting
 // packets to oc, then returns whether we should keep encoding.
-encode_video_frame :: proc(
-    oc: ^avfmt.FormatContext,
-    ost: ^OutputStream,
-    pkt: ^avcodec.Packet,
-    n_frames: int,
-) -> bool {
+encode_video_frame :: proc(oc: ^avfmt.FormatContext, ost: ^OutputStream, pkt: ^avcodec.Packet, n_frames: int) -> bool {
     if ost.next_pts >= c.int64_t(n_frames) {
         // Signal EOF by flushing the encoder.
         avcodec.send_frame(ost.enc, nil)

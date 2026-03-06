@@ -3,24 +3,28 @@ package swresample
 import avutil "../avutil"
 import "core:c"
 
+LINK :: #config(FFMPEG_LINK, "system")
+
 when ODIN_OS == .Windows {
-    when #config(FFMPEG_LINK, "shared") == "static" {
-        foreign import swresample "swresample_static.lib"
+    when LINK == "static" {
+        foreign import swresample "../swresample_static.lib"
+    } else when LINK == "shared" {
+        foreign import swresample "../swresample.lib"
     } else {
         foreign import swresample "swresample.lib"
     }
 } else when ODIN_OS == .Darwin {
-    when #config(FFMPEG_LINK, "system") == "static" {
+    when LINK == "static" {
         foreign import swresample "../libswresample.darwin.a"
-    } else when #config(FFMPEG_LINK, "system") == "shared" {
+    } else when LINK == "shared" {
         foreign import swresample "../libswresample.dylib"
     } else {
         foreign import swresample "system:swresample"
     }
 } else when ODIN_OS == .Linux {
-    when #config(FFMPEG_LINK, "system") == "static" {
+    when LINK == "static" {
         foreign import swresample "../libswresample.linux.a"
-    } else when #config(FFMPEG_LINK, "system") == "shared" {
+    } else when LINK == "shared" {
         foreign import swresample "../libswresample.so"
     } else {
         foreign import swresample "system:swresample"
@@ -31,8 +35,10 @@ when ODIN_OS == .Windows {
 // libswresample — audio resampling and conversion (swresample.h)
 // ---------------------------------------------------------------------------
 
-ResampleFlag :: enum c.int { Resample = 0 }
-ResampleFlags :: distinct bit_set[ResampleFlag; c.int]
+ResampleFlag :: enum c.int {
+    Resample = 0,
+}
+ResampleFlags :: distinct bit_set[ResampleFlag;c.int]
 
 DitherType :: enum c.int {
     None = 0,
