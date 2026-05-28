@@ -23,9 +23,21 @@ when ODIN_OS == .Windows {
     }
 } else when ODIN_OS == .Linux {
     when LINK == "static" {
-        foreign import swresample "../libswresample.linux.a"
+        when ODIN_ARCH == .amd64 {
+            foreign import swresample "../linux_x64/libswresample.linux.a"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import swresample "../linux_arm64/libswresample.linux.a"
+        } else {
+            foreign import swresample "../libswresample.linux.a"
+        }
     } else when LINK == "shared" {
-        foreign import swresample "../libswresample.so"
+        when ODIN_ARCH == .amd64 {
+            foreign import swresample "../linux_x64/libswresample.so"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import swresample "../linux_arm64/libswresample.so"
+        } else {
+            foreign import swresample "../libswresample.so"
+        }
     } else {
         foreign import swresample "system:swresample"
     }

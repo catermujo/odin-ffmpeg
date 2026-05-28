@@ -28,9 +28,21 @@ when ODIN_OS == .Windows {
     }
 } else when ODIN_OS == .Linux {
     when LINK == "static" {
-        foreign import avutil "../libavutil.linux.a"
+        when ODIN_ARCH == .amd64 {
+            foreign import avutil "../linux_x64/libavutil.linux.a"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import avutil "../linux_arm64/libavutil.linux.a"
+        } else {
+            foreign import avutil "../libavutil.linux.a"
+        }
     } else when LINK == "shared" {
-        foreign import avutil "../libavutil.so"
+        when ODIN_ARCH == .amd64 {
+            foreign import avutil "../linux_x64/libavutil.so"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import avutil "../linux_arm64/libavutil.so"
+        } else {
+            foreign import avutil "../libavutil.so"
+        }
     } else {
         foreign import avutil "system:avutil"
     }

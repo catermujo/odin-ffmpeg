@@ -36,9 +36,21 @@ when ODIN_OS == .Windows {
     }
 } else when ODIN_OS == .Linux {
     when LINK == "static" {
-        foreign import avformat "../libavformat.linux.a"
+        when ODIN_ARCH == .amd64 {
+            foreign import avformat "../linux_x64/libavformat.linux.a"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import avformat "../linux_arm64/libavformat.linux.a"
+        } else {
+            foreign import avformat "../libavformat.linux.a"
+        }
     } else when LINK == "shared" {
-        foreign import avformat "../libavformat.so"
+        when ODIN_ARCH == .amd64 {
+            foreign import avformat "../linux_x64/libavformat.so"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import avformat "../linux_arm64/libavformat.so"
+        } else {
+            foreign import avformat "../libavformat.so"
+        }
     } else {
         foreign import avformat "system:avformat"
     }

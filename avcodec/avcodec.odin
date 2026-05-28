@@ -36,9 +36,21 @@ when ODIN_OS == .Windows {
     }
 } else when ODIN_OS == .Linux {
     when LINK == "static" {
-        foreign import avcodec "../libavcodec.linux.a"
+        when ODIN_ARCH == .amd64 {
+            foreign import avcodec "../linux_x64/libavcodec.linux.a"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import avcodec "../linux_arm64/libavcodec.linux.a"
+        } else {
+            foreign import avcodec "../libavcodec.linux.a"
+        }
     } else when LINK == "shared" {
-        foreign import avcodec "../libavcodec.so"
+        when ODIN_ARCH == .amd64 {
+            foreign import avcodec "../linux_x64/libavcodec.so"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import avcodec "../linux_arm64/libavcodec.so"
+        } else {
+            foreign import avcodec "../libavcodec.so"
+        }
     } else {
         foreign import avcodec "system:avcodec"
     }

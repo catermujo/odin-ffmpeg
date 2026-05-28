@@ -7,7 +7,9 @@
 #   ./build_static.sh arm64        # cross-compile to arm64 (Darwin only)
 #   ./build_static.sh x86_64       # cross-compile to x86_64
 #
-# Output: libXXX.{darwin,linux}.a files placed next to this script.
+# Output:
+#   Darwin: libXXX.darwin.a files placed next to this script.
+#   Linux: linux_{arch}/libXXX.linux.a (e.g. linux_x64/libavcodec.linux.a).
 # Build with: odin build . -define:FFMPEG_LINK=static
 
 set -e
@@ -24,6 +26,14 @@ fi
 HOST_OS="$(uname -s)"
 HOST_ARCH="$(uname -m)"
 TARGET_ARCH="${1:-$HOST_ARCH}"
+
+linux_arch_dir() {
+    case "$1" in
+        x86_64 | amd64) echo "linux_x64" ;;
+        aarch64 | arm64) echo "linux_arm64" ;;
+        *) echo "linux_$1" ;;
+    esac
+}
 
 case "$HOST_OS" in
     Darwin) OS_EXT=darwin; CPUS=$(sysctl -n hw.ncpu) ;;
@@ -72,17 +82,35 @@ make -j"$CPUS"
 echo "==> Installing to $BUILD_DIR..."
 make install
 
-echo "==> Copying static libs to $BASE/..."
-for lib in avutil avcodec avformat avfilter swscale swresample avdevice; do
-    src="$BUILD_DIR/lib/lib${lib}.a"
-    dst="$BASE/lib${lib}.${OS_EXT}.a"
-    if [ -f "$src" ]; then
-        cp "$src" "$dst"
-        echo "    lib${lib}.${OS_EXT}.a"
-    else
-        echo "    Warning: $src not found, skipping" >&2
-    fi
-done
+if [ "$HOST_OS" = "Linux" ]; then
+    ARCH_DIR="$(linux_arch_dir "$TARGET_ARCH")"
+    OUT_DIR="$BASE/$ARCH_DIR"
+    mkdir -p "$OUT_DIR"
+    echo "==> Copying static libs to $OUT_DIR/..."
+    for lib in avutil avcodec avformat avfilter swscale swresample avdevice; do
+        src="$BUILD_DIR/lib/lib${lib}.a"
+        dst="$OUT_DIR/lib${lib}.${OS_EXT}.a"
+        if [ -f "$src" ]; then
+            cp "$src" "$dst"
+            echo "    $ARCH_DIR/lib${lib}.${OS_EXT}.a"
+        else
+            echo "    Warning: $src not found, skipping" >&2
+        fi
+    done
+    echo "==> Done. Static libs written to $OUT_DIR/"
+else
+    echo "==> Copying static libs to $BASE/..."
+    for lib in avutil avcodec avformat avfilter swscale swresample avdevice; do
+        src="$BUILD_DIR/lib/lib${lib}.a"
+        dst="$BASE/lib${lib}.${OS_EXT}.a"
+        if [ -f "$src" ]; then
+            cp "$src" "$dst"
+            echo "    lib${lib}.${OS_EXT}.a"
+        else
+            echo "    Warning: $src not found, skipping" >&2
+        fi
+    done
+    echo "==> Done. Static libs written to $BASE/"
+fi
 
-echo "==> Done. Static libs written to $BASE/"
 echo "    Build with: odin build . -define:FFMPEG_LINK=static"

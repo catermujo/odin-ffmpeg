@@ -45,9 +45,21 @@ when ODIN_OS == .Windows {
     }
 } else when ODIN_OS == .Linux {
     when LINK == "static" {
-        foreign import avfilter "../libavfilter.linux.a"
+        when ODIN_ARCH == .amd64 {
+            foreign import avfilter "../linux_x64/libavfilter.linux.a"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import avfilter "../linux_arm64/libavfilter.linux.a"
+        } else {
+            foreign import avfilter "../libavfilter.linux.a"
+        }
     } else when LINK == "shared" {
-        foreign import avfilter "../libavfilter.so"
+        when ODIN_ARCH == .amd64 {
+            foreign import avfilter "../linux_x64/libavfilter.so"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import avfilter "../linux_arm64/libavfilter.so"
+        } else {
+            foreign import avfilter "../libavfilter.so"
+        }
     } else {
         foreign import avfilter "system:avfilter"
     }

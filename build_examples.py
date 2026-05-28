@@ -170,7 +170,9 @@ def _parse_run_overrides(
     overrides: dict[str, list[str]] = {}
     for raw in values:
         if "=" not in raw:
-            msg = f"Invalid -run-override value '{raw}'. Expected '<example>=<args...>'."
+            msg = (
+                f"Invalid -run-override value '{raw}'. Expected '<example>=<args...>'."
+            )
             raise ValueError(msg)
         name, rhs = raw.split("=", 1)
         name = name.strip()
@@ -186,7 +188,17 @@ def _runtime_env(preset: str) -> dict[str, str]:
     if preset != "shared":
         return env
 
-    ffmpeg_path = str(FFMPEG_ROOT.resolve())
+    ffmpeg_root = FFMPEG_ROOT.resolve()
+    if sys.platform == "linux":
+        machine = os.uname().machine
+        if machine in ("x86_64", "amd64"):
+            ffmpeg_root = ffmpeg_root / "linux_x64"
+        elif machine in ("aarch64", "arm64"):
+            ffmpeg_root = ffmpeg_root / "linux_arm64"
+        else:
+            ffmpeg_root = ffmpeg_root / f"linux_{machine}"
+
+    ffmpeg_path = str(ffmpeg_root)
     if sys.platform == "win32":
         key, sep = "PATH", ";"
     elif sys.platform == "darwin":
@@ -214,7 +226,9 @@ def _optional_run_skip_reason(example: str, output: str) -> str | None:
         return "unsupported hardware/runtime"
     if example == "avio_http_serve_files" and "cannot open server at" in lower:
         return "http listen unsupported in current FFmpeg build"
-    if example == "transcode" and all(hint in lower for hint in TRANSCODE_ENCODER_HINTS):
+    if example == "transcode" and all(
+        hint in lower for hint in TRANSCODE_ENCODER_HINTS
+    ):
         return "platform encoder limitation"
     return None
 
@@ -460,7 +474,9 @@ def main() -> int:
 
                 run_args = run_overrides.get(example)
                 if run_args is None:
-                    run_args = _default_run_args(example, out_dir=out_dir, preset=preset)
+                    run_args = _default_run_args(
+                        example, out_dir=out_dir, preset=preset
+                    )
                 if run_args is None:
                     reason = "no run arguments (use -run-override)"
                     run_skips.append((preset, example, reason))

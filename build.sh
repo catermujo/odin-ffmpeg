@@ -10,7 +10,7 @@
 #
 # Output:
 #   Darwin: libXXX.dylib  (install name set to @rpath/libXXX.dylib)
-#   Linux:  libXXX.so
+#   Linux:  linux_{arch}/libXXX.so (e.g. linux_x64/libavcodec.so)
 #
 # Build your app with:
 #   odin build . -define:FFMPEG_LINK=shared
@@ -47,6 +47,14 @@ fi
 HOST_OS="$(uname -s)"
 HOST_ARCH="$(uname -m)"
 TARGET_ARCH="${1:-$HOST_ARCH}"
+
+linux_arch_dir() {
+    case "$1" in
+        x86_64 | amd64) echo "linux_x64" ;;
+        aarch64 | arm64) echo "linux_arm64" ;;
+        *) echo "linux_$1" ;;
+    esac
+}
 
 case "$HOST_OS" in
     Darwin) OS_EXT=darwin; CPUS=$(sysctl -n hw.ncpu) ;;
@@ -129,20 +137,23 @@ Darwin)
     ;;
 
 Linux)
-    echo "==> Copying shared libs to $BASE/..."
+    ARCH_DIR="$(linux_arch_dir "$TARGET_ARCH")"
+    OUT_DIR="$BASE/$ARCH_DIR"
+    mkdir -p "$OUT_DIR"
+    echo "==> Copying shared libs to $OUT_DIR/..."
     for lib in $LIBS; do
         src="$BUILD_DIR/lib/lib${lib}.so"
-        dst="$BASE/lib${lib}.so"
+        dst="$OUT_DIR/lib${lib}.so"
         if [ -f "$src" ] || [ -L "$src" ]; then
             cp -L "$src" "$dst"
-            echo "    lib${lib}.so"
+            echo "    $ARCH_DIR/lib${lib}.so"
         else
             echo "    Warning: $src not found, skipping" >&2
         fi
     done
 
-    echo "==> Done. Shared libs written to $BASE/"
+    echo "==> Done. Shared libs written to $OUT_DIR/"
     echo "    Build with: odin build . -define:FFMPEG_LINK=shared"
-    echo "    Runtime:    LD_LIBRARY_PATH=$BASE:\$LD_LIBRARY_PATH ./your_binary"
+    echo "    Runtime:    LD_LIBRARY_PATH=$OUT_DIR:\$LD_LIBRARY_PATH ./your_binary"
     ;;
 esac

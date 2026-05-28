@@ -24,9 +24,21 @@ when ODIN_OS == .Windows {
     }
 } else when ODIN_OS == .Linux {
     when LINK == "static" {
-        foreign import avdevice "../libavdevice.linux.a"
+        when ODIN_ARCH == .amd64 {
+            foreign import avdevice "../linux_x64/libavdevice.linux.a"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import avdevice "../linux_arm64/libavdevice.linux.a"
+        } else {
+            foreign import avdevice "../libavdevice.linux.a"
+        }
     } else when LINK == "shared" {
-        foreign import avdevice "../libavdevice.so"
+        when ODIN_ARCH == .amd64 {
+            foreign import avdevice "../linux_x64/libavdevice.so"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import avdevice "../linux_arm64/libavdevice.so"
+        } else {
+            foreign import avdevice "../libavdevice.so"
+        }
     } else {
         foreign import avdevice "system:avdevice"
     }
