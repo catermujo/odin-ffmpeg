@@ -7,18 +7,42 @@ import "core:c"
 LINK :: #config(FFMPEG_LINK, "system")
 
 when ODIN_OS == .Windows {
-    when LINK == "static" {
-        foreign import avdevice "../avdevice_static.lib"
-    } else when LINK == "shared" {
-        foreign import avdevice "../avdevice.lib"
+    when ODIN_ARCH == .amd64 {
+        when LINK == "static" {
+            foreign import avdevice "../windows_x64/avdevice_static.lib"
+        } else when LINK == "shared" {
+            foreign import avdevice "../windows_x64/avdevice.lib"
+        } else {
+            foreign import avdevice "avdevice.lib"
+        }
+    } else when ODIN_ARCH == .arm64 {
+        when LINK == "static" {
+            foreign import avdevice "../windows_arm64/avdevice_static.lib"
+        } else when LINK == "shared" {
+            foreign import avdevice "../windows_arm64/avdevice.lib"
+        } else {
+            foreign import avdevice "avdevice.lib"
+        }
     } else {
-        foreign import avdevice "avdevice.lib"
+        #panic("This architecture is currently not supported on Windows")
     }
 } else when ODIN_OS == .Darwin {
     when LINK == "static" {
-        foreign import avdevice "../libavdevice.darwin.a"
+        when ODIN_ARCH == .amd64 {
+            foreign import avdevice "../darwin_x64/libavdevice.darwin.a"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import avdevice "../darwin_arm64/libavdevice.darwin.a"
+        } else {
+            #panic("This architecture is currently not supported on Darwin")
+        }
     } else when LINK == "shared" {
-        foreign import avdevice "../libavdevice.dylib"
+        when ODIN_ARCH == .amd64 {
+            foreign import avdevice "../darwin_x64/libavdevice.dylib"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import avdevice "../darwin_arm64/libavdevice.dylib"
+        } else {
+            #panic("This architecture is currently not supported on Darwin")
+        }
     } else {
         foreign import avdevice "system:avdevice"
     }

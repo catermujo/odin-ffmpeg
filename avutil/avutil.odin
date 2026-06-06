@@ -5,24 +5,54 @@ import "core:c"
 LINK :: #config(FFMPEG_LINK, "system")
 
 when ODIN_OS == .Windows {
-    when LINK == "static" {
-        foreign import avutil "../avutil_static.lib"
-    } else when LINK == "shared" {
-        foreign import avutil "../avutil.lib"
+    when ODIN_ARCH == .amd64 {
+        when LINK == "static" {
+            foreign import avutil "../windows_x64/avutil_static.lib"
+        } else when LINK == "shared" {
+            foreign import avutil "../windows_x64/avutil.lib"
+        } else {
+            foreign import avutil "avutil.lib"
+        }
+    } else when ODIN_ARCH == .arm64 {
+        when LINK == "static" {
+            foreign import avutil "../windows_arm64/avutil_static.lib"
+        } else when LINK == "shared" {
+            foreign import avutil "../windows_arm64/avutil.lib"
+        } else {
+            foreign import avutil "avutil.lib"
+        }
     } else {
-        foreign import avutil "avutil.lib"
+        #panic("This architecture is currently not supported on Windows")
     }
 } else when ODIN_OS == .Darwin {
     when LINK == "static" {
-        // Extra system frameworks required by static libavutil.
-        @(require) foreign import "system:VideoToolbox.framework"
-        @(require) foreign import "system:CoreFoundation.framework"
-        @(require) foreign import "system:CoreMedia.framework"
-        @(require) foreign import "system:CoreVideo.framework"
-        @(require) foreign import "system:CoreServices.framework"
-        foreign import avutil "../libavutil.darwin.a"
+        when ODIN_ARCH == .amd64 {
+            // Extra system frameworks required by static libavutil.
+            @(require) foreign import "system:VideoToolbox.framework"
+            @(require) foreign import "system:CoreFoundation.framework"
+            @(require) foreign import "system:CoreMedia.framework"
+            @(require) foreign import "system:CoreVideo.framework"
+            @(require) foreign import "system:CoreServices.framework"
+            foreign import avutil "../darwin_x64/libavutil.darwin.a"
+        } else when ODIN_ARCH == .arm64 {
+            // Extra system frameworks required by static libavutil.
+            @(require) foreign import "system:VideoToolbox.framework"
+            @(require) foreign import "system:CoreFoundation.framework"
+            @(require) foreign import "system:CoreMedia.framework"
+            @(require) foreign import "system:CoreVideo.framework"
+            @(require) foreign import "system:CoreServices.framework"
+            foreign import avutil "../darwin_arm64/libavutil.darwin.a"
+        } else {
+            #panic("This architecture is currently not supported on Darwin")
+        }
     } else when LINK == "shared" {
-        foreign import avutil "../libavutil.dylib"
+        when ODIN_ARCH == .amd64 {
+            foreign import avutil "../darwin_x64/libavutil.dylib"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import avutil "../darwin_arm64/libavutil.dylib"
+        } else {
+            #panic("This architecture is currently not supported on Darwin")
+        }
     } else {
         foreign import avutil "system:avutil"
     }

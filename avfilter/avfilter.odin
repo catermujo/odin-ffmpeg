@@ -6,40 +6,86 @@ import "core:c"
 LINK :: #config(FFMPEG_LINK, "system")
 
 when ODIN_OS == .Windows {
-    when LINK == "static" {
-        foreign import avfilter "../avfilter_static.lib"
-    } else when LINK == "shared" {
-        foreign import avfilter "../avfilter.lib"
+    when ODIN_ARCH == .amd64 {
+        when LINK == "static" {
+            foreign import avfilter "../windows_x64/avfilter_static.lib"
+        } else when LINK == "shared" {
+            foreign import avfilter "../windows_x64/avfilter.lib"
+        } else {
+            foreign import avfilter "avfilter.lib"
+        }
+    } else when ODIN_ARCH == .arm64 {
+        when LINK == "static" {
+            foreign import avfilter "../windows_arm64/avfilter_static.lib"
+        } else when LINK == "shared" {
+            foreign import avfilter "../windows_arm64/avfilter.lib"
+        } else {
+            foreign import avfilter "avfilter.lib"
+        }
     } else {
-        foreign import avfilter "avfilter.lib"
+        #panic("This architecture is currently not supported on Windows")
     }
 } else when ODIN_OS == .Darwin {
     when LINK == "static" {
-        // Extra system frameworks/libs required by static libavfilter.
-        @(require) foreign import "system:Foundation.framework"
-        @(require) foreign import "system:AudioToolbox.framework"
-        @(require) foreign import "system:CoreAudio.framework"
-        @(require) foreign import "system:OpenGL.framework"
-        @(require) foreign import "system:Metal.framework"
-        @(require) foreign import "system:VideoToolbox.framework"
-        @(require) foreign import "system:CoreImage.framework"
-        @(require) foreign import "system:AppKit.framework"
-        @(require) foreign import "system:CoreFoundation.framework"
-        @(require) foreign import "system:CoreMedia.framework"
-        @(require) foreign import "system:CoreVideo.framework"
-        @(require) foreign import "system:CoreServices.framework"
-        @(require) foreign import "system:Security.framework"
-        @(require) foreign import "system:bz2"
-        @(require) foreign import "system:z"
-        // Pull static transitive deps explicitly for stable link order.
-        @(require) foreign import _avf "../libavformat.darwin.a"
-        @(require) foreign import _avc "../libavcodec.darwin.a"
-        @(require) foreign import _avu "../libavutil.darwin.a"
-        @(require) foreign import _swr "../libswresample.darwin.a"
-        @(require) foreign import _sws "../libswscale.darwin.a"
-        foreign import avfilter "../libavfilter.darwin.a"
+        when ODIN_ARCH == .amd64 {
+            // Extra system frameworks/libs required by static libavfilter.
+            @(require) foreign import "system:Foundation.framework"
+            @(require) foreign import "system:AudioToolbox.framework"
+            @(require) foreign import "system:CoreAudio.framework"
+            @(require) foreign import "system:OpenGL.framework"
+            @(require) foreign import "system:Metal.framework"
+            @(require) foreign import "system:VideoToolbox.framework"
+            @(require) foreign import "system:CoreImage.framework"
+            @(require) foreign import "system:AppKit.framework"
+            @(require) foreign import "system:CoreFoundation.framework"
+            @(require) foreign import "system:CoreMedia.framework"
+            @(require) foreign import "system:CoreVideo.framework"
+            @(require) foreign import "system:CoreServices.framework"
+            @(require) foreign import "system:Security.framework"
+            @(require) foreign import "system:bz2"
+            @(require) foreign import "system:z"
+            // Pull static transitive deps explicitly for stable link order.
+            @(require) foreign import _avf "../darwin_x64/libavformat.darwin.a"
+            @(require) foreign import _avc "../darwin_x64/libavcodec.darwin.a"
+            @(require) foreign import _avu "../darwin_x64/libavutil.darwin.a"
+            @(require) foreign import _swr "../darwin_x64/libswresample.darwin.a"
+            @(require) foreign import _sws "../darwin_x64/libswscale.darwin.a"
+            foreign import avfilter "../darwin_x64/libavfilter.darwin.a"
+        } else when ODIN_ARCH == .arm64 {
+            // Extra system frameworks/libs required by static libavfilter.
+            @(require) foreign import "system:Foundation.framework"
+            @(require) foreign import "system:AudioToolbox.framework"
+            @(require) foreign import "system:CoreAudio.framework"
+            @(require) foreign import "system:OpenGL.framework"
+            @(require) foreign import "system:Metal.framework"
+            @(require) foreign import "system:VideoToolbox.framework"
+            @(require) foreign import "system:CoreImage.framework"
+            @(require) foreign import "system:AppKit.framework"
+            @(require) foreign import "system:CoreFoundation.framework"
+            @(require) foreign import "system:CoreMedia.framework"
+            @(require) foreign import "system:CoreVideo.framework"
+            @(require) foreign import "system:CoreServices.framework"
+            @(require) foreign import "system:Security.framework"
+            @(require) foreign import "system:bz2"
+            @(require) foreign import "system:z"
+            // Pull static transitive deps explicitly for stable link order.
+            @(require) foreign import _avf "../darwin_arm64/libavformat.darwin.a"
+            @(require) foreign import _avc "../darwin_arm64/libavcodec.darwin.a"
+            @(require) foreign import _avu "../darwin_arm64/libavutil.darwin.a"
+            @(require) foreign import _swr "../darwin_arm64/libswresample.darwin.a"
+            @(require) foreign import _sws "../darwin_arm64/libswscale.darwin.a"
+            foreign import avfilter "../darwin_arm64/libavfilter.darwin.a"
+        } else {
+            #panic("This architecture is currently not supported on Darwin")
+        }
     } else when LINK == "shared" {
-        foreign import avfilter "../libavfilter.dylib"
+        when ODIN_ARCH == .amd64 {
+            foreign import avfilter "../darwin_x64/libavfilter.dylib"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import avfilter "../darwin_arm64/libavfilter.dylib"
+        } else {
+            #panic("This architecture is currently not supported on Darwin")
+        }
     } else {
         foreign import avfilter "system:avfilter"
     }

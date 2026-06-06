@@ -56,6 +56,14 @@ linux_arch_dir() {
     esac
 }
 
+darwin_arch_dir() {
+    case "$1" in
+        x86_64 | amd64) echo "darwin_x64" ;;
+        aarch64 | arm64) echo "darwin_arm64" ;;
+        *) echo "darwin_$1" ;;
+    esac
+}
+
 case "$HOST_OS" in
     Darwin) OS_EXT=darwin; CPUS=$(sysctl -n hw.ncpu) ;;
     Linux)  OS_EXT=linux;  CPUS=$(nproc) ;;
@@ -107,14 +115,17 @@ LIBS="avutil avcodec avformat avfilter swscale swresample avdevice"
 
 case "$HOST_OS" in
 Darwin)
+    ARCH_DIR="$(darwin_arch_dir "$TARGET_ARCH")"
+    OUT_DIR="$BASE/$ARCH_DIR"
+    mkdir -p "$OUT_DIR"
     echo "==> Copying shared libs to $BASE/..."
     for lib in $LIBS; do
         src="$BUILD_DIR/lib/lib${lib}.dylib"
-        dst="$BASE/lib${lib}.dylib"
+        dst="$OUT_DIR/lib${lib}.dylib"
         if [ -f "$src" ] || [ -L "$src" ]; then
             cp -L "$src" "$dst"
             install_name_tool -id "@rpath/lib${lib}.dylib" "$dst"
-            echo "    lib${lib}.dylib"
+            echo "    $ARCH_DIR/lib${lib}.dylib"
         else
             echo "    Warning: $src not found, skipping" >&2
         fi
@@ -131,7 +142,7 @@ Darwin)
         done
     done
 
-    echo "==> Done. Shared libs written to $BASE/"
+    echo "==> Done. Shared libs written to $OUT_DIR/"
     echo "    Build with: odin build . -define:FFMPEG_LINK=shared"
     echo "    Add rpath:  -extra-linker-flags:\"-rpath \$(pwd)/vendor/ffmpeg\""
     ;;

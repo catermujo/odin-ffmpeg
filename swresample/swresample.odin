@@ -6,18 +6,42 @@ import "core:c"
 LINK :: #config(FFMPEG_LINK, "system")
 
 when ODIN_OS == .Windows {
-    when LINK == "static" {
-        foreign import swresample "../swresample_static.lib"
-    } else when LINK == "shared" {
-        foreign import swresample "../swresample.lib"
+    when ODIN_ARCH == .amd64 {
+        when LINK == "static" {
+            foreign import swresample "../windows_x64/swresample_static.lib"
+        } else when LINK == "shared" {
+            foreign import swresample "../windows_x64/swresample.lib"
+        } else {
+            foreign import swresample "swresample.lib"
+        }
+    } else when ODIN_ARCH == .arm64 {
+        when LINK == "static" {
+            foreign import swresample "../windows_arm64/swresample_static.lib"
+        } else when LINK == "shared" {
+            foreign import swresample "../windows_arm64/swresample.lib"
+        } else {
+            foreign import swresample "swresample.lib"
+        }
     } else {
-        foreign import swresample "swresample.lib"
+        #panic("This architecture is currently not supported on Windows")
     }
 } else when ODIN_OS == .Darwin {
     when LINK == "static" {
-        foreign import swresample "../libswresample.darwin.a"
+        when ODIN_ARCH == .amd64 {
+            foreign import swresample "../darwin_x64/libswresample.darwin.a"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import swresample "../darwin_arm64/libswresample.darwin.a"
+        } else {
+            #panic("This architecture is currently not supported on Darwin")
+        }
     } else when LINK == "shared" {
-        foreign import swresample "../libswresample.dylib"
+        when ODIN_ARCH == .amd64 {
+            foreign import swresample "../darwin_x64/libswresample.dylib"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import swresample "../darwin_arm64/libswresample.dylib"
+        } else {
+            #panic("This architecture is currently not supported on Darwin")
+        }
     } else {
         foreign import swresample "system:swresample"
     }

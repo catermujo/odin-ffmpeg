@@ -35,6 +35,14 @@ linux_arch_dir() {
     esac
 }
 
+darwin_arch_dir() {
+    case "$1" in
+        x86_64 | amd64) echo "darwin_x64" ;;
+        aarch64 | arm64) echo "darwin_arm64" ;;
+        *) echo "darwin_$1" ;;
+    esac
+}
+
 case "$HOST_OS" in
     Darwin) OS_EXT=darwin; CPUS=$(sysctl -n hw.ncpu) ;;
     Linux)  OS_EXT=linux;  CPUS=$(nproc) ;;
@@ -99,18 +107,21 @@ if [ "$HOST_OS" = "Linux" ]; then
     done
     echo "==> Done. Static libs written to $OUT_DIR/"
 else
+    ARCH_DIR="$(darwin_arch_dir "$TARGET_ARCH")"
+    OUT_DIR="$BASE/$ARCH_DIR"
+    mkdir -p "$OUT_DIR"
     echo "==> Copying static libs to $BASE/..."
     for lib in avutil avcodec avformat avfilter swscale swresample avdevice; do
         src="$BUILD_DIR/lib/lib${lib}.a"
-        dst="$BASE/lib${lib}.${OS_EXT}.a"
+        dst="$OUT_DIR/lib${lib}.${OS_EXT}.a"
         if [ -f "$src" ]; then
             cp "$src" "$dst"
-            echo "    lib${lib}.${OS_EXT}.a"
+            echo "    $ARCH_DIR/lib${lib}.${OS_EXT}.a"
         else
             echo "    Warning: $src not found, skipping" >&2
         fi
     done
-    echo "==> Done. Static libs written to $BASE/"
+    echo "==> Done. Static libs written to $OUT_DIR/"
 fi
 
 echo "    Build with: odin build . -define:FFMPEG_LINK=static"

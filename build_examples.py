@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import platform
 import shlex
 import subprocess
 import sys
@@ -189,8 +190,22 @@ def _runtime_env(preset: str) -> dict[str, str]:
         return env
 
     ffmpeg_root = FFMPEG_ROOT.resolve()
-    if sys.platform == "linux":
-        machine = os.uname().machine
+    machine = platform.machine().lower()
+    if sys.platform == "win32":
+        if machine in ("x86_64", "amd64"):
+            ffmpeg_root = ffmpeg_root / "windows_x64"
+        elif machine in ("aarch64", "arm64"):
+            ffmpeg_root = ffmpeg_root / "windows_arm64"
+        else:
+            ffmpeg_root = ffmpeg_root / f"windows_{machine}"
+    elif sys.platform == "darwin":
+        if machine in ("x86_64", "amd64"):
+            ffmpeg_root = ffmpeg_root / "darwin_x64"
+        elif machine in ("aarch64", "arm64"):
+            ffmpeg_root = ffmpeg_root / "darwin_arm64"
+        else:
+            ffmpeg_root = ffmpeg_root / f"darwin_{machine}"
+    elif sys.platform == "linux":
         if machine in ("x86_64", "amd64"):
             ffmpeg_root = ffmpeg_root / "linux_x64"
         elif machine in ("aarch64", "arm64"):

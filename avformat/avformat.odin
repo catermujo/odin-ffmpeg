@@ -7,30 +7,66 @@ import "core:c"
 LINK :: #config(FFMPEG_LINK, "system")
 
 when ODIN_OS == .Windows {
-    when LINK == "static" {
-        foreign import avformat "../avformat_static.lib"
-    } else when LINK == "shared" {
-        foreign import avformat "../avformat.lib"
+    when ODIN_ARCH == .amd64 {
+        when LINK == "static" {
+            foreign import avformat "../windows_x64/avformat_static.lib"
+        } else when LINK == "shared" {
+            foreign import avformat "../windows_x64/avformat.lib"
+        } else {
+            foreign import avformat "avformat.lib"
+        }
+    } else when ODIN_ARCH == .arm64 {
+        when LINK == "static" {
+            foreign import avformat "../windows_arm64/avformat_static.lib"
+        } else when LINK == "shared" {
+            foreign import avformat "../windows_arm64/avformat.lib"
+        } else {
+            foreign import avformat "avformat.lib"
+        }
     } else {
-        foreign import avformat "avformat.lib"
+        #panic("This architecture is currently not supported on Windows")
     }
 } else when ODIN_OS == .Darwin {
     when LINK == "static" {
-        // Extra system framework/libs and static FFmpeg deps required by
-        // static libavformat on macOS.
-        @(require) foreign import "system:CoreFoundation.framework"
-        @(require) foreign import "system:Security.framework"
-        @(require) foreign import "system:bz2"
-        @(require) foreign import "system:z"
-        // Static libavformat depends on avcodec/avutil and often pulls
-        // swresample/swscale from codec paths.
-        @(require) foreign import _avc "../libavcodec.darwin.a"
-        @(require) foreign import _avu "../libavutil.darwin.a"
-        @(require) foreign import _swr "../libswresample.darwin.a"
-        @(require) foreign import _sws "../libswscale.darwin.a"
-        foreign import avformat "../libavformat.darwin.a"
+        when ODIN_ARCH == .amd64 {
+            // Extra system framework/libs and static FFmpeg deps required by
+            // static libavformat on macOS.
+            @(require) foreign import "system:CoreFoundation.framework"
+            @(require) foreign import "system:Security.framework"
+            @(require) foreign import "system:bz2"
+            @(require) foreign import "system:z"
+            // Static libavformat depends on avcodec/avutil and often pulls
+            // swresample/swscale from codec paths.
+            @(require) foreign import _avc "../darwin_x64/libavcodec.darwin.a"
+            @(require) foreign import _avu "../darwin_x64/libavutil.darwin.a"
+            @(require) foreign import _swr "../darwin_x64/libswresample.darwin.a"
+            @(require) foreign import _sws "../darwin_x64/libswscale.darwin.a"
+            foreign import avformat "../darwin_x64/libavformat.darwin.a"
+        } else when ODIN_ARCH == .arm64 {
+            // Extra system framework/libs and static FFmpeg deps required by
+            // static libavformat on macOS.
+            @(require) foreign import "system:CoreFoundation.framework"
+            @(require) foreign import "system:Security.framework"
+            @(require) foreign import "system:bz2"
+            @(require) foreign import "system:z"
+            // Static libavformat depends on avcodec/avutil and often pulls
+            // swresample/swscale from codec paths.
+            @(require) foreign import _avc "../darwin_arm64/libavcodec.darwin.a"
+            @(require) foreign import _avu "../darwin_arm64/libavutil.darwin.a"
+            @(require) foreign import _swr "../darwin_arm64/libswresample.darwin.a"
+            @(require) foreign import _sws "../darwin_arm64/libswscale.darwin.a"
+            foreign import avformat "../darwin_arm64/libavformat.darwin.a"
+        } else {
+            #panic("This architecture is currently not supported on Darwin")
+        }
     } else when LINK == "shared" {
-        foreign import avformat "../libavformat.dylib"
+        when ODIN_ARCH == .amd64 {
+            foreign import avformat "../darwin_x64/libavformat.dylib"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import avformat "../darwin_arm64/libavformat.dylib"
+        } else {
+            #panic("This architecture is currently not supported on Darwin")
+        }
     } else {
         foreign import avformat "system:avformat"
     }

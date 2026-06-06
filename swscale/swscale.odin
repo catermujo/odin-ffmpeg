@@ -6,18 +6,42 @@ import "core:c"
 LINK :: #config(FFMPEG_LINK, "system")
 
 when ODIN_OS == .Windows {
-    when LINK == "static" {
-        foreign import swscale "../swscale_static.lib"
-    } else when LINK == "shared" {
-        foreign import swscale "../swscale.lib"
+    when ODIN_ARCH == .amd64 {
+        when LINK == "static" {
+            foreign import swscale "../windows_x64/swscale_static.lib"
+        } else when LINK == "shared" {
+            foreign import swscale "../windows_x64/swscale.lib"
+        } else {
+            foreign import swscale "swscale.lib"
+        }
+    } else when ODIN_ARCH == .arm64 {
+        when LINK == "static" {
+            foreign import swscale "../windows_arm64/swscale_static.lib"
+        } else when LINK == "shared" {
+            foreign import swscale "../windows_arm64/swscale.lib"
+        } else {
+            foreign import swscale "swscale.lib"
+        }
     } else {
-        foreign import swscale "swscale.lib"
+        #panic("This architecture is currently not supported on Windows")
     }
 } else when ODIN_OS == .Darwin {
     when LINK == "static" {
-        foreign import swscale "../libswscale.darwin.a"
+        when ODIN_ARCH == .amd64 {
+            foreign import swscale "../darwin_x64/libswscale.darwin.a"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import swscale "../darwin_arm64/libswscale.darwin.a"
+        } else {
+            #panic("This architecture is currently not supported on Darwin")
+        }
     } else when LINK == "shared" {
-        foreign import swscale "../libswscale.dylib"
+        when ODIN_ARCH == .amd64 {
+            foreign import swscale "../darwin_x64/libswscale.dylib"
+        } else when ODIN_ARCH == .arm64 {
+            foreign import swscale "../darwin_arm64/libswscale.dylib"
+        } else {
+            #panic("This architecture is currently not supported on Darwin")
+        }
     } else {
         foreign import swscale "system:swscale"
     }
