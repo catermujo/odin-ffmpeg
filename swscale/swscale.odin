@@ -52,7 +52,7 @@ when ODIN_OS == .Windows {
         } else when ODIN_ARCH == .arm64 {
             foreign import swscale "../linux_arm64/libswscale.linux.a"
         } else {
-            foreign import swscale "../libswscale.linux.a"
+            #panic("This architecture is currently not supported on Linux")
         }
     } else when LINK == "shared" {
         when ODIN_ARCH == .amd64 {
@@ -60,7 +60,7 @@ when ODIN_OS == .Windows {
         } else when ODIN_ARCH == .arm64 {
             foreign import swscale "../linux_arm64/libswscale.so"
         } else {
-            foreign import swscale "../libswscale.so"
+            #panic("This architecture is currently not supported on Linux")
         }
     } else {
         foreign import swscale "system:swscale"

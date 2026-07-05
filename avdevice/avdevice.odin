@@ -53,7 +53,7 @@ when ODIN_OS == .Windows {
         } else when ODIN_ARCH == .arm64 {
             foreign import avdevice "../linux_arm64/libavdevice.linux.a"
         } else {
-            foreign import avdevice "../libavdevice.linux.a"
+            #panic("This architecture is currently not supported on Linux")
         }
     } else when LINK == "shared" {
         when ODIN_ARCH == .amd64 {
@@ -61,7 +61,7 @@ when ODIN_OS == .Windows {
         } else when ODIN_ARCH == .arm64 {
             foreign import avdevice "../linux_arm64/libavdevice.so"
         } else {
-            foreign import avdevice "../libavdevice.so"
+            #panic("This architecture is currently not supported on Linux")
         }
     } else {
         foreign import avdevice "system:avdevice"

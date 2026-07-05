@@ -78,7 +78,7 @@ when ODIN_OS == .Windows {
         } else when ODIN_ARCH == .arm64 {
             foreign import avcodec "../linux_arm64/libavcodec.linux.a"
         } else {
-            foreign import avcodec "../libavcodec.linux.a"
+            #panic("This architecture is currently not supported on Linux")
         }
     } else when LINK == "shared" {
         when ODIN_ARCH == .amd64 {
@@ -86,7 +86,7 @@ when ODIN_OS == .Windows {
         } else when ODIN_ARCH == .arm64 {
             foreign import avcodec "../linux_arm64/libavcodec.so"
         } else {
-            foreign import avcodec "../libavcodec.so"
+            #panic("This architecture is currently not supported on Linux")
         }
     } else {
         foreign import avcodec "system:avcodec"

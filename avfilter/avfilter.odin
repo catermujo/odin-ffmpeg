@@ -96,7 +96,7 @@ when ODIN_OS == .Windows {
         } else when ODIN_ARCH == .arm64 {
             foreign import avfilter "../linux_arm64/libavfilter.linux.a"
         } else {
-            foreign import avfilter "../libavfilter.linux.a"
+            #panic("This architecture is currently not supported on Linux")
         }
     } else when LINK == "shared" {
         when ODIN_ARCH == .amd64 {
@@ -104,7 +104,7 @@ when ODIN_OS == .Windows {
         } else when ODIN_ARCH == .arm64 {
             foreign import avfilter "../linux_arm64/libavfilter.so"
         } else {
-            foreign import avfilter "../libavfilter.so"
+            #panic("This architecture is currently not supported on Linux")
         }
     } else {
         foreign import avfilter "system:avfilter"

@@ -63,7 +63,7 @@ when ODIN_OS == .Windows {
         } else when ODIN_ARCH == .arm64 {
             foreign import avutil "../linux_arm64/libavutil.linux.a"
         } else {
-            foreign import avutil "../libavutil.linux.a"
+            #panic("This architecture is currently not supported on Linux")
         }
     } else when LINK == "shared" {
         when ODIN_ARCH == .amd64 {
@@ -71,7 +71,7 @@ when ODIN_OS == .Windows {
         } else when ODIN_ARCH == .arm64 {
             foreign import avutil "../linux_arm64/libavutil.so"
         } else {
-            foreign import avutil "../libavutil.so"
+            #panic("This architecture is currently not supported on Linux")
         }
     } else {
         foreign import avutil "system:avutil"

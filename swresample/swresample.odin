@@ -52,7 +52,7 @@ when ODIN_OS == .Windows {
         } else when ODIN_ARCH == .arm64 {
             foreign import swresample "../linux_arm64/libswresample.linux.a"
         } else {
-            foreign import swresample "../libswresample.linux.a"
+            #panic("This architecture is currently not supported on Linux")
         }
     } else when LINK == "shared" {
         when ODIN_ARCH == .amd64 {
@@ -60,7 +60,7 @@ when ODIN_OS == .Windows {
         } else when ODIN_ARCH == .arm64 {
             foreign import swresample "../linux_arm64/libswresample.so"
         } else {
-            foreign import swresample "../libswresample.so"
+            #panic("This architecture is currently not supported on Linux")
         }
     } else {
         foreign import swresample "system:swresample"

@@ -15,32 +15,19 @@
 # Build your app with:
 #   odin build . -define:FFMPEG_LINK=shared
 #
-# Darwin runtime — add rpath pointing at this directory, e.g.:
+# Darwin runtime — add rpath pointing at the arch dir, e.g.:
 #   odin build . -define:FFMPEG_LINK=shared \
-#       -extra-linker-flags:"-rpath /abs/path/to/vendor/ffmpeg"
+#       -extra-linker-flags:"-rpath /abs/path/to/vendor/ffmpeg/darwin_arm64"
 # Linux runtime — libs must be on LD_LIBRARY_PATH or rpath-patched with patchelf.
 
 set -e
 
 BASE="$(cd "$(dirname "$0")" && pwd)"
 SRC="$BASE/FFmpeg"
-SRC_REMOTE="${FFMPEG_SRC_REMOTE:-https://github.com/FFmpeg/FFmpeg.git}"
 
 if [ ! -f "$SRC/configure" ]; then
-    if [ -e "$SRC" ] && [ ! -d "$SRC/.git" ]; then
-        echo "Error: $SRC exists but is not a git repository" >&2
-        echo "Remove it and re-run build.sh, or clone FFmpeg into that path." >&2
-        exit 1
-    fi
-    if [ ! -d "$SRC/.git" ]; then
-        echo "==> FFmpeg source missing. Cloning $SRC_REMOTE into $SRC"
-        git clone "$SRC_REMOTE" "$SRC"
-    fi
-fi
-
-if [ ! -f "$SRC/configure" ]; then
-    echo "Error: FFmpeg source not found at $SRC/configure after clone attempt" >&2
-    echo "Try: git -C $SRC checkout <valid-ffmpeg-ref>" >&2
+    echo "Error: FFmpeg source not found at $SRC/configure" >&2
+    echo "Vendor source must already exist inside this repository." >&2
     exit 1
 fi
 
@@ -118,7 +105,7 @@ Darwin)
     ARCH_DIR="$(darwin_arch_dir "$TARGET_ARCH")"
     OUT_DIR="$BASE/$ARCH_DIR"
     mkdir -p "$OUT_DIR"
-    echo "==> Copying shared libs to $BASE/..."
+    echo "==> Copying shared libs to $OUT_DIR/..."
     for lib in $LIBS; do
         src="$BUILD_DIR/lib/lib${lib}.dylib"
         dst="$OUT_DIR/lib${lib}.dylib"
@@ -133,7 +120,7 @@ Darwin)
 
     echo "==> Fixing inter-library @rpath references..."
     for lib in $LIBS; do
-        dst="$BASE/lib${lib}.dylib"
+        dst="$OUT_DIR/lib${lib}.dylib"
         [ -f "$dst" ] || continue
         for dep in $LIBS; do
             otool -L "$dst" | awk '{print $1}' | grep "lib${dep}" | grep -v "@rpath" | while read -r old; do
@@ -144,7 +131,7 @@ Darwin)
 
     echo "==> Done. Shared libs written to $OUT_DIR/"
     echo "    Build with: odin build . -define:FFMPEG_LINK=shared"
-    echo "    Add rpath:  -extra-linker-flags:\"-rpath \$(pwd)/vendor/ffmpeg\""
+    echo "    Add rpath:  -extra-linker-flags:\"-rpath $OUT_DIR\""
     ;;
 
 Linux)

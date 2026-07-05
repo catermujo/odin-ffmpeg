@@ -8,7 +8,7 @@
 #   ./build_static.sh x86_64       # cross-compile to x86_64
 #
 # Output:
-#   Darwin: libXXX.darwin.a files placed next to this script.
+#   Darwin: darwin_{arch}/libXXX.darwin.a
 #   Linux: linux_{arch}/libXXX.linux.a (e.g. linux_x64/libavcodec.linux.a).
 # Build with: odin build . -define:FFMPEG_LINK=static
 
@@ -19,7 +19,7 @@ SRC="$BASE/FFmpeg"
 
 if [ ! -f "$SRC/configure" ]; then
     echo "Error: FFmpeg source not found at $SRC/configure" >&2
-    echo "Clone it with: git clone https://github.com/FFmpeg/FFmpeg.git $SRC" >&2
+    echo "Vendor source must already exist inside this repository." >&2
     exit 1
 fi
 
@@ -110,7 +110,7 @@ else
     ARCH_DIR="$(darwin_arch_dir "$TARGET_ARCH")"
     OUT_DIR="$BASE/$ARCH_DIR"
     mkdir -p "$OUT_DIR"
-    echo "==> Copying static libs to $BASE/..."
+    echo "==> Copying static libs to $OUT_DIR/..."
     for lib in avutil avcodec avformat avfilter swscale swresample avdevice; do
         src="$BUILD_DIR/lib/lib${lib}.a"
         dst="$OUT_DIR/lib${lib}.${OS_EXT}.a"

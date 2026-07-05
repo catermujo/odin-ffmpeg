@@ -77,7 +77,7 @@ when ODIN_OS == .Windows {
         } else when ODIN_ARCH == .arm64 {
             foreign import avformat "../linux_arm64/libavformat.linux.a"
         } else {
-            foreign import avformat "../libavformat.linux.a"
+            #panic("This architecture is currently not supported on Linux")
         }
     } else when LINK == "shared" {
         when ODIN_ARCH == .amd64 {
@@ -85,7 +85,7 @@ when ODIN_OS == .Windows {
         } else when ODIN_ARCH == .arm64 {
             foreign import avformat "../linux_arm64/libavformat.so"
         } else {
-            foreign import avformat "../libavformat.so"
+            #panic("This architecture is currently not supported on Linux")
         }
     } else {
         foreign import avformat "system:avformat"
