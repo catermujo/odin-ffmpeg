@@ -140,13 +140,20 @@ Linux)
     mkdir -p "$OUT_DIR"
     echo "==> Copying shared libs to $OUT_DIR/..."
     for lib in $LIBS; do
-        src="$BUILD_DIR/lib/lib${lib}.so"
-        dst="$OUT_DIR/lib${lib}.so"
-        if [ -f "$src" ] || [ -L "$src" ]; then
-            cp -L "$src" "$dst"
-            echo "    $ARCH_DIR/lib${lib}.so"
-        else
-            echo "    Warning: $src not found, skipping" >&2
+        found=false
+        for src in "$BUILD_DIR"/lib/lib${lib}.so*; do
+            if [ ! -f "$src" ] && [ ! -L "$src" ]; then
+                continue
+            fi
+            name=$(basename "$src")
+            dst="$OUT_DIR/$name"
+            rm -f "$dst"
+            cp -P "$src" "$dst"
+            echo "    $ARCH_DIR/$name"
+            found=true
+        done
+        if [ "$found" != true ]; then
+            echo "    Warning: $BUILD_DIR/lib/lib${lib}.so not found, skipping" >&2
         fi
     done
 
