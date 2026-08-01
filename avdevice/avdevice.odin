@@ -57,8 +57,16 @@ when ODIN_OS == .Windows {
         }
     } else when LINK == "shared" {
         when ODIN_ARCH == .amd64 {
+            @(require) foreign import _avf "../linux_x64/libavfilter.so"
+            @(require) foreign import _avfmt "../linux_x64/libavformat.so"
+            @(require) foreign import _avc "../linux_x64/libavcodec.so"
+            @(require) foreign import _avu "../linux_x64/libavutil.so"
             foreign import avdevice "../linux_x64/libavdevice.so"
         } else when ODIN_ARCH == .arm64 {
+            @(require) foreign import _avf "../linux_arm64/libavfilter.so"
+            @(require) foreign import _avfmt "../linux_arm64/libavformat.so"
+            @(require) foreign import _avc "../linux_arm64/libavcodec.so"
+            @(require) foreign import _avu "../linux_arm64/libavutil.so"
             foreign import avdevice "../linux_arm64/libavdevice.so"
         } else {
             #panic("This architecture is currently not supported on Linux")

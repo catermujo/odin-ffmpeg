@@ -56,8 +56,10 @@ when ODIN_OS == .Windows {
         }
     } else when LINK == "shared" {
         when ODIN_ARCH == .amd64 {
+            @(require) foreign import _avu "../linux_x64/libavutil.so"
             foreign import swresample "../linux_x64/libswresample.so"
         } else when ODIN_ARCH == .arm64 {
+            @(require) foreign import _avu "../linux_arm64/libavutil.so"
             foreign import swresample "../linux_arm64/libswresample.so"
         } else {
             #panic("This architecture is currently not supported on Linux")

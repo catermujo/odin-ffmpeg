@@ -100,8 +100,18 @@ when ODIN_OS == .Windows {
         }
     } else when LINK == "shared" {
         when ODIN_ARCH == .amd64 {
+            @(require) foreign import _sws "../linux_x64/libswscale.so"
+            @(require) foreign import _avf "../linux_x64/libavformat.so"
+            @(require) foreign import _avc "../linux_x64/libavcodec.so"
+            @(require) foreign import _swr "../linux_x64/libswresample.so"
+            @(require) foreign import _avu "../linux_x64/libavutil.so"
             foreign import avfilter "../linux_x64/libavfilter.so"
         } else when ODIN_ARCH == .arm64 {
+            @(require) foreign import _sws "../linux_arm64/libswscale.so"
+            @(require) foreign import _avf "../linux_arm64/libavformat.so"
+            @(require) foreign import _avc "../linux_arm64/libavcodec.so"
+            @(require) foreign import _swr "../linux_arm64/libswresample.so"
+            @(require) foreign import _avu "../linux_arm64/libavutil.so"
             foreign import avfilter "../linux_arm64/libavfilter.so"
         } else {
             #panic("This architecture is currently not supported on Linux")

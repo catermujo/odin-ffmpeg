@@ -56,8 +56,10 @@ when ODIN_OS == .Windows {
         }
     } else when LINK == "shared" {
         when ODIN_ARCH == .amd64 {
+            @(require) foreign import _avu "../linux_x64/libavutil.so"
             foreign import swscale "../linux_x64/libswscale.so"
         } else when ODIN_ARCH == .arm64 {
+            @(require) foreign import _avu "../linux_arm64/libavutil.so"
             foreign import swscale "../linux_arm64/libswscale.so"
         } else {
             #panic("This architecture is currently not supported on Linux")
