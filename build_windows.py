@@ -96,7 +96,8 @@ def run_with_msvc_env(bash_path: Path, mode: str, arch: str) -> int:
     vsdevcmd = find_vsdevcmd()
     if vsdevcmd is None:
         print(
-            "Error: cl.exe not found and VsDevCmd.bat could not be located.",
+            "Error: cl.exe not found and VsDevCmd.bat could not be located. "
+            "Install Visual Studio 2022 C++ tools or use an x64 Native Tools prompt.",
             file=sys.stderr,
         )
         return 1
@@ -133,7 +134,8 @@ def main(argv: list[str] | None = None) -> int:
     bash_path = find_bash()
     if bash_path is None:
         print(
-            "Error: bash.exe not found. Install Git for Windows or MSYS2 and add bash to PATH.",
+            "Error: bash.exe not found. Install Git for Windows or MSYS2 "
+            "(scoop install git or scoop install msys2), then add bash to PATH.",
             file=sys.stderr,
         )
         return 1

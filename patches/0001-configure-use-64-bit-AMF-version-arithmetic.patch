@@ -1,0 +1,24 @@
+From 2dca9d0bb75bd9d0e6d93ca834c4a0f6d42b67f2 Mon Sep 17 00:00:00 2001
+From: Catermujo <noreply@catermujo.local>
+Date: Wed, 26 Aug 2026 11:20:00 -0300
+Subject: [PATCH] configure: use 64-bit AMF version arithmetic
+
+MSVC evaluates the AMF version check's unsuffixed left shifts as 32-bit
+expressions, so a valid AMF 1.5.2 header fails the configure probe.
+Use explicitly 64-bit multipliers for the version components.
+
+---
+ configure | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure b/configure
+index 21128a80a00c04e1e7199dfcdc2453d27709034d..59cc3b8d2b993478e0ac48cde82503bee868d43f 100755
+--- a/configure
++++ b/configure
+@@ -7909,5 +7909,5 @@
+ enabled amf &&
+     check_cpp_condition amf "AMF/core/Version.h" \
+-        "(AMF_VERSION_MAJOR << 48 | AMF_VERSION_MINOR << 32 | AMF_VERSION_RELEASE << 16 | AMF_VERSION_BUILD_NUM) >= 0x1000500020000"
++        "(AMF_VERSION_MAJOR * 0x1000000000000ULL | AMF_VERSION_MINOR * 0x100000000ULL | AMF_VERSION_RELEASE * 0x10000ULL | AMF_VERSION_BUILD_NUM) >= 0x1000500020000ULL"
+
+ # Funny iconv installations are not unusual, so check it after all flags have been set

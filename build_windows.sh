@@ -8,6 +8,7 @@
 # Requirements:
 #   - Run from a shell where MSVC tools are available (cl.exe/link.exe).
 #   - bash + make available (Git Bash/MSYS2).
+#   - pkg-config available on PATH.
 #   - FFmpeg's NVENC, AMF, and oneVPL development headers/libraries available.
 #   - Set FFMPEG_EXTRA_CFLAGS/LDFLAGS when those SDKs are outside compiler defaults.
 
@@ -51,6 +52,11 @@ SRC="$BASE/FFmpeg"
 SRC_REMOTE="${FFMPEG_SRC_REMOTE:-https://github.com/FFmpeg/FFmpeg.git}"
 
 if [ ! -f "$SRC/configure" ]; then
+    if ! command -v git >/dev/null 2>&1; then
+        echo "Error: git not found; cannot clone FFmpeg source." >&2
+        echo "Fix: scoop install git" >&2
+        exit 1
+    fi
     if [ -e "$SRC" ] && [ ! -d "$SRC/.git" ]; then
         echo "Error: $SRC exists but is not a git repository" >&2
         echo "Remove it and re-run build_windows.sh, or clone FFmpeg into that path." >&2
@@ -68,15 +74,44 @@ if [ ! -f "$SRC/configure" ]; then
     exit 1
 fi
 
-if ! command -v cl.exe >/dev/null 2>&1; then
-    echo "Error: cl.exe not found. Run from a Visual Studio x64 developer shell." >&2
-    exit 1
-fi
+for patch in "$BASE"/patches/*.patch; do
+    [ -f "$patch" ] || continue
+    subject="$(sed -n 's/^Subject: \[PATCH\] //p' "$patch" | sed 's/\r$//' | head -n 1)"
+    if [ -n "$subject" ] && git -C "$SRC" log --format=%s --all | grep -Fxe "$subject" >/dev/null; then
+        continue
+    fi
+    if ! git -C "$SRC" am --3way "$patch"; then
+        git -C "$SRC" am --abort || true
+        echo "Error: failed to apply FFmpeg patch $(basename "$patch")" >&2
+        exit 1
+    fi
+done
 
-if ! command -v make >/dev/null 2>&1; then
-    echo "Error: make not found. Install Git Bash or MSYS2 and ensure make is in PATH." >&2
-    exit 1
-fi
+require_command() {
+    local name="$1"
+    local fix="$2"
+    if ! command -v "$name" >/dev/null 2>&1; then
+        echo "Error: $name not found." >&2
+        echo "Fix: $fix" >&2
+        exit 1
+    fi
+}
+
+require_pkg_config() {
+    local package="$1"
+    local requirement="$2"
+    local fix="$3"
+    if ! pkg-config --exists "$requirement"; then
+        echo "Error: $package missing from pkg-config ($requirement)." >&2
+        echo "Fix: $fix" >&2
+        echo "Then add the directory containing its .pc file to PKG_CONFIG_PATH." >&2
+        exit 1
+    fi
+}
+
+require_command cl.exe "Install Visual Studio 2022 C++ tools, then use an x64 Native Tools prompt."
+require_command make "scoop install make, or install make with MSYS2."
+require_command pkg-config "scoop install pkg-config, or install pkgconf with MSYS2."
 
 CPUS="${NUMBER_OF_PROCESSORS:-}"
 if [ -z "$CPUS" ] && command -v nproc >/dev/null 2>&1; then
@@ -97,10 +132,13 @@ fi
 FFMPEG_EXTRA_CFLAGS="${FFMPEG_EXTRA_CFLAGS:-}"
 FFMPEG_EXTRA_LDFLAGS="${FFMPEG_EXTRA_LDFLAGS:-}"
 
+require_pkg_config ffnvcodec "ffnvcodec" "vcpkg install ffnvcodec:x64-windows"
+require_pkg_config libvpl "vpl >= 2.6" "build and install oneVPL from source; see README.md"
+
 echo "==> Configuring FFmpeg ($MODE): os=windows arch=$FFMPEG_ARCH prefix=$BUILD_DIR"
 cd "$SRC"
 
-./configure \
+if ! ./configure \
     --prefix="$BUILD_DIR" \
     --arch="$FFMPEG_ARCH" \
     --target-os="$FFMPEG_TARGET_OS" \
@@ -116,13 +154,18 @@ cd "$SRC"
     --enable-amf \
     --enable-libvpl \
     --extra-cflags="$FFMPEG_EXTRA_CFLAGS" \
-    --extra-ldflags="$FFMPEG_EXTRA_LDFLAGS"
+    --extra-ldflags="$FFMPEG_EXTRA_LDFLAGS"; then
+    echo "FFmpeg configure failed. AMF needs version 1.5.2 or newer in FFMPEG_EXTRA_CFLAGS." >&2
+    echo "Use the Windows FFmpeg hardware encoder instructions in README.md if amd-amf is too old." >&2
+    echo "See README.md in the repository for the complete Windows hardware-encoder setup." >&2
+    exit 1
+fi
 
 echo "==> Building (using $CPUS cores)..."
 make -j"$CPUS"
 
 echo "==> Installing to $BUILD_DIR..."
-make install
+make install-libs
 
 LIBS=(avutil avcodec avformat avfilter swscale swresample avdevice)
 
@@ -147,6 +190,7 @@ if [ "$MODE" = "shared" ]; then
     for lib in "${LIBS[@]}"; do
         copy_first \
             "$BASE/$FFMPEG_OUTPUT_DIR/${lib}.lib" \
+            "$BUILD_DIR/bin/${lib}.lib" \
             "$BUILD_DIR/lib/${lib}.lib" \
             "$BUILD_DIR/lib/lib${lib}.lib" || true
     done
@@ -176,6 +220,7 @@ else
     for lib in "${LIBS[@]}"; do
         copy_first \
             "$BASE/$FFMPEG_OUTPUT_DIR/${lib}_static.lib" \
+            "$BUILD_DIR/bin/${lib}.lib" \
             "$BUILD_DIR/lib/${lib}.lib" \
             "$BUILD_DIR/lib/lib${lib}.lib" || true
     done
