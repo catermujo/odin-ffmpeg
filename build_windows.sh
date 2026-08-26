@@ -8,6 +8,8 @@
 # Requirements:
 #   - Run from a shell where MSVC tools are available (cl.exe/link.exe).
 #   - bash + make available (Git Bash/MSYS2).
+#   - FFmpeg's NVENC, AMF, and oneVPL development headers/libraries available.
+#   - Set FFMPEG_EXTRA_CFLAGS/LDFLAGS when those SDKs are outside compiler defaults.
 
 set -euo pipefail
 
@@ -79,6 +81,9 @@ else
     MODE_FLAGS=(--enable-static --disable-shared)
 fi
 
+FFMPEG_EXTRA_CFLAGS="${FFMPEG_EXTRA_CFLAGS:-}"
+FFMPEG_EXTRA_LDFLAGS="${FFMPEG_EXTRA_LDFLAGS:-}"
+
 echo "==> Configuring FFmpeg ($MODE): os=windows arch=$FFMPEG_ARCH prefix=$BUILD_DIR"
 cd "$SRC"
 
@@ -93,7 +98,12 @@ cd "$SRC"
     --disable-debug \
     --disable-avx \
     --disable-avx2 \
-    --disable-iconv
+    --disable-iconv \
+    --enable-nvenc \
+    --enable-amf \
+    --enable-libvpl \
+    --extra-cflags="$FFMPEG_EXTRA_CFLAGS" \
+    --extra-ldflags="$FFMPEG_EXTRA_LDFLAGS"
 
 echo "==> Building (using $CPUS cores)..."
 make -j"$CPUS"
