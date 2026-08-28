@@ -6,7 +6,14 @@ import "core:c"
 
 LINK :: #config(FFMPEG_LINK, "system")
 
-when ODIN_OS == .Windows {
+when ODIN_ARCH == .wasm32 || ODIN_ARCH == .wasm64p32 {
+    @(require) foreign import _avc "../avcodec.wasm.a"
+    @(require) foreign import _avu "../avutil.wasm.a"
+    @(require) foreign import _swr "../swresample.wasm.a"
+    @(require) foreign import _sws "../swscale.wasm.a"
+    @(export)
+    foreign import avformat "../avformat.wasm.a"
+} else when ODIN_OS == .Windows {
     when ODIN_ARCH == .amd64 {
         when LINK == "static" {
             foreign import avformat "../windows_x64/avformat_static.lib"

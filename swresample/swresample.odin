@@ -5,7 +5,11 @@ import "core:c"
 
 LINK :: #config(FFMPEG_LINK, "system")
 
-when ODIN_OS == .Windows {
+when ODIN_ARCH == .wasm32 || ODIN_ARCH == .wasm64p32 {
+    @(require) foreign import _avu "../avutil.wasm.a"
+    @(export)
+    foreign import swresample "../swresample.wasm.a"
+} else when ODIN_OS == .Windows {
     when ODIN_ARCH == .amd64 {
         when LINK == "static" {
             foreign import swresample "../windows_x64/swresample_static.lib"

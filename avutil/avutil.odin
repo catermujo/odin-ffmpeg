@@ -4,7 +4,10 @@ import "core:c"
 
 LINK :: #config(FFMPEG_LINK, "system")
 
-when ODIN_OS == .Windows {
+when ODIN_ARCH == .wasm32 || ODIN_ARCH == .wasm64p32 {
+    @(export)
+    foreign import avutil "../avutil.wasm.a"
+} else when ODIN_OS == .Windows {
     when ODIN_ARCH == .amd64 {
         when LINK == "static" {
             foreign import avutil "../windows_x64/avutil_static.lib"

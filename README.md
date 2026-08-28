@@ -1,5 +1,22 @@
 # Catermujo FFmpeg vendor
 
+The canonical entry points are:
+
+- `build.bat` / `build_static.bat` — Windows shared or static libraries.
+- `build.sh` / `build_static.sh` — macOS or Linux shared or static libraries.
+- `build_wasm.sh` — Emscripten static libraries in `*.wasm.a`; Web has no shared-library mode.
+
+The Web build stages one archive per FFmpeg library. Odin's WebAssembly branches import those archives, while the root
+build system adds them automatically to Emscripten application links when `vendor/ffmpeg` is a dependency.
+The build enables Emscripten pthread support because current FFmpeg requires a thread backend for its compatibility
+API.
+
+Run it from this directory after installing Emscripten:
+
+```bash
+./build_wasm.sh
+```
+
 ## Windows build with NVENC, QSV, and AMF
 
 The vendor build enables NVIDIA NVENC, Intel QSV, and AMD AMF. GPU drivers are only needed when using the encoders;
