@@ -212,6 +212,14 @@ if [ "$MODE" = "shared" ]; then
         fi
     done
 
+    VPL_DLL="$SRC/.build-deps/oneVPL-install/bin/libvpl.dll"
+    if [ -f "$VPL_DLL" ]; then
+        cp -f "$VPL_DLL" "$BASE/$FFMPEG_OUTPUT_DIR/libvpl.dll"
+        echo "    libvpl.dll"
+    else
+        echo "    Warning: oneVPL dispatcher libvpl.dll not found at $VPL_DLL" >&2
+    fi
+
     echo "==> Done. Shared libs written to $BASE/$FFMPEG_OUTPUT_DIR/"
     echo "    Build with: odin build . -define:FFMPEG_LINK=shared"
 else
