@@ -150,6 +150,7 @@ if ! ./configure \
     --disable-avx \
     --disable-avx2 \
     --disable-iconv \
+    --enable-d3d12va \
     --enable-nvenc \
     --enable-amf \
     --enable-libvpl \

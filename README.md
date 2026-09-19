@@ -17,9 +17,9 @@ Run it from this directory after installing Emscripten:
 ./build_wasm.sh
 ```
 
-## Windows build with NVENC, QSV, and AMF
+## Windows build with D3D12VA, NVENC, QSV, and AMF
 
-The vendor build enables NVIDIA NVENC, Intel QSV, and AMD AMF. GPU drivers are only needed when using the encoders;
+The vendor build enables D3D12VA H.264, NVIDIA NVENC, Intel QSV, and AMD AMF. GPU drivers are only needed when using the encoders;
 the build needs their development headers and libraries.
 
 Install the Windows build tools and SDK headers from PowerShell:
@@ -75,7 +75,11 @@ From the catermujo root, `./tool vendor build ffmpeg` builds the shared variant.
 and static variants explicitly.
 
 At runtime, keep `libvpl.dll` from `C:\deps\oneVPL-install\bin` beside the application or on `PATH` when using
-QSV. NVIDIA and AMD GPU drivers provide the NVENC and AMF runtime components.
+QSV. NVIDIA and AMD GPU drivers provide the NVENC and AMF runtime components. D3D12VA uses the Windows D3D12 video
+encode interfaces supplied by the graphics driver.
+
+The explicit `--enable-d3d12va` flag is required because FFmpeg's D3D12VA encoder is not enabled by every Windows
+autodetection environment. The encoder is exposed at runtime as `h264_d3d12va` and consumes D3D12 NV12 frames.
 
 ### Missing dependency fixes
 
