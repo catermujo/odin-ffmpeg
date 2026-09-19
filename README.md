@@ -81,6 +81,10 @@ encode interfaces supplied by the graphics driver.
 The explicit `--enable-d3d12va` flag is required because FFmpeg's D3D12VA encoder is not enabled by every Windows
 autodetection environment. The encoder is exposed at runtime as `h264_d3d12va` and consumes D3D12 NV12 frames.
 
+For a D3D12-only build on a machine without the optional NVIDIA, AMD, or oneVPL SDKs, set
+`FFMPEG_D3D12_ONLY=1` before running the Windows build. This keeps the D3D12 encoder while disabling those unrelated
+hardware backends and their development-package checks.
+
 ### Missing dependency fixes
 
 - `cl.exe`: install Visual Studio 2022 Desktop development with C++ and use its x64 Native Tools prompt.

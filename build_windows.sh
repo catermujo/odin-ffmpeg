@@ -132,8 +132,13 @@ fi
 FFMPEG_EXTRA_CFLAGS="${FFMPEG_EXTRA_CFLAGS:-}"
 FFMPEG_EXTRA_LDFLAGS="${FFMPEG_EXTRA_LDFLAGS:-}"
 
-require_pkg_config ffnvcodec "ffnvcodec" "vcpkg install ffnvcodec:x64-windows"
-require_pkg_config libvpl "vpl >= 2.6" "build and install oneVPL from source; see README.md"
+if [ "${FFMPEG_D3D12_ONLY:-0}" = "1" ]; then
+    HW_FLAGS=(--enable-d3d12va --disable-nvenc --disable-amf --disable-libvpl)
+else
+    require_pkg_config ffnvcodec "ffnvcodec" "vcpkg install ffnvcodec:x64-windows"
+    require_pkg_config libvpl "vpl >= 2.6" "build and install oneVPL from source; see README.md"
+    HW_FLAGS=(--enable-d3d12va --enable-nvenc --enable-amf --enable-libvpl)
+fi
 
 echo "==> Configuring FFmpeg ($MODE): os=windows arch=$FFMPEG_ARCH prefix=$BUILD_DIR"
 cd "$SRC"
@@ -150,10 +155,7 @@ if ! ./configure \
     --disable-avx \
     --disable-avx2 \
     --disable-iconv \
-    --enable-d3d12va \
-    --enable-nvenc \
-    --enable-amf \
-    --enable-libvpl \
+    "${HW_FLAGS[@]}" \
     --extra-cflags="$FFMPEG_EXTRA_CFLAGS" \
     --extra-ldflags="$FFMPEG_EXTRA_LDFLAGS"; then
     echo "FFmpeg configure failed. AMF needs version 1.5.2 or newer in FFMPEG_EXTRA_CFLAGS." >&2
