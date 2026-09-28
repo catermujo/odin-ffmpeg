@@ -8,14 +8,15 @@
 //   odin run vendor/ffmpeg/examples/decode_filter_video/ -- <input_file>
 package main
 
-import avcodec "../avcodec"
-import avfilt "../avfilter"
-import avfmt "../avformat"
-import avutil "../avutil"
 import "core:c"
 import "core:fmt"
 import "core:os"
 import "core:strings"
+
+import "../avcodec"
+import avfilt "../avfilter"
+import avfmt "../avformat"
+import "../avutil"
 
 
 err_str :: proc(code: c.int) -> string {

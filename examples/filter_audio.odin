@@ -9,13 +9,14 @@
 //   odin run vendor/ffmpeg/examples/filter_audio/
 package main
 
-import avfilt "../avfilter"
-import avutil "../avutil"
 import "core:c"
 import "core:fmt"
 import "core:math"
 import "core:os"
 import "core:strings"
+
+import avfilt "../avfilter"
+import "../avutil"
 
 SAMPLE_RATE :: 8000
 DURATION_SECS :: 10

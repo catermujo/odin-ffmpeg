@@ -12,14 +12,15 @@
 //   odin run vendor/ffmpeg/examples/mux/ -- output.mpeg
 package main
 
-import avcodec "../avcodec"
-import avfmt "../avformat"
-import avutil "../avutil"
 import "core:c"
 import "core:fmt"
 import "core:math"
 import "core:os"
 import "core:strings"
+
+import "../avcodec"
+import avfmt "../avformat"
+import "../avutil"
 
 
 err_str :: proc(code: c.int) -> string {

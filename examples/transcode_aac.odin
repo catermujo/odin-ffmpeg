@@ -9,14 +9,15 @@
 //   odin run vendor/ffmpeg/examples/transcode_aac/ -- <input> <output.m4a>
 package main
 
-import avcodec "../avcodec"
-import avfmt "../avformat"
-import avutil "../avutil"
-import swr "../swresample"
 import "core:c"
 import "core:fmt"
 import "core:os"
 import "core:strings"
+
+import "../avcodec"
+import avfmt "../avformat"
+import "../avutil"
+import swr "../swresample"
 
 
 // ---------------------------------------------------------------------------

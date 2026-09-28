@@ -1,8 +1,9 @@
 package avformat
 
-import avcodec "../avcodec"
-import avutil "../avutil"
 import "core:c"
+
+import "../avcodec"
+import "../avutil"
 
 LINK :: #config(FFMPEG_LINK, "system")
 

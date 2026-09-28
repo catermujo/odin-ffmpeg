@@ -12,14 +12,15 @@
 //   odin run vendor/ffmpeg/examples/transcode/ -- <input> <output>
 package main
 
-import avcodec "../avcodec"
-import avfilt "../avfilter"
-import avfmt "../avformat"
-import avutil "../avutil"
 import "core:c"
 import "core:fmt"
 import "core:os"
 import "core:strings"
+
+import "../avcodec"
+import avfilt "../avfilter"
+import avfmt "../avformat"
+import "../avutil"
 
 
 // AV_OPT_SEARCH_CHILDREN from FFmpeg opt.h

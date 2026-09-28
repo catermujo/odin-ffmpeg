@@ -4,12 +4,13 @@
 //   odin run vendor/ffmpeg/examples/probe/ -- /path/to/file.mp4
 package main
 
-import avcodec "../avcodec"
-import avfmt "../avformat"
-import avutil "../avutil"
 import "core:fmt"
 import "core:os"
 import "core:strings"
+
+import "../avcodec"
+import avfmt "../avformat"
+import "../avutil"
 
 main :: proc() {
     if len(os.args) < 2 {

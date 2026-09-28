@@ -7,13 +7,14 @@
 //   odin run vendor/ffmpeg/examples/avio_http_serve_files/ -- /local/file.mp4 http://0.0.0.0:8080
 package main
 
-import avfmt "../avformat"
-import avutil "../avutil"
 import "core:c"
 import "core:fmt"
 import "core:os"
 import "core:strings"
 import "core:sys/posix"
+
+import avfmt "../avformat"
+import "../avutil"
 
 // AV_OPT_SEARCH_CHILDREN from FFmpeg opt.h
 AV_OPT_SEARCH_CHILDREN :: c.int(2)

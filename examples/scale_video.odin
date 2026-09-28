@@ -12,14 +12,15 @@
 //   odin run vendor/ffmpeg/examples/scale_video/ -- input.mp4 640x480 out.yuv
 package main
 
-import avcodec "../avcodec"
-import avfmt "../avformat"
-import avutil "../avutil"
-import sws "../swscale"
 import "core:c"
 import "core:fmt"
 import "core:os"
 import "core:strings"
+
+import "../avcodec"
+import avfmt "../avformat"
+import "../avutil"
+import sws "../swscale"
 
 
 err_str :: proc(code: c.int) -> string {

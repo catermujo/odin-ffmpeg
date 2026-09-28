@@ -4,11 +4,12 @@
 //   odin run vendor/ffmpeg/examples/show_metadata/ -- /path/to/file.mp4
 package main
 
-import avfmt "../avformat"
-import avutil "../avutil"
 import "core:fmt"
 import "core:os"
 import "core:strings"
+
+import avfmt "../avformat"
+import "../avutil"
 
 main :: proc() {
     if len(os.args) < 2 {

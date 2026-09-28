@@ -7,13 +7,14 @@
 //   odin run vendor/ffmpeg/examples/extract_mvs/ -- <input_file>
 package main
 
-import avcodec "../avcodec"
-import avfmt "../avformat"
-import avutil "../avutil"
 import "core:c"
 import "core:fmt"
 import "core:os"
 import "core:strings"
+
+import "../avcodec"
+import avfmt "../avformat"
+import "../avutil"
 
 
 // AV_FRAME_DATA_MOTION_VECTORS = 8 in FFmpeg source (frame.h)

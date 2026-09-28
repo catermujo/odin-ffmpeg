@@ -6,13 +6,14 @@
 //   odin run vendor/ffmpeg/examples/remux/ -- input.mp4 output.mkv
 package main
 
-import avcodec "../avcodec"
-import avfmt "../avformat"
-import avutil "../avutil"
 import "core:c"
 import "core:fmt"
 import "core:os"
 import "core:strings"
+
+import "../avcodec"
+import avfmt "../avformat"
+import "../avutil"
 
 err_str :: proc(code: c.int) -> string {
     buf: [avutil.AV_ERROR_MAX_STRING_SIZE]c.char

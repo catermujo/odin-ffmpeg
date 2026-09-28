@@ -13,13 +13,14 @@
 //   odin run vendor/ffmpeg/examples/resample_audio/ -- out.raw
 package main
 
-import avutil "../avutil"
-import swr "../swresample"
 import "core:c"
 import "core:fmt"
 import "core:math"
 import "core:os"
 import "core:strings"
+
+import "../avutil"
+import swr "../swresample"
 
 err_str :: proc(code: c.int) -> string {
     buf: [avutil.AV_ERROR_MAX_STRING_SIZE]c.char

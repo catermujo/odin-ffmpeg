@@ -7,14 +7,15 @@
 //   odin run vendor/ffmpeg/examples/decode/ -- /path/to/file.mp4
 package main
 
-import avcodec "../avcodec"
-import avfmt "../avformat"
-import avutil "../avutil"
-import sws "../swscale"
 import "core:c"
 import "core:fmt"
 import "core:os"
 import "core:strings"
+
+import "../avcodec"
+import avfmt "../avformat"
+import "../avutil"
+import sws "../swscale"
 
 // AVERROR(EAGAIN) on every platform == -EAGAIN.  We only need to distinguish
 // "try again" vs "real error", so a simple < 0 check for the inner loop is

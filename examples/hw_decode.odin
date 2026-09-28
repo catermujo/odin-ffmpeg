@@ -13,13 +13,14 @@
 //   ./hw_decode vaapi input.mp4 /tmp/out.raw
 package main
 
-import avcodec "../avcodec"
-import avfmt "../avformat"
-import avutil "../avutil"
 import "core:c"
 import "core:fmt"
 import "core:os"
 import "core:strings"
+
+import "../avcodec"
+import avfmt "../avformat"
+import "../avutil"
 
 
 // ---------------------------------------------------------------------------

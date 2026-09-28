@@ -11,13 +11,14 @@
 // Note: Linux only. Requires a VAAPI-capable GPU and driver.
 package main
 
-import avcodec "../avcodec"
-import avutil "../avutil"
 import "core:c"
 import "core:fmt"
 import "core:os"
 import "core:strconv"
 import "core:strings"
+
+import "../avcodec"
+import "../avutil"
 
 
 // AVHWFramesContext from FFmpeg hwcontext.h (simplified — fields used by this example)

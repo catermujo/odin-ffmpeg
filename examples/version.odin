@@ -4,14 +4,15 @@
 //   odin run vendor/ffmpeg/examples/version/
 package main
 
-import avcodec "../avcodec"
-import avdevice "../avdevice"
-import avfilter "../avfilter"
-import avfmt "../avformat"
-import avutil "../avutil"
-import swresample "../swresample"
-import swscale "../swscale"
 import "core:fmt"
+
+import "../avcodec"
+import "../avdevice"
+import "../avfilter"
+import avfmt "../avformat"
+import "../avutil"
+import "../swresample"
+import "../swscale"
 
 ver :: proc(v: u32) -> string {
     return fmt.tprintf("%d.%d.%d", v >> 16, (v >> 8) & 0xFF, v & 0xFF)

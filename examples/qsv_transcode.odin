@@ -6,14 +6,15 @@
 //   odin run vendor/ffmpeg/examples/qsv_transcode/ -- input.mp4 h264_qsv output.mp4 "g 60"
 package main
 
-import avcodec "../avcodec"
-import avfmt "../avformat"
-import avutil "../avutil"
 import "core:c"
 import "core:fmt"
 import "core:os"
 import "core:strconv"
 import "core:strings"
+
+import "../avcodec"
+import avfmt "../avformat"
+import "../avutil"
 
 AVERROR_ENOMEM :: -12
 

@@ -4,10 +4,11 @@
 //   odin run vendor/ffmpeg/examples/avio_list_dir/ -- /path/to/dir
 package main
 
-import avfmt "../avformat"
 import "core:fmt"
 import "core:os"
 import "core:strings"
+
+import avfmt "../avformat"
 
 type_name :: proc(t: avfmt.IODirEntryType) -> string {
     #partial switch t {

@@ -6,13 +6,14 @@
 //   odin run vendor/ffmpeg/examples/encode_audio/ -- output.mp2
 package main
 
-import avcodec "../avcodec"
-import avutil "../avutil"
 import "core:c"
 import "core:fmt"
 import "core:math"
 import "core:os"
 import "core:strings"
+
+import "../avcodec"
+import "../avutil"
 
 
 err_str :: proc(code: c.int) -> string {

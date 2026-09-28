@@ -8,12 +8,13 @@
 //   odin run vendor/ffmpeg/examples/decode_video/ -- input.mpeg1
 package main
 
-import avcodec "../avcodec"
-import avutil "../avutil"
 import "core:c"
 import "core:fmt"
 import "core:os"
 import "core:strings"
+
+import "../avcodec"
+import "../avutil"
 
 INBUF_SIZE :: 4096
 

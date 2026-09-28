@@ -16,13 +16,14 @@
 // Note: Linux only. Requires a VAAPI-capable GPU and driver.
 package main
 
-import avcodec "../avcodec"
-import avfmt "../avformat"
-import avutil "../avutil"
 import "core:c"
 import "core:fmt"
 import "core:os"
 import "core:strings"
+
+import "../avcodec"
+import avfmt "../avformat"
+import "../avutil"
 
 
 // ---------------------------------------------------------------------------

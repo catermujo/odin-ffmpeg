@@ -12,14 +12,15 @@
 // Note: Linux/Intel only. Requires Intel Media SDK and QSV-capable hardware.
 package main
 
-import avcodec "../avcodec"
-import avfmt "../avformat"
-import avutil "../avutil"
 import "core:c"
 import "core:fmt"
 import "core:mem"
 import "core:os"
 import "core:strings"
+
+import "../avcodec"
+import avfmt "../avformat"
+import "../avutil"
 
 
 // ---------------------------------------------------------------------------

@@ -7,13 +7,14 @@
 //   odin run vendor/ffmpeg/examples/avio_read_callback/ -- /path/to/file.mp4
 package main
 
-import avcodec "../avcodec"
-import avfmt "../avformat"
-import avutil "../avutil"
 import "core:c"
 import "core:fmt"
 import "core:os"
 import "core:strings"
+
+import "../avcodec"
+import avfmt "../avformat"
+import "../avutil"
 
 // Buffer used by the custom read callback.
 BufferData :: struct {
