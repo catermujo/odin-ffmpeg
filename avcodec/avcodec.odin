@@ -5,6 +5,7 @@ import "core:c"
 import "../avutil"
 
 LINK :: #config(FFMPEG_LINK, "system")
+API_MAJOR :: #config(FFMPEG_AVCODEC_MAJOR, 62 when ODIN_OS == .Darwin else 63)
 
 when ODIN_ARCH == .wasm32 || ODIN_ARCH == .wasm64p32 {
     @(require) foreign import _swr "../swresample.wasm.a"
@@ -273,7 +274,8 @@ CodecID :: enum c.int {
     BmvVideo,
     Vble,
     Dxtory,
-    Xwd,
+    // DUMBAI: FFmpeg 63 removes V410. Keep later codec IDs compatible with the selected library ABI.
+    Xwd = 157 when API_MAJOR < 63 else 156,
     Cdxl,
     Xbm,
     Zerocodec,
