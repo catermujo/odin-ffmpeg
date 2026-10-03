@@ -12,6 +12,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from validate_shader_payloads import validate_shader_payloads
+
 ROOT = Path(__file__).resolve().parent
 BUILD_SCRIPT = ROOT / "build_windows.sh"
 
@@ -221,7 +223,13 @@ def write_manifest(mode: str, arch: str) -> None:
             and not path.name.endswith("_static.lib")
         )
     )
+    shader_payloads = validate_shader_payloads(source)
+    if shader_payloads["compression"]:
+        raise RuntimeError(
+            "Windows Vulkan build must disable shader compression explicitly"
+        )
     data = {
+        "shaders": shader_payloads,
         "ffmpeg_source_revision": subprocess.check_output(
             ["git", "rev-parse", "HEAD"], cwd=source, text=True
         ).strip(),

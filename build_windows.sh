@@ -157,6 +157,7 @@ if ! ./configure \
     --disable-iconv \
     "${HW_FLAGS[@]}" \
     --enable-zlib \
+    --disable-shader-compression \
     --enable-vulkan \
     --enable-encoder=prores_ks_vulkan \
     --glslc="${FFMPEG_GLSLC:?set FFMPEG_GLSLC or use build_windows.py}" \
@@ -168,8 +169,11 @@ if ! ./configure \
     exit 1
 fi
 
+python "$BASE/validate_shader_payloads.py" prepare "$SRC"
+
 echo "==> Building (using $CPUS cores)..."
 make -j"$CPUS"
+python "$BASE/validate_shader_payloads.py" verify "$SRC"
 
 echo "==> Installing to $BUILD_DIR..."
 make install-libs

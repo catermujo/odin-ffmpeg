@@ -125,3 +125,11 @@ With upstream CMake zlib headers on MSVC, zconf.h must treat HAVE_UNISTD_H as a 
 FFmpeg defines the unavailable feature as 0; a presence-only check would incorrectly include unistd.h.
 `windows_x64/build_manifest.json` records each variant's source revision, embedded configuration, artifact hashes,
 codec inventory for native shared builds, and the exact local compatibility header hash used.
+
+
+Windows builds keep zlib enabled for codecs but explicitly disable shader compression. FFmpeg's runtime shader
+loader and its generated SPIR-V/PTX arrays must use the same encoding. Changing zlib availability can otherwise
+change configure's compression default while Make reuses arrays generated under the previous setting.
+The build removes only generated shader caches from FFmpeg library directories, verifies every generated array's
+encoding, byte length, terminator, and source bytes before installing libraries, and records their hashes in the
+build manifest. Run `python validate_shader_payloads.py verify FFmpeg` to repeat the payload/configuration check.
