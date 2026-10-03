@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# build_windows.sh — build vendored FFmpeg on Windows using MSVC toolchain.
+# build_windows.sh - build vendored FFmpeg on Windows using MSVC toolchain.
 #
 # Usage:
 #   ./build_windows.sh shared [x86_64|arm64]
@@ -156,6 +156,10 @@ if ! ./configure \
     --disable-avx2 \
     --disable-iconv \
     "${HW_FLAGS[@]}" \
+    --enable-zlib \
+    --enable-vulkan \
+    --enable-encoder=prores_ks_vulkan \
+    --glslc="${FFMPEG_GLSLC:?set FFMPEG_GLSLC or use build_windows.py}" \
     --extra-cflags="$FFMPEG_EXTRA_CFLAGS" \
     --extra-ldflags="$FFMPEG_EXTRA_LDFLAGS"; then
     echo "FFmpeg configure failed. AMF needs version 1.5.2 or newer in FFMPEG_EXTRA_CFLAGS." >&2
@@ -221,6 +225,13 @@ if [ "$MODE" = "shared" ]; then
         echo "    libvpl.dll"
     else
         echo "    Warning: oneVPL dispatcher libvpl.dll not found at $VPL_DLL" >&2
+    fi
+
+    # DUMBAI: Stage the local zlib runtime alongside the codecs which require it.
+    ZLIB_RUNTIME="${FFMPEG_ZLIB_RUNTIME:-$SRC/.build-deps/zlib-install/bin/zlib.dll}"
+    if [ -f "$ZLIB_RUNTIME" ]; then
+        cp -f "$ZLIB_RUNTIME" "$BASE/$FFMPEG_OUTPUT_DIR/$(basename "$ZLIB_RUNTIME")"
+        echo "    $(basename "$ZLIB_RUNTIME")"
     fi
 
     echo "==> Done. Shared libs written to $BASE/$FFMPEG_OUTPUT_DIR/"

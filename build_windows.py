@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+import ctypes
+import hashlib
+import json
 import os
+import platform
 import shutil
 import subprocess
 import sys
 from pathlib import Path
-
 
 ROOT = Path(__file__).resolve().parent
 BUILD_SCRIPT = ROOT / "build_windows.sh"
@@ -92,7 +95,9 @@ def normalize_arch(raw_arch: str) -> str | None:
     return None
 
 
-def run_with_msvc_env(bash_path: Path, mode: str, arch: str) -> int:
+def run_with_msvc_env(
+    bash_path: Path, mode: str, arch: str, env: dict[str, str]
+) -> int:
     vsdevcmd = find_vsdevcmd()
     if vsdevcmd is None:
         print(
@@ -110,9 +115,152 @@ def run_with_msvc_env(bash_path: Path, mode: str, arch: str) -> int:
         command,
         cwd=ROOT,
         check=False,
-        env=bash_env(bash_path),
+        env=env,
         shell=True,
     ).returncode
+
+
+def prepare_vulkan(env: dict[str, str]) -> None:
+    # DUMBAI: Reuse the monorepo's verified headers and host shader compiler sources without a system SDK install.
+    candidates = [
+        Path(env["FFMPEG_VULKAN_INCLUDE"])
+        if env.get("FFMPEG_VULKAN_INCLUDE")
+        else None,
+        Path(env["VULKAN_SDK"]) / "Include" if env.get("VULKAN_SDK") else None,
+        ROOT.parent / "slang" / "external" / "vulkan" / "include",
+    ]
+    headers = next(
+        (p for p in candidates if p and (p / "vulkan" / "vulkan.h").is_file()), None
+    )
+    if headers is None:
+        raise RuntimeError(
+            "Vulkan headers missing: set FFMPEG_VULKAN_INCLUDE or VULKAN_SDK; Vulkan >= 1.3.277 required"
+        )
+    compiler = env.get("FFMPEG_GLSLC") or next(
+        (
+            path
+            for name in ("glslc", "glslang", "glslangValidator")
+            if (path := shutil.which(name))
+        ),
+        None,
+    )
+    if compiler is None:
+        source = Path(
+            env.get(
+                "FFMPEG_GLSLANG_SOURCE",
+                str(ROOT.parent / "slang" / "external" / "glslang"),
+            )
+        )
+        if not (source / "CMakeLists.txt").is_file():
+            raise RuntimeError(
+                "GLSL compiler missing: set FFMPEG_GLSLC or FFMPEG_GLSLANG_SOURCE"
+            )
+        build = ROOT / "FFmpeg" / ".build-deps" / "glslang-build"
+        subprocess.run(
+            [
+                "cmake",
+                "-S",
+                str(source),
+                "-B",
+                str(build),
+                "-G",
+                "Visual Studio 17 2022",
+                "-A",
+                "x64",
+                "-DENABLE_GLSLANG_BINARIES=ON",
+                "-DENABLE_SPIRV=ON",
+                "-DENABLE_OPT=OFF",
+                "-DBUILD_TESTING=OFF",
+            ],
+            check=True,
+            env=env,
+        )
+        subprocess.run(
+            [
+                "cmake",
+                "--build",
+                str(build),
+                "--config",
+                "Release",
+                "--target",
+                "glslang-standalone",
+                "--parallel",
+                env.get("NUMBER_OF_PROCESSORS", "4"),
+            ],
+            check=True,
+            env=env,
+        )
+        compiler = str(build / "StandAlone" / "Release" / "glslang.exe")
+        if not Path(compiler).is_file():
+            raise RuntimeError(f"GLSL compiler build did not produce {compiler}")
+    env["FFMPEG_GLSLC"] = Path(compiler).as_posix()
+    include_flag = f'-I"{headers.as_posix()}"'
+    env["FFMPEG_EXTRA_CFLAGS"] = " ".join(
+        filter(None, (env.get("FFMPEG_EXTRA_CFLAGS"), include_flag))
+    )
+
+
+def write_manifest(mode: str, arch: str) -> None:
+    output = ROOT / f"windows_{arch}"
+    manifest_path = output / "build_manifest.json"
+    manifest = json.loads(manifest_path.read_text()) if manifest_path.is_file() else {}
+    source = ROOT / "FFmpeg"
+    configuration = next(
+        line.removeprefix("FFMPEG_CONFIGURATION=")
+        for line in (source / "ffbuild" / "config.mak").read_text().splitlines()
+        if line.startswith("FFMPEG_CONFIGURATION=")
+    )
+    artifacts = sorted(
+        path
+        for path in output.iterdir()
+        if path.is_file()
+        and (
+            path.name.endswith("_static.lib")
+            if mode == "static"
+            else path.suffix in {".dll", ".lib"}
+            and not path.name.endswith("_static.lib")
+        )
+    )
+    data = {
+        "ffmpeg_source_revision": subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=source, text=True
+        ).strip(),
+        "configuration": configuration,
+        "artifacts_sha256": {
+            path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in artifacts
+        },
+    }
+    zconf = source / ".build-deps" / "zlib-install" / "include" / "zconf.h"
+    if zconf.is_file():
+        data["local_zconf_sha256"] = hashlib.sha256(zconf.read_bytes()).hexdigest()
+    native_arch = normalize_arch(platform.machine())
+    if mode == "shared" and arch == native_arch:
+        # DUMBAI: Enumerate without creating any hardware context or opening the costly Vulkan encoder.
+        with os.add_dll_directory(str(output)):
+            codec = ctypes.CDLL(str(next(output.glob("avcodec-*.dll"))))
+
+            class Codec(ctypes.Structure):
+                _fields_ = [("name", ctypes.c_char_p)]
+
+            codec.avcodec_configuration.restype = ctypes.c_char_p
+            data["configuration"] = codec.avcodec_configuration().decode()
+            codec.av_codec_iterate.argtypes = [ctypes.POINTER(ctypes.c_void_p)]
+            codec.av_codec_iterate.restype = ctypes.POINTER(Codec)
+            codec.av_codec_is_encoder.argtypes = [ctypes.c_void_p]
+            codec.av_codec_is_decoder.argtypes = [ctypes.c_void_p]
+            opaque = ctypes.c_void_p()
+            encoders, decoders = [], []
+            while item := codec.av_codec_iterate(ctypes.byref(opaque)):
+                name = item.contents.name.decode()
+                if codec.av_codec_is_encoder(item):
+                    encoders.append(name)
+                if codec.av_codec_is_decoder(item):
+                    decoders.append(name)
+            data["encoders"] = sorted(encoders)
+            data["decoders"] = sorted(decoders)
+    manifest[mode] = data
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -140,15 +288,21 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 1
 
+    env = bash_env(bash_path)
+    prepare_vulkan(env)
+
     if shutil.which("cl.exe"):
-        return subprocess.run(
+        result = subprocess.run(
             [str(bash_path), str(BUILD_SCRIPT), mode, arch],
             cwd=ROOT,
             check=False,
-            env=bash_env(bash_path),
+            env=env,
         ).returncode
-
-    return run_with_msvc_env(bash_path, mode, arch)
+    else:
+        result = run_with_msvc_env(bash_path, mode, arch, env)
+    if result == 0:
+        write_manifest(mode, arch)
+    return result
 
 
 if __name__ == "__main__":

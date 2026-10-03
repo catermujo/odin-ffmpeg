@@ -71,8 +71,8 @@ python build_windows.py shared x64
 python build_windows.py static x64
 ```
 
-From the catermujo root, `./tool vendor build ffmpeg` builds the shared variant. The direct commands above build shared
-and static variants explicitly.
+From the catermujo root, `./tool vendor build ffmpeg` builds both shared and static variants. The direct commands above
+select either variant explicitly.
 
 At runtime, keep `libvpl.dll` from `C:\deps\oneVPL-install\bin` beside the application or on `PATH` when using
 QSV. NVIDIA and AMD GPU drivers provide the NVENC and AMF runtime components. D3D12VA uses the Windows D3D12 video
@@ -97,3 +97,31 @@ hardware backends and their development-package checks.
 - AMF: use AMF 1.5.2+ headers and add the directory containing `AMF/core/*.h` to `FFMPEG_EXTRA_CFLAGS`.
 
 The build clones FFmpeg source automatically when `FFmpeg` is missing; set `FFMPEG_SRC_REMOTE` to use a mirror.
+
+
+## Windows Vulkan compute encoding
+
+Windows shared/static builds explicitly enable Vulkan hardware contexts and `prores_ks_vulkan` while retaining
+the existing D3D12VA/NVENC/AMF/oneVPL configuration. Both batch entry points delegate to `build_windows.py`, which
+locates and initializes Visual Studio even when launched through the monorepo vendor workflow.
+
+The build requires Vulkan headers >= 1.3.277 and a supported GLSL-to-SPIR-V compiler. It uses `VULKAN_SDK/Include`
+or the sibling Slang checkout's Vulkan-Headers, and locates `glslc`, `glslang`, or `glslangValidator` on PATH.
+When no shader compiler is available, it builds the sibling Slang checkout's official glslang sources with CMake
+into `FFmpeg/.build-deps/glslang-build`; this does not install a system package. Override discovery with
+`FFMPEG_VULKAN_INCLUDE`, `FFMPEG_GLSLC`, or `FFMPEG_GLSLANG_SOURCE` for standalone vendor builds.
+
+The Vulkan loader and graphics driver are runtime requirements. ProRes Vulkan is a compute encoder: hardware
+frames and planar image conversion must be supplied explicitly. Encoder availability does not prove D3D12 texture
+import support or zero-readback application integration. Verify `prores_ks_vulkan` enumeration and actual Vulkan
+frames/encoder initialization with the newly built DLLs before pinning or publishing them.
+
+Windows builds require zlib to preserve PNG/APNG and compressed codecs. Put its headers/libraries in
+FFMPEG_EXTRA_CFLAGS/FFMPEG_EXTRA_LDFLAGS or pkg-config. A local `.build-deps/zlib-install/bin/zlib.dll` is
+staged automatically; set `FFMPEG_ZLIB_RUNTIME` for another runtime path. Configure fails if zlib is missing.
+
+With upstream CMake zlib headers on MSVC, zconf.h must treat HAVE_UNISTD_H as a boolean: use
+`#if defined(HAVE_UNISTD_H) && HAVE_UNISTD_H` instead of `#ifdef HAVE_UNISTD_H` in the local build prefix.
+FFmpeg defines the unavailable feature as 0; a presence-only check would incorrectly include unistd.h.
+`windows_x64/build_manifest.json` records each variant's source revision, embedded configuration, artifact hashes,
+codec inventory for native shared builds, and the exact local compatibility header hash used.
