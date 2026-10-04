@@ -80,7 +80,8 @@ esac
 BUILD_DIR="$SRC/build_${OS_EXT}_${TARGET_ARCH}_shared"
 
 echo "==> Configuring FFmpeg (shared): OS=$OS_EXT arch=$TARGET_ARCH prefix=$BUILD_DIR"
-cd "$SRC"
+mkdir -p "$BUILD_DIR"
+cd "$BUILD_DIR"
 
 EXTRA_CFLAGS=""
 EXTRA_LDFLAGS=""
@@ -91,7 +92,16 @@ if [ "$HOST_OS" = "Darwin" ] && [ "$TARGET_ARCH" != "$HOST_ARCH" ]; then
     EXTRA_LDFLAGS="-arch $TARGET_ARCH"
 fi
 
-./configure \
+set --
+if [ "$HOST_OS" = "Darwin" ]; then
+    export MACOSX_DEPLOYMENT_TARGET="${MACOSX_DEPLOYMENT_TARGET:-12.0}"
+    EXTRA_CFLAGS="$EXTRA_CFLAGS -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
+    EXTRA_LDFLAGS="$EXTRA_LDFLAGS -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
+    set -- --disable-xlib --disable-libxcb --disable-libxcb-shm --disable-libxcb-xfixes --disable-libxcb-shape
+fi
+
+"$SRC/configure" \
+    "$@" \
     --prefix="$BUILD_DIR" \
     --arch="$TARGET_ARCH" \
     --disable-static \
