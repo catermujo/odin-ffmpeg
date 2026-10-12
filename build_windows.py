@@ -268,7 +268,8 @@ def write_manifest(mode: str, arch: str) -> None:
             data["encoders"] = sorted(encoders)
             data["decoders"] = sorted(decoders)
     manifest[mode] = data
-    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
+    # DUMBAI: Keep generated manifests identical across host newline conventions.
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", newline="\n")
 
 
 def main(argv: list[str] | None = None) -> int:

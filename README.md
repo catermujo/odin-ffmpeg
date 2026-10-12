@@ -124,6 +124,13 @@ Windows builds require zlib to preserve PNG/APNG and compressed codecs. Put its 
 FFMPEG_EXTRA_CFLAGS/FFMPEG_EXTRA_LDFLAGS or pkg-config. A local `.build-deps/zlib-install/bin/zlib.dll` is
 staged automatically; set `FFMPEG_ZLIB_RUNTIME` for another runtime path. Configure fails if zlib is missing.
 
+If bzip2 autodetection selects a shared library, set `FFMPEG_BZLIB_RUNTIME` to its DLL.
+The default runtime path is `.build-deps/bzip2-install/bin/bz2.dll`.
+The Windows build stages this DLL beside the FFmpeg libraries.
+
+To retain `av1_d3d12va`, the Windows SDK must define `D3D12_VIDEO_ENCODER_CODEC_AV1`.
+For older SDKs, add a recent DirectX-Headers `include/directx` directory to `FFMPEG_EXTRA_CFLAGS`.
+
 With upstream CMake zlib headers on MSVC, zconf.h must treat HAVE_UNISTD_H as a boolean: use
 `#if defined(HAVE_UNISTD_H) && HAVE_UNISTD_H` instead of `#ifdef HAVE_UNISTD_H` in the local build prefix.
 FFmpeg defines the unavailable feature as 0; a presence-only check would incorrectly include unistd.h.
@@ -137,3 +144,7 @@ change configure's compression default while Make reuses arrays generated under 
 The build removes only generated shader caches from FFmpeg library directories, verifies every generated array's
 encoding, byte length, terminator, and source bytes before installing libraries, and records their hashes in the
 build manifest. Run `python validate_shader_payloads.py verify FFmpeg` to repeat the payload/configuration check.
+
+The Windows patch set adds the missing shared-memory barrier before the first ProRes Vulkan DCT pass.
+Each invocation loads one row, but that pass reads columns across other invocations.
+The barrier completes those writes before the transform reads them. GPU encoding remains enabled.

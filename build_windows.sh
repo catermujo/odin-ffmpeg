@@ -237,6 +237,12 @@ if [ "$MODE" = "shared" ]; then
         cp -f "$ZLIB_RUNTIME" "$BASE/$FFMPEG_OUTPUT_DIR/$(basename "$ZLIB_RUNTIME")"
         echo "    $(basename "$ZLIB_RUNTIME")"
     fi
+    # DUMBAI: An autodetected shared bzip2 build also needs its runtime beside avformat.
+    BZLIB_RUNTIME="${FFMPEG_BZLIB_RUNTIME:-$SRC/.build-deps/bzip2-install/bin/bz2.dll}"
+    if [ -f "$BZLIB_RUNTIME" ]; then
+        cp -f "$BZLIB_RUNTIME" "$BASE/$FFMPEG_OUTPUT_DIR/$(basename "$BZLIB_RUNTIME")"
+        echo "    $(basename "$BZLIB_RUNTIME")"
+    fi
 
     echo "==> Done. Shared libs written to $BASE/$FFMPEG_OUTPUT_DIR/"
     echo "    Build with: odin build . -define:FFMPEG_LINK=shared"

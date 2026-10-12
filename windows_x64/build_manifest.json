@@ -144,8 +144,8 @@
           "sha256": "5399e54cbb8ca6451313573eeb521b4e01d07997415b5270aea72808438d8335"
         },
         "libavcodec/vulkan/prores_ks_slice_data.comp.spv.c": {
-          "bytes": 16196,
-          "sha256": "387a7a44f6ebe43769944587d6d9759e1419f19e402f0da49d3bcd7d65c27dc5"
+          "bytes": 16212,
+          "sha256": "c10aef73b706d55956817ad35f3c149921707d411d96cf272a0be8e3cea64c40"
         },
         "libavcodec/vulkan/prores_ks_trellis_node.comp.spv.c": {
           "bytes": 7284,
@@ -166,6 +166,46 @@
         "libavcodec/vulkan/seg_gather.comp.spv.c": {
           "bytes": 5144,
           "sha256": "3f951ec5cb3eb1a676efff6ac97cfbf12af65ade6b822d5a7465d483cfd52a22"
+        },
+        "libavfilter/vf_bilateral_cuda.ptx.c": {
+          "bytes": 13959,
+          "sha256": "5a9221f10fe8189cd542b9fb379d128c25e8190f2f8c6826ba9ea3086d5d4e4e"
+        },
+        "libavfilter/vf_bwdif_cuda.ptx.c": {
+          "bytes": 43888,
+          "sha256": "0b02d9567d8e4baf30c1d0a143fc7b6038a44cc6305e33048e2e7acea13e5422"
+        },
+        "libavfilter/vf_chromakey_cuda.ptx.c": {
+          "bytes": 18271,
+          "sha256": "dbe9f3607494648aa53cc049a8389d3842a894cb08a317be1b8440af7b89145a"
+        },
+        "libavfilter/vf_colorspace_cuda.ptx.c": {
+          "bytes": 5013,
+          "sha256": "cc4f5dc7040778bb68b61a0026c05b7f7bb6e2ae331326cb600e89fa4d8fbef6"
+        },
+        "libavfilter/vf_overlay_cuda.ptx.c": {
+          "bytes": 3232,
+          "sha256": "fbc7952366cf01f28e264bcb02c5f8c8b58461c33aa6397fe2c332bf8598db74"
+        },
+        "libavfilter/vf_pad_cuda.ptx.c": {
+          "bytes": 5206,
+          "sha256": "c60115a7ea65226c8bc792cd12cd9f27fa2646d3c2233256b176114651be29be"
+        },
+        "libavfilter/vf_scale_cuda.ptx.c": {
+          "bytes": 3030439,
+          "sha256": "9ddc4e01356ce9e99d248a8bae169d7349cb9816723c1b1a5653206623ef9fc6"
+        },
+        "libavfilter/vf_thumbnail_cuda.ptx.c": {
+          "bytes": 7009,
+          "sha256": "9f3c41e326ba7bfc594998c6132ae4088677faab4f8bdcf729d033cf6b59c5ef"
+        },
+        "libavfilter/vf_transpose_cuda.ptx.c": {
+          "bytes": 17470,
+          "sha256": "57523f3e58e892f2e9d2839756df9fc070e8e21483c7a9a32a43708a0e42061e"
+        },
+        "libavfilter/vf_yadif_cuda.ptx.c": {
+          "bytes": 49557,
+          "sha256": "144a4f48108f3812d185cda0e5065c64ca8c317164dd6b86f9ac3f03655c6568"
         },
         "libavfilter/vulkan/avgblur.comp.spv.c": {
           "bytes": 2432,
@@ -257,27 +297,28 @@
         }
       }
     },
-    "ffmpeg_source_revision": "60a479ffd8623ca2a348cd042e38490cb0a45bc0",
-    "configuration": "--prefix=/c/Users/i/source/repos/catermujo/vendor/ffmpeg/FFmpeg/build_windows_x86_64_shared --arch=x86_64 --target-os=win64 --toolchain=msvc --disable-static --enable-shared --disable-programs --disable-doc --disable-debug --disable-avx --disable-avx2 --disable-iconv --enable-d3d12va --enable-nvenc --enable-amf --enable-libvpl --enable-zlib --disable-shader-compression --enable-vulkan --enable-encoder=prores_ks_vulkan --glslc='C:/VulkanSDK/1.4.357.0/Bin/glslc.EXE' --extra-cflags='-IC:/Users/i/source/repos/catermujo/vendor/ffmpeg/FFmpeg/.build-deps/AMF/header-root -IC:/Users/i/source/repos/catermujo/vendor/ffmpeg/FFmpeg/.build-deps/zlib-install/include -I\"C:/VulkanSDK/1.4.357.0/Include\"' --extra-ldflags='-libpath:C:/Users/i/source/repos/catermujo/vendor/ffmpeg/FFmpeg/.build-deps/zlib-install/lib'",
+    "ffmpeg_source_revision": "d01d7956c6d77e920bec3ae4f83db51ece13ed4b",
+    "configuration": "--prefix=/c/Users/fenetrino/source/repos/catermujo/vendor/ffmpeg/FFmpeg/build_windows_x86_64_shared --arch=x86_64 --target-os=win64 --toolchain=msvc --disable-static --enable-shared --disable-programs --disable-doc --disable-debug --disable-avx --disable-avx2 --disable-iconv --enable-d3d12va --enable-nvenc --enable-amf --enable-libvpl --enable-zlib --disable-shader-compression --enable-vulkan --enable-encoder=prores_ks_vulkan --glslc='C:/VulkanSDK/1.4.357.0/Bin/glslc.EXE' --extra-cflags='-IC:/Users/fenetrino/source/repos/catermujo/vendor/ffmpeg/FFmpeg/.build-deps/AMF/header-root -IC:/Users/fenetrino/scoop/apps/vcpkg/current/installed/x64-windows/include -IC:/Users/fenetrino/source/repos/catermujo/vendor/ffmpeg/FFmpeg/.build-deps/DirectX-Headers/include/directx -I\"C:/VulkanSDK/1.4.357.0/Include\"' --extra-ldflags='-libpath:C:/Users/fenetrino/scoop/apps/vcpkg/current/installed/x64-windows/lib'",
     "artifacts_sha256": {
-      "avcodec-63.dll": "256dddb9fa290321028ca967a52e8d48473023e135d48f5e0b2d8c3abb564617",
-      "avcodec.lib": "68df949b92c31a27bc8cece91e5ab2a1ebb219933621e5d8f1e77f9d40f3ce5e",
-      "avdevice-63.dll": "7c0d43e462a61943b0c950bf322542eb36419b27988514f9b10ed6673b9c8926",
-      "avdevice.lib": "2cfcdf29fa1ea157c0b5d164de628ca416d8180d89790cb59f084932aab9b0a0",
-      "avfilter-12.dll": "9cee39cd42b9c16fb5068561ef3ab5238e9b6a6f56bec4c36bd9f6af2eef06a7",
-      "avfilter.lib": "44a34b6646198963b23b5f6f5f86f88e97def1c3db3fdbe2e78067a8391e7c15",
-      "avformat-63.dll": "bb85248369ab9c8192d7370b04cbdc65d38069dbd986dae9dd24fee920c92951",
-      "avformat.lib": "c9a6275dc410f705948f36d2eab7bbdda0197839a5de5b7b48c321dfb2e1da67",
-      "avutil-61.dll": "514d268e09a1089e8b1771002919d925cb28b1ac473bc4c836561df7cc8995ec",
-      "avutil.lib": "0f1324db4a244418f0ed176015d5961851e01e0e603c917f9557fdfa091206eb",
-      "libvpl.dll": "2922ca265973ce742d3f21ebf738aa23f3af39fb85abba6fefd8c430a5094748",
-      "swresample-7.dll": "239e676ec7595f7477ef9adb8fe9af7562e1606d9dd3be86a4f317299cc0bbaf",
-      "swresample.lib": "d6ba878db2f63a118aab0a7212002336412444790532a3f10ca3312851e39094",
-      "swscale-10.dll": "1f1a6ee1638f8faa9cc07f63dab4ab55d125b20ed559288898b796cb48fe5283",
-      "swscale.lib": "8325663a7afc6517f04fd9f811c01a3d26f0d4a93dc8bf1dcb1a4b24f6a332ad",
-      "zlib.dll": "67aac157b320075dc99b1dac7af7a5a61b447ff8670419e5a4c05e0ce7c8a8d4"
+      "avcodec-63.dll": "e03c57e431f962a852c3fd672543b05b1b92187c3288b0e96faae453543b25de",
+      "avcodec.lib": "10dadb1d02b25efe8462a4c5dcc4371ad467f696c44a17887d8da484530505c9",
+      "avdevice-63.dll": "72172e6109fd9bb1cf3c02121e1db20c7651f9a0da87781106db1170883986a6",
+      "avdevice.lib": "47bb18f46f024739946e5b5a526ff4349f29cee0775c4ddc9bc9ddbef427e25e",
+      "avfilter-12.dll": "2805c5631fe963bb933267496e816a8350ec10230f6d63184fb24cb013ab7514",
+      "avfilter.lib": "449d04f9e132579d0408c607805ce16eb394d5212aa3a2c1336e27b031b0307c",
+      "avformat-63.dll": "c6785f58638a6aa904f0b6ad2b884ff693cbbbcc38656c11d6b0962163a87cba",
+      "avformat.lib": "e5367c4c6e97219a32966457eefda54f2e57bc438d88c8ace728032f9d932c57",
+      "avutil-61.dll": "ce5681652082b6e0a71b4ecf4a6637ec6467aa7900c81e47c798e55f6507792f",
+      "avutil.lib": "65b736b606d288e8cd11be1ebc20e05a363778f5412f4586d21ba6dfb59ddbdd",
+      "bz2.dll": "541cf280b88598e1c3cbb3a6445b47c2e1e308135a5ef7a56f54788b864f212a",
+      "libvpl.dll": "9f727a600d0a968afd4f44ac55b6a53e26478bedef89b70739b180f82163a139",
+      "swresample-7.dll": "864255717762fe98216cfb0a423f4ca34c94baef6ac4a27e9221788c00b57d11",
+      "swresample.lib": "582e88fcf5265c3fa5b5a9135d4c492b7b95c9fd53a54228a5ec95a5dc289ba9",
+      "swscale-10.dll": "15d6058327e80ee54e61488b1e90ac059829f836cba1408da49ea141ff9f48bb",
+      "swscale.lib": "07348dd6b4091baee661cd490bb7100dd03bc33b06653eebd8318b6dbba25807",
+      "zlib.dll": "67aac157b320075dc99b1dac7af7a5a61b447ff8670419e5a4c05e0ce7c8a8d4",
+      "zlib1.dll": "c5511a733da8d4f2640d542cd09a1a09bfe0c9c5ee18117c9ab9bf50a44dc31f"
     },
-    "local_zconf_sha256": "98cba33757c51ae6443ea903afed0bbb69f49fb3fe2f25fed8c9ca664d1cc45c",
     "encoders": [
       "a64multi",
       "a64multi5",
@@ -1153,8 +1194,8 @@
           "sha256": "5399e54cbb8ca6451313573eeb521b4e01d07997415b5270aea72808438d8335"
         },
         "libavcodec/vulkan/prores_ks_slice_data.comp.spv.c": {
-          "bytes": 16196,
-          "sha256": "387a7a44f6ebe43769944587d6d9759e1419f19e402f0da49d3bcd7d65c27dc5"
+          "bytes": 16212,
+          "sha256": "c10aef73b706d55956817ad35f3c149921707d411d96cf272a0be8e3cea64c40"
         },
         "libavcodec/vulkan/prores_ks_trellis_node.comp.spv.c": {
           "bytes": 7284,
@@ -1175,6 +1216,46 @@
         "libavcodec/vulkan/seg_gather.comp.spv.c": {
           "bytes": 5144,
           "sha256": "3f951ec5cb3eb1a676efff6ac97cfbf12af65ade6b822d5a7465d483cfd52a22"
+        },
+        "libavfilter/vf_bilateral_cuda.ptx.c": {
+          "bytes": 13959,
+          "sha256": "5a9221f10fe8189cd542b9fb379d128c25e8190f2f8c6826ba9ea3086d5d4e4e"
+        },
+        "libavfilter/vf_bwdif_cuda.ptx.c": {
+          "bytes": 43888,
+          "sha256": "0b02d9567d8e4baf30c1d0a143fc7b6038a44cc6305e33048e2e7acea13e5422"
+        },
+        "libavfilter/vf_chromakey_cuda.ptx.c": {
+          "bytes": 18271,
+          "sha256": "dbe9f3607494648aa53cc049a8389d3842a894cb08a317be1b8440af7b89145a"
+        },
+        "libavfilter/vf_colorspace_cuda.ptx.c": {
+          "bytes": 5013,
+          "sha256": "cc4f5dc7040778bb68b61a0026c05b7f7bb6e2ae331326cb600e89fa4d8fbef6"
+        },
+        "libavfilter/vf_overlay_cuda.ptx.c": {
+          "bytes": 3232,
+          "sha256": "fbc7952366cf01f28e264bcb02c5f8c8b58461c33aa6397fe2c332bf8598db74"
+        },
+        "libavfilter/vf_pad_cuda.ptx.c": {
+          "bytes": 5206,
+          "sha256": "c60115a7ea65226c8bc792cd12cd9f27fa2646d3c2233256b176114651be29be"
+        },
+        "libavfilter/vf_scale_cuda.ptx.c": {
+          "bytes": 3030439,
+          "sha256": "9ddc4e01356ce9e99d248a8bae169d7349cb9816723c1b1a5653206623ef9fc6"
+        },
+        "libavfilter/vf_thumbnail_cuda.ptx.c": {
+          "bytes": 7009,
+          "sha256": "9f3c41e326ba7bfc594998c6132ae4088677faab4f8bdcf729d033cf6b59c5ef"
+        },
+        "libavfilter/vf_transpose_cuda.ptx.c": {
+          "bytes": 17470,
+          "sha256": "57523f3e58e892f2e9d2839756df9fc070e8e21483c7a9a32a43708a0e42061e"
+        },
+        "libavfilter/vf_yadif_cuda.ptx.c": {
+          "bytes": 49557,
+          "sha256": "144a4f48108f3812d185cda0e5065c64ca8c317164dd6b86f9ac3f03655c6568"
         },
         "libavfilter/vulkan/avgblur.comp.spv.c": {
           "bytes": 2432,
@@ -1266,17 +1347,16 @@
         }
       }
     },
-    "ffmpeg_source_revision": "60a479ffd8623ca2a348cd042e38490cb0a45bc0",
-    "configuration": "--prefix=/c/Users/i/source/repos/catermujo/vendor/ffmpeg/FFmpeg/build_windows_x86_64_static --arch=x86_64 --target-os=win64 --toolchain=msvc --enable-static --disable-shared --disable-programs --disable-doc --disable-debug --disable-avx --disable-avx2 --disable-iconv --enable-d3d12va --enable-nvenc --enable-amf --enable-libvpl --enable-zlib --disable-shader-compression --enable-vulkan --enable-encoder=prores_ks_vulkan --glslc='C:/VulkanSDK/1.4.357.0/Bin/glslc.EXE' --extra-cflags='-IC:/Users/i/source/repos/catermujo/vendor/ffmpeg/FFmpeg/.build-deps/AMF/header-root -IC:/Users/i/source/repos/catermujo/vendor/ffmpeg/FFmpeg/.build-deps/zlib-install/include -I\"C:/VulkanSDK/1.4.357.0/Include\"' --extra-ldflags='-libpath:C:/Users/i/source/repos/catermujo/vendor/ffmpeg/FFmpeg/.build-deps/zlib-install/lib'",
+    "ffmpeg_source_revision": "d01d7956c6d77e920bec3ae4f83db51ece13ed4b",
+    "configuration": "--prefix=/c/Users/fenetrino/source/repos/catermujo/vendor/ffmpeg/FFmpeg/build_windows_x86_64_static --arch=x86_64 --target-os=win64 --toolchain=msvc --enable-static --disable-shared --disable-programs --disable-doc --disable-debug --disable-avx --disable-avx2 --disable-iconv --enable-d3d12va --enable-nvenc --enable-amf --enable-libvpl --enable-zlib --disable-shader-compression --enable-vulkan --enable-encoder=prores_ks_vulkan --glslc='C:/VulkanSDK/1.4.357.0/Bin/glslc.EXE' --extra-cflags='-IC:/Users/fenetrino/source/repos/catermujo/vendor/ffmpeg/FFmpeg/.build-deps/AMF/header-root -IC:/Users/fenetrino/scoop/apps/vcpkg/current/installed/x64-windows/include -IC:/Users/fenetrino/source/repos/catermujo/vendor/ffmpeg/FFmpeg/.build-deps/DirectX-Headers/include/directx -I\"C:/VulkanSDK/1.4.357.0/Include\"' --extra-ldflags='-libpath:C:/Users/fenetrino/scoop/apps/vcpkg/current/installed/x64-windows/lib'",
     "artifacts_sha256": {
-      "avcodec_static.lib": "fc6da616985e428c572ab2e566557b08070223a7c498b8cafc1c743270687b66",
-      "avdevice_static.lib": "fdbed72af84c190e13d5a6c65479e09575911757333834b9fad17dfe4e029601",
-      "avfilter_static.lib": "d733c853ce68aaad9e62b58ca89b7ca6e0cd7ca5ab3bfaf6de5cd20c55d73eef",
-      "avformat_static.lib": "d17828c668035054018955a6cd1014906932e345d6a422763e74520f726c47ce",
-      "avutil_static.lib": "7f7e2b4576bf01abd0ac529426c96c6a2ac186cd45e2f72c1303194d5bae862d",
-      "swresample_static.lib": "b1ccf42d04e08ecc7f58edd7535ec3965bb6566af82b17a4782410de98719ded",
-      "swscale_static.lib": "a2fce298a5d0584b1e7d3496cdeba85cf74d9da4134a892f933959dbfe6b32d6"
-    },
-    "local_zconf_sha256": "98cba33757c51ae6443ea903afed0bbb69f49fb3fe2f25fed8c9ca664d1cc45c"
+      "avcodec_static.lib": "64fc15b9a31ec9e16ea261174ca3f69db2975e46dbf4cf665247ed0ea79f34a3",
+      "avdevice_static.lib": "81626d4b89bb7843cba16e6939c7796e8bf117bba3db3f356df68c16eaa5bbc3",
+      "avfilter_static.lib": "b0054d5368fe83b43718497e384e0bb931fe6f0783b877702b49e0b13f684c0f",
+      "avformat_static.lib": "6945dc175481a28e77588241c0d85cd36fe5206cb088430937b7a570b649b90a",
+      "avutil_static.lib": "f3d9549bf8e66b75f24ce8bc561e3bc0fbf4e305739554e5d39428e8db62975d",
+      "swresample_static.lib": "1822fe11676c7bf6fb5246c8e4b4f6a65663801d7c2036b8cdf7fd6139e0196d",
+      "swscale_static.lib": "e116575cc9f58f0c6b848d5aae395f6ebd90ca438592e7f2b384c831aacc2cdd"
+    }
   }
 }
