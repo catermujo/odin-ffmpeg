@@ -9,39 +9,39 @@
         },
         "libavcodec/vulkan/apv_encode_dct.comp.spv.c": {
           "bytes": 17544,
-          "sha256": "2b28ddb1d082af9d8405a362721ef25b2dcf035817e379341b703c6d2db0b610"
+          "sha256": "1addcaef2cc21a99a8f6e31f7ca45e6acf34140139d0e3542fdfa0b70cf99d27"
         },
         "libavcodec/vulkan/apv_encode_tiles.comp.spv.c": {
-          "bytes": 136740,
-          "sha256": "5c9ccb974e4b3a95086a031071d0fa17d84257f39b350e700c59319dfe7460bd"
+          "bytes": 136772,
+          "sha256": "21d5fd7a0850e63db84f6a643a02fdb48b533fcdb16ef72af887f5793f4f8b62"
         },
         "libavcodec/vulkan/apv_idct.comp.spv.c": {
-          "bytes": 17108,
-          "sha256": "0349244e8333e7935c708b5e89707ef82e9fb8b4f1909ae62f5cb9f06c98e66c"
+          "bytes": 14768,
+          "sha256": "ace67023ccff4c641bfccbb621f2eb066b9843b6b32581b803c22f9f2c151cae"
         },
         "libavcodec/vulkan/dpx_copy.comp.spv.c": {
-          "bytes": 5160,
-          "sha256": "bd177bb24b1117876684f4f651ed8f4277f30c579917451b9dfb7202e2b9f5c7"
+          "bytes": 5280,
+          "sha256": "7c20ca850d5a8cfc4a3b167fb56f63fbaafccc9f7878f784348ff07c3cb2c630"
         },
         "libavcodec/vulkan/dpx_unpack.comp.spv.c": {
-          "bytes": 4772,
-          "sha256": "abe2303f8772831e2b48aaaa5a17a45c48dcb8461533b0001867f2460ce1660a"
+          "bytes": 4852,
+          "sha256": "438f43afca4b6f091483cb643ae7c237005ef2c3d8dcce7c114b3ad66caa1f72"
         },
         "libavcodec/vulkan/ffv1_dec.comp.spv.c": {
-          "bytes": 30392,
-          "sha256": "4a578f9eef1b2aac02f16d71d58229a9005556167580af961e9f9cc78833483a"
+          "bytes": 317092,
+          "sha256": "d39895fedc7b5eaf89f413a4cb834a179d6a407962d336bea0b310ef42a7e744"
         },
         "libavcodec/vulkan/ffv1_dec_bayer.comp.spv.c": {
-          "bytes": 36492,
-          "sha256": "8d0f5575e10725352f1c0054b67d8113fc70cdd022a70712badeee74fba1c3e1"
+          "bytes": 323760,
+          "sha256": "40608bade49866103fff966f847055135bc62c834b35c700ada2a61e6d78cea6"
         },
         "libavcodec/vulkan/ffv1_dec_bayer_golomb.comp.spv.c": {
-          "bytes": 43376,
-          "sha256": "3f0f4b7ab8a721e4dd01e2d16fc54412f83eb75bb98b7c1a9b3497757681544f"
+          "bytes": 70556,
+          "sha256": "dc7432693c43a31855030e877b5e5d928fb45abebe18c897cb662fa0f1bb8440"
         },
         "libavcodec/vulkan/ffv1_dec_golomb.comp.spv.c": {
-          "bytes": 39116,
-          "sha256": "f1e61e2eb261fbdaea1f9867f9411b80e20a3f1121a2c7e45d0f5c77f7986ec7"
+          "bytes": 66348,
+          "sha256": "8943075e0632c3d1114d85583ddac51d9cf022e58e007b7b611707f2337dff86"
         },
         "libavcodec/vulkan/ffv1_dec_reset.comp.spv.c": {
           "bytes": 3356,
@@ -52,44 +52,44 @@
           "sha256": "2c5fc7f96c44d08b58592be60d30944c00d5aef79943e67f98cd1df1aeab5861"
         },
         "libavcodec/vulkan/ffv1_dec_rgb.comp.spv.c": {
-          "bytes": 35744,
-          "sha256": "31dcd7524db450566de585f0af21810a1b1a49dbc1102f6f3a09b2868a94f762"
+          "bytes": 323012,
+          "sha256": "20c2f660494dd5b1ce99acf0d4081c262b0312bb10a0ed3edaafcf68c6c3d8ba"
         },
         "libavcodec/vulkan/ffv1_dec_rgb_float.comp.spv.c": {
-          "bytes": 38300,
-          "sha256": "fef59601047cb9c3f53c2f748364ed7fb09421c2466674581ed74d77e743d2f3"
+          "bytes": 325592,
+          "sha256": "1b1345defd8c22662a4990fa32d95b522ca8e80f9d108c29c9513c78de275adf"
         },
         "libavcodec/vulkan/ffv1_dec_rgb_float_golomb.comp.spv.c": {
-          "bytes": 44440,
-          "sha256": "6c957331c5aaf004e671d5ae9a2a69608e6e94ffa87c2724897d0cedc5af1e29"
+          "bytes": 71620,
+          "sha256": "98cc8be08b7b62f78481e4d8c2f05d26d3669eecd59489ecf266a247e8d629fb"
         },
         "libavcodec/vulkan/ffv1_dec_rgb_golomb.comp.spv.c": {
-          "bytes": 42744,
-          "sha256": "187df7b7c417fca8058c077b244460cce2fb55e5125a88955b0bfed353e2059e"
+          "bytes": 69924,
+          "sha256": "1b7af4ce2c32d515ff911c7f10bd49380345466814992fa7fb5720f4e076dc8a"
         },
         "libavcodec/vulkan/ffv1_dec_setup.comp.spv.c": {
-          "bytes": 94684,
-          "sha256": "591fb95809a20b1654ad3a53311ca86f51b3b364acf647d79d2613ab7519b9bf"
+          "bytes": 94748,
+          "sha256": "1d5728eeb46f4dc1a48d5d73ab6503eb0b7b5e96a9575f637c8083358161285b"
         },
         "libavcodec/vulkan/ffv1_enc.comp.spv.c": {
-          "bytes": 38144,
-          "sha256": "31cbf6d9d997f34f786356000e479a20054cde49351b3bcec4df3d4077994319"
+          "bytes": 145360,
+          "sha256": "66c927fef5e32cbdb12d341053a328485d0adc9c8c4adf2fd29342d9ed0c039f"
         },
         "libavcodec/vulkan/ffv1_enc_bayer.comp.spv.c": {
-          "bytes": 42120,
-          "sha256": "5d02018c40383c2e953eca0136502644b2dc1ad36230e828130cba792ab783be"
+          "bytes": 148600,
+          "sha256": "3dfd58860c5de765f62854e060aec44047c29441be4588bf19af010209e2eb2e"
         },
         "libavcodec/vulkan/ffv1_enc_bayer_golomb.comp.spv.c": {
-          "bytes": 46332,
-          "sha256": "359c5aaedb910c7858e57fd9cc398eb9367743a054a49c77c84b69e2e2db1b18"
+          "bytes": 47704,
+          "sha256": "c6d6463809fd19f3968429120cc60bcdcf04f856b550ac9db4f1cd3c7631b481"
         },
         "libavcodec/vulkan/ffv1_enc_golomb.comp.spv.c": {
-          "bytes": 43032,
-          "sha256": "433bde7888f6a1ee4e216922f241b206ec7a5f32e55bedd0cbe43e1e55b34be0"
+          "bytes": 44432,
+          "sha256": "49dd189641be0c1ed3bdd667b63363780beb88a124929ff5da75461f5c60a156"
         },
         "libavcodec/vulkan/ffv1_enc_rct_search.comp.spv.c": {
-          "bytes": 11396,
-          "sha256": "7bd6f4b841e727bd624568b978c75e1496344c76f7100ab9adfb52f0cab80995"
+          "bytes": 11388,
+          "sha256": "5a27c7ae56a9f85a347f0455ea25a0af51e48d494eeb6e619bd7d9843ebe5456"
         },
         "libavcodec/vulkan/ffv1_enc_remap.comp.spv.c": {
           "bytes": 6712,
@@ -104,112 +104,72 @@
           "sha256": "b389ad5a5449900fcc456054ec208dd211474781e7d8e8dba630ce6ad8cef5d2"
         },
         "libavcodec/vulkan/ffv1_enc_rgb.comp.spv.c": {
-          "bytes": 42392,
-          "sha256": "87e733fff3d9fcc9fd888a0a1653d110fe9e2c73a0fbac2a8ce5413722cd10f1"
+          "bytes": 152904,
+          "sha256": "e51fcb8033927eaeb0304bc0fbb9766bf084e190f31e7870afffd845d711a190"
         },
         "libavcodec/vulkan/ffv1_enc_rgb_float.comp.spv.c": {
-          "bytes": 45152,
-          "sha256": "23fd466c7f769f4782db0212fb8eea03e5379dd075275816256f2a64d3b83834"
+          "bytes": 154784,
+          "sha256": "fcb7158b80dd52adbd676564a1d5a6b90f8b6148730c6a497e778e309f1c3e0e"
         },
         "libavcodec/vulkan/ffv1_enc_rgb_float_golomb.comp.spv.c": {
-          "bytes": 48008,
-          "sha256": "8d1d71df36b002582cc7d224144d69128fbb521aef9fb3cd51c11fbca268e992"
+          "bytes": 52888,
+          "sha256": "78562d2f158252162a9eec3ac476037ff2d4f8ff0fc414e81b626f096983f5a2"
         },
         "libavcodec/vulkan/ffv1_enc_rgb_golomb.comp.spv.c": {
-          "bytes": 46116,
-          "sha256": "ffb3d7e7724bd9936b03b56286d25358bf6dffe7f575865cc8f3bd86cbe50150"
+          "bytes": 50936,
+          "sha256": "21430695f02614bff6a2d92dd8bd9e55eab53a4dc1041374707eb47910a5f8af"
         },
         "libavcodec/vulkan/ffv1_enc_setup.comp.spv.c": {
-          "bytes": 185212,
-          "sha256": "32d4e876d01cd734d3b293a67c90f6de0411878d267ca1a3efdf70a9b187da1a"
+          "bytes": 157092,
+          "sha256": "e787efc0e47385380a7f22be2959597b590735d573c8a7ecd04372d02c67a07b"
         },
         "libavcodec/vulkan/ffv1_enc_sort32.comp.spv.c": {
-          "bytes": 10140,
-          "sha256": "3c5c36a3013a3d4d5f5f72b9ebb1496f9a8604430699f12d7eae58be8bc29ce3"
+          "bytes": 13892,
+          "sha256": "c430af3b4455bb26db45f621106f6e6907d06d1c33b838403d8a0382ed4df84d"
         },
         "libavcodec/vulkan/prores_idct.comp.spv.c": {
-          "bytes": 18204,
-          "sha256": "9289c715ce27ae4bef949077a98e563ccc5133c8ff46dd870ae6801ea00c1e17"
+          "bytes": 16116,
+          "sha256": "f163a98cb049e7af7df790f5a6de809f84329c5d81b6981cfe6208557cf5b5ca"
         },
         "libavcodec/vulkan/prores_ks_alpha_data.comp.spv.c": {
           "bytes": 3460,
           "sha256": "f75ad59a537791e7374b02ea800caf4c145b9f78964462e61c16a3a4ffd40b09"
         },
         "libavcodec/vulkan/prores_ks_encode_slice.comp.spv.c": {
-          "bytes": 77824,
-          "sha256": "003b9cc01642588682d2161c064834e1af65383f191d9f9cfd74eb16ecbb9ba5"
+          "bytes": 77996,
+          "sha256": "a432ff5943c8a3b9894256af25bf6c023e0cce35ba4af2055e42bae10f557d0e"
         },
         "libavcodec/vulkan/prores_ks_estimate_slice.comp.spv.c": {
-          "bytes": 21800,
-          "sha256": "5399e54cbb8ca6451313573eeb521b4e01d07997415b5270aea72808438d8335"
+          "bytes": 24252,
+          "sha256": "a5e65fb16b73ffe047f15f343dd33c242388a589cc76bbb19e0a584eb7aca73f"
         },
         "libavcodec/vulkan/prores_ks_slice_data.comp.spv.c": {
           "bytes": 16212,
-          "sha256": "c10aef73b706d55956817ad35f3c149921707d411d96cf272a0be8e3cea64c40"
+          "sha256": "a5da779720e2f4f443512d500fdd99c6bb392f36a3f43a19d222e7c5cbc4936e"
         },
         "libavcodec/vulkan/prores_ks_trellis_node.comp.spv.c": {
-          "bytes": 7284,
-          "sha256": "c4a049609cd5e0e94faa22152fdb43000bd11ca059342ba1957264b4b9b2b644"
+          "bytes": 4816,
+          "sha256": "2a441d34834d7d243b9ab6da576500b9538ccf22b7f0c803936723b3258dcc01"
         },
         "libavcodec/vulkan/prores_raw_decode.comp.spv.c": {
-          "bytes": 51932,
-          "sha256": "3b2c5cc9842c657086f7f6847b450ec4a39058196b126a2dc0a8b63aa45030bd"
+          "bytes": 50756,
+          "sha256": "ebd16b98de3186fc37bf7a5675e3b6be2efa325d7ee7ea8f1796b421ef0e2a57"
         },
         "libavcodec/vulkan/prores_raw_idct.comp.spv.c": {
-          "bytes": 26656,
-          "sha256": "d79b4adb50ab6ff69a39e67ccfbfba7b79b466c771ad274ba69bc322e43d798c"
+          "bytes": 24604,
+          "sha256": "19d07b2c50c2b3cf2c3bccb299faaabf04013bf6674445b8bf5bbed13191ba41"
         },
         "libavcodec/vulkan/prores_vld.comp.spv.c": {
-          "bytes": 48084,
-          "sha256": "5751a2aaf497787030ef50f17f37d24b055e367de18e002300ed6a9f4be23258"
+          "bytes": 46260,
+          "sha256": "46eb293b95202ad543bd3c52fa81c77aef5df1077b2d9a220d171a29c40d3ee8"
         },
         "libavcodec/vulkan/seg_gather.comp.spv.c": {
-          "bytes": 5144,
-          "sha256": "3f951ec5cb3eb1a676efff6ac97cfbf12af65ade6b822d5a7465d483cfd52a22"
-        },
-        "libavfilter/vf_bilateral_cuda.ptx.c": {
-          "bytes": 13959,
-          "sha256": "5a9221f10fe8189cd542b9fb379d128c25e8190f2f8c6826ba9ea3086d5d4e4e"
-        },
-        "libavfilter/vf_bwdif_cuda.ptx.c": {
-          "bytes": 43888,
-          "sha256": "0b02d9567d8e4baf30c1d0a143fc7b6038a44cc6305e33048e2e7acea13e5422"
-        },
-        "libavfilter/vf_chromakey_cuda.ptx.c": {
-          "bytes": 18271,
-          "sha256": "dbe9f3607494648aa53cc049a8389d3842a894cb08a317be1b8440af7b89145a"
-        },
-        "libavfilter/vf_colorspace_cuda.ptx.c": {
-          "bytes": 5013,
-          "sha256": "cc4f5dc7040778bb68b61a0026c05b7f7bb6e2ae331326cb600e89fa4d8fbef6"
-        },
-        "libavfilter/vf_overlay_cuda.ptx.c": {
-          "bytes": 3232,
-          "sha256": "fbc7952366cf01f28e264bcb02c5f8c8b58461c33aa6397fe2c332bf8598db74"
-        },
-        "libavfilter/vf_pad_cuda.ptx.c": {
-          "bytes": 5206,
-          "sha256": "c60115a7ea65226c8bc792cd12cd9f27fa2646d3c2233256b176114651be29be"
-        },
-        "libavfilter/vf_scale_cuda.ptx.c": {
-          "bytes": 3030439,
-          "sha256": "9ddc4e01356ce9e99d248a8bae169d7349cb9816723c1b1a5653206623ef9fc6"
-        },
-        "libavfilter/vf_thumbnail_cuda.ptx.c": {
-          "bytes": 7009,
-          "sha256": "9f3c41e326ba7bfc594998c6132ae4088677faab4f8bdcf729d033cf6b59c5ef"
-        },
-        "libavfilter/vf_transpose_cuda.ptx.c": {
-          "bytes": 17470,
-          "sha256": "57523f3e58e892f2e9d2839756df9fc070e8e21483c7a9a32a43708a0e42061e"
-        },
-        "libavfilter/vf_yadif_cuda.ptx.c": {
-          "bytes": 49557,
-          "sha256": "144a4f48108f3812d185cda0e5065c64ca8c317164dd6b86f9ac3f03655c6568"
+          "bytes": 5792,
+          "sha256": "d2253bab413220bf59c69d43e8fbd5432896603f76d654795032e298e88ee34d"
         },
         "libavfilter/vulkan/avgblur.comp.spv.c": {
-          "bytes": 2432,
-          "sha256": "003e13119f1c3e99dcb287aa4090dd45963c611b77abd600d8c83691ec62df57"
+          "bytes": 2524,
+          "sha256": "b79d9989f65f7ed6aaa08ebe824d157475149b7adcd3f166e1ff3ad9cb7d6de2"
         },
         "libavfilter/vulkan/blackdetect.comp.spv.c": {
           "bytes": 2000,
@@ -217,11 +177,11 @@
         },
         "libavfilter/vulkan/blend.comp.spv.c": {
           "bytes": 10796,
-          "sha256": "1f951967d239a94d1f51b98c35411e6d34e8ba4c3bf9553430ffce38e3c17c3b"
+          "sha256": "62314491d89bd3b5993f81994f64757aa7fc15e8b1cfb8873a4ae8e001b63a98"
         },
         "libavfilter/vulkan/bwdif.comp.spv.c": {
           "bytes": 6784,
-          "sha256": "ebcd74904e283389aa4e840cd5b6f302115c681d271e32e67a6aba590adb9587"
+          "sha256": "a757ec48df770e6b40728ae22d4d224482b1a56e30ea9ba8babc627f3dce46c0"
         },
         "libavfilter/vulkan/chromaber.comp.spv.c": {
           "bytes": 2832,
@@ -236,8 +196,8 @@
           "sha256": "88f5a40046429da2405b9a510ac9b7f66b4b5b495863745d41447f688b5e5645"
         },
         "libavfilter/vulkan/flip.comp.spv.c": {
-          "bytes": 1804,
-          "sha256": "24bddd997ec4cf72e94a596c7d7bebbac5306c02c36dbb58995a57e8989b289a"
+          "bytes": 1900,
+          "sha256": "d15a20c7ec2a754b0a4a337d6b182cea119bcd211d665c208c0f527339ecc357"
         },
         "libavfilter/vulkan/fruc_grayscale.comp.spv.c": {
           "bytes": 2364,
@@ -248,12 +208,12 @@
           "sha256": "fdc106fc42cd70a0c0d4e3627e242a01a8c86acc4fa045ab5b53a20d4976e7a0"
         },
         "libavfilter/vulkan/gblur.comp.spv.c": {
-          "bytes": 2596,
-          "sha256": "183855ac499f9fbf9ce59d93853d199995b40c8a9b44468f14aa900cd2b3a489"
+          "bytes": 2712,
+          "sha256": "44042d8c4c9f5703a8e33feaf41f3801c6c0fcb3da86662e45cea0d45015e0e5"
         },
         "libavfilter/vulkan/interlace.comp.spv.c": {
           "bytes": 4044,
-          "sha256": "93fd90b46d9b766ba780e56fed047fae2383451818644cfe0345be0bd6ecfa81"
+          "sha256": "c320de5dc4ba4e380d8504e9a9a1f6051c254e8e8310b43536a01082c7e97b90"
         },
         "libavfilter/vulkan/nlmeans_denoise.comp.spv.c": {
           "bytes": 3196,
@@ -273,49 +233,50 @@
         },
         "libavfilter/vulkan/overlay.comp.spv.c": {
           "bytes": 3744,
-          "sha256": "1aacc2d7afda9ba5521c8d062d003209cd7cb756b9952fd24bd0fc9c425ee44e"
+          "sha256": "fa780e8a53b57083fcef4545fcb56cc8b4d7d531ea45409b33f92363230d2a87"
         },
         "libavfilter/vulkan/scale.comp.spv.c": {
-          "bytes": 4064,
-          "sha256": "460cd374ffff6f9f1cb57988d3a2e3a96adb7033fd0dcc8b78a44e798ef06df2"
+          "bytes": 5532,
+          "sha256": "79478a8238a1bf3a1dd95e99e52e8f0a8d83ecc864ec6df20f73e0ea09adee6d"
         },
         "libavfilter/vulkan/scdet.comp.spv.c": {
           "bytes": 2192,
           "sha256": "2d2c54a6e130df9efab92f66b76835f9bb118730ff8926246e9258791233aac1"
         },
         "libavfilter/vulkan/transpose.comp.spv.c": {
-          "bytes": 2352,
-          "sha256": "98c9979094adc6655e431a354211208d6ceb2d154be5895426cd1a48c42e6981"
+          "bytes": 1944,
+          "sha256": "998117735b00dd3ac31ffe23b1175caee180fa0cd42b83bfdfcf5d7434c87423"
         },
         "libavfilter/vulkan/v360.comp.spv.c": {
-          "bytes": 8176,
-          "sha256": "8da022f4f0ae19ed421a3dabdc6dbd5dcb31b667e8c90073e57ac41fff9f90d0"
+          "bytes": 14820,
+          "sha256": "310ed2dffde96f55332ec5ff942bbc8fbfbbf9f616f830c75810eed7418c2821"
         },
         "libavfilter/vulkan/xfade.comp.spv.c": {
-          "bytes": 13180,
-          "sha256": "e76eaa774724a97b3f454ae907447cf2f70c0ce59ccf06ff630981572929cb31"
+          "bytes": 13556,
+          "sha256": "833fc2cf5d82deea3bdc21004647840345926a71d6b30bd85abbf6378c799ed7"
         }
       }
     },
-    "ffmpeg_source_revision": "d01d7956c6d77e920bec3ae4f83db51ece13ed4b",
-    "configuration": "--prefix=/c/Users/fenetrino/source/repos/catermujo/vendor/ffmpeg/FFmpeg/build_windows_x86_64_shared --arch=x86_64 --target-os=win64 --toolchain=msvc --disable-static --enable-shared --disable-programs --disable-doc --disable-debug --disable-avx --disable-avx2 --disable-iconv --enable-d3d12va --enable-nvenc --enable-amf --enable-libvpl --enable-zlib --disable-shader-compression --enable-vulkan --enable-encoder=prores_ks_vulkan --glslc='C:/VulkanSDK/1.4.357.0/Bin/glslc.EXE' --extra-cflags='-IC:/Users/fenetrino/source/repos/catermujo/vendor/ffmpeg/FFmpeg/.build-deps/AMF/header-root -IC:/Users/fenetrino/scoop/apps/vcpkg/current/installed/x64-windows/include -IC:/Users/fenetrino/source/repos/catermujo/vendor/ffmpeg/FFmpeg/.build-deps/DirectX-Headers/include/directx -I\"C:/VulkanSDK/1.4.357.0/Include\"' --extra-ldflags='-libpath:C:/Users/fenetrino/scoop/apps/vcpkg/current/installed/x64-windows/lib'",
+    "ffmpeg_source_revision": "398f931de9fdf56cef270f12833a74e1ce31cd7f",
+    "configuration": "--prefix=/c/Users/evaporei/source/repos/catermujo/vendor/ffmpeg/FFmpeg/build_windows_x86_64_shared --arch=x86_64 --target-os=win64 --toolchain=msvc --disable-static --enable-shared --disable-programs --disable-doc --disable-debug --disable-avx --disable-avx2 --disable-iconv --enable-d3d12va --enable-nvenc --enable-amf --enable-libvpl --enable-zlib --disable-shader-compression --enable-vulkan --enable-encoder=prores_ks_vulkan --glslc='C:/VulkanSDK/1.4.357.0/Bin/glslc.exe' --extra-cflags='-IC:/Users/evaporei/source/repos/catermujo/odd/.tool_cache/ffmpeg-build-deps/amf-include -IC:/Users/evaporei/source/repos/catermujo/odd/.tool_cache/ffmpeg-build-deps/DirectX-Headers/include/directx -IC:/Users/evaporei/source/repos/catermujo/odd/.tool_cache/ffmpeg-build-deps/zlib-install/include -I\"C:/VulkanSDK/1.4.357.0/Include\"' --extra-ldflags='-libpath:C:/Users/evaporei/source/repos/catermujo/odd/.tool_cache/ffmpeg-build-deps/zlib-install/lib'",
     "artifacts_sha256": {
-      "avcodec-63.dll": "e03c57e431f962a852c3fd672543b05b1b92187c3288b0e96faae453543b25de",
-      "avcodec.lib": "10dadb1d02b25efe8462a4c5dcc4371ad467f696c44a17887d8da484530505c9",
-      "avdevice-63.dll": "72172e6109fd9bb1cf3c02121e1db20c7651f9a0da87781106db1170883986a6",
-      "avdevice.lib": "47bb18f46f024739946e5b5a526ff4349f29cee0775c4ddc9bc9ddbef427e25e",
-      "avfilter-12.dll": "2805c5631fe963bb933267496e816a8350ec10230f6d63184fb24cb013ab7514",
-      "avfilter.lib": "449d04f9e132579d0408c607805ce16eb394d5212aa3a2c1336e27b031b0307c",
-      "avformat-63.dll": "c6785f58638a6aa904f0b6ad2b884ff693cbbbcc38656c11d6b0962163a87cba",
-      "avformat.lib": "e5367c4c6e97219a32966457eefda54f2e57bc438d88c8ace728032f9d932c57",
-      "avutil-61.dll": "ce5681652082b6e0a71b4ecf4a6637ec6467aa7900c81e47c798e55f6507792f",
-      "avutil.lib": "65b736b606d288e8cd11be1ebc20e05a363778f5412f4586d21ba6dfb59ddbdd",
+      "avcodec-63.dll": "5a3911cdd16e4abc1f817feec1ef6d8894d2dcb9cdf4fb160c2f507417c75746",
+      "avcodec.lib": "e1d04882e62837166a9db1fcde9068ec0cc711234affe88b321645e23a28fa12",
+      "avdevice-63.dll": "0197026db313ba0d09f6886d62512fac69f8b29aff6d9dd8e3e41e1db26b0237",
+      "avdevice.lib": "6538f5c5efa555671f93c05669498f0ae26ef3f1362b57e25fd85580e259acf1",
+      "avfilter-12.dll": "f3b944f712c93217beb8d4ca60e96362ab1a39378c2e1a8c30e398ef97f21901",
+      "avfilter.lib": "2878eb74f7aeb6fc679ba02c4a206dac0d6f2573f454a436e211ad59b84f27a8",
+      "avformat-63.dll": "9bcf0ab15717e892c4e43a12d20a9cae6c636d82a9b9f8209877aacdd61c88cc",
+      "avformat.lib": "5a2f225eb88a851b3293560cea2fcab46fa63a4aa34a8c7be4556aa176372cc2",
+      "avutil-61.dll": "330cf05865a59af5d61cb7bab6de2e535e7dcc96ad2c22c4104696101c297b90",
+      "avutil.lib": "b252f699fbe3de24442cf6d8c71074dffe6c8058b43d44de98ec4d3eaeb902c2",
       "bz2.dll": "541cf280b88598e1c3cbb3a6445b47c2e1e308135a5ef7a56f54788b864f212a",
-      "libvpl.dll": "9f727a600d0a968afd4f44ac55b6a53e26478bedef89b70739b180f82163a139",
-      "swresample-7.dll": "864255717762fe98216cfb0a423f4ca34c94baef6ac4a27e9221788c00b57d11",
-      "swresample.lib": "582e88fcf5265c3fa5b5a9135d4c492b7b95c9fd53a54228a5ec95a5dc289ba9",
-      "swscale-10.dll": "15d6058327e80ee54e61488b1e90ac059829f836cba1408da49ea141ff9f48bb",
-      "swscale.lib": "07348dd6b4091baee661cd490bb7100dd03bc33b06653eebd8318b6dbba25807",
+      "libvpl.dll": "010eb6d36781ff377c31e8fc3d6077dc9be38e8d78de0222a8168a01e02abea8",
+      "libz.dll": "27f1a59c3f0a15356b9d0f464f7d54364a7492211ccb108782351557febd57ea",
+      "swresample-7.dll": "0f6110c8c8d6764ac3a52ecb9d3a69bdd6acae642c0abe11a4241062e7255a78",
+      "swresample.lib": "c1f0cfdce434f52b2efd5fcbb191a57045df4bcf43a686e68ad0a271f5474ead",
+      "swscale-10.dll": "9cb1ac169084677861c503f7f865284d2c6516a7174769ad6aecdb44eb4fbdbe",
+      "swscale.lib": "5cf2537b25e11b8f39d7465eaf132b967017e3b49238e5adbe859e8343bd5928",
       "zlib.dll": "67aac157b320075dc99b1dac7af7a5a61b447ff8670419e5a4c05e0ce7c8a8d4",
       "zlib1.dll": "c5511a733da8d4f2640d542cd09a1a09bfe0c9c5ee18117c9ab9bf50a44dc31f"
     },
@@ -555,6 +516,7 @@
       "adpcm_ima_amv",
       "adpcm_ima_apc",
       "adpcm_ima_apm",
+      "adpcm_ima_citrix",
       "adpcm_ima_cunning",
       "adpcm_ima_dat4",
       "adpcm_ima_dk3",
@@ -575,6 +537,7 @@
       "adpcm_ms",
       "adpcm_mtaf",
       "adpcm_psx",
+      "adpcm_rhetorex",
       "adpcm_sanyo",
       "adpcm_sbpro_2",
       "adpcm_sbpro_3",
@@ -746,6 +709,7 @@
       "imc",
       "imm4",
       "imm5",
+      "imm6",
       "indeo2",
       "indeo3",
       "indeo4",
@@ -917,6 +881,7 @@
       "rv30",
       "rv40",
       "rv60",
+      "rw2",
       "s302m",
       "sami",
       "sanm",
@@ -1059,39 +1024,39 @@
         },
         "libavcodec/vulkan/apv_encode_dct.comp.spv.c": {
           "bytes": 17544,
-          "sha256": "2b28ddb1d082af9d8405a362721ef25b2dcf035817e379341b703c6d2db0b610"
+          "sha256": "1addcaef2cc21a99a8f6e31f7ca45e6acf34140139d0e3542fdfa0b70cf99d27"
         },
         "libavcodec/vulkan/apv_encode_tiles.comp.spv.c": {
-          "bytes": 136740,
-          "sha256": "5c9ccb974e4b3a95086a031071d0fa17d84257f39b350e700c59319dfe7460bd"
+          "bytes": 136772,
+          "sha256": "21d5fd7a0850e63db84f6a643a02fdb48b533fcdb16ef72af887f5793f4f8b62"
         },
         "libavcodec/vulkan/apv_idct.comp.spv.c": {
-          "bytes": 17108,
-          "sha256": "0349244e8333e7935c708b5e89707ef82e9fb8b4f1909ae62f5cb9f06c98e66c"
+          "bytes": 14768,
+          "sha256": "ace67023ccff4c641bfccbb621f2eb066b9843b6b32581b803c22f9f2c151cae"
         },
         "libavcodec/vulkan/dpx_copy.comp.spv.c": {
-          "bytes": 5160,
-          "sha256": "bd177bb24b1117876684f4f651ed8f4277f30c579917451b9dfb7202e2b9f5c7"
+          "bytes": 5280,
+          "sha256": "7c20ca850d5a8cfc4a3b167fb56f63fbaafccc9f7878f784348ff07c3cb2c630"
         },
         "libavcodec/vulkan/dpx_unpack.comp.spv.c": {
-          "bytes": 4772,
-          "sha256": "abe2303f8772831e2b48aaaa5a17a45c48dcb8461533b0001867f2460ce1660a"
+          "bytes": 4852,
+          "sha256": "438f43afca4b6f091483cb643ae7c237005ef2c3d8dcce7c114b3ad66caa1f72"
         },
         "libavcodec/vulkan/ffv1_dec.comp.spv.c": {
-          "bytes": 30392,
-          "sha256": "4a578f9eef1b2aac02f16d71d58229a9005556167580af961e9f9cc78833483a"
+          "bytes": 317092,
+          "sha256": "d39895fedc7b5eaf89f413a4cb834a179d6a407962d336bea0b310ef42a7e744"
         },
         "libavcodec/vulkan/ffv1_dec_bayer.comp.spv.c": {
-          "bytes": 36492,
-          "sha256": "8d0f5575e10725352f1c0054b67d8113fc70cdd022a70712badeee74fba1c3e1"
+          "bytes": 323760,
+          "sha256": "40608bade49866103fff966f847055135bc62c834b35c700ada2a61e6d78cea6"
         },
         "libavcodec/vulkan/ffv1_dec_bayer_golomb.comp.spv.c": {
-          "bytes": 43376,
-          "sha256": "3f0f4b7ab8a721e4dd01e2d16fc54412f83eb75bb98b7c1a9b3497757681544f"
+          "bytes": 70556,
+          "sha256": "dc7432693c43a31855030e877b5e5d928fb45abebe18c897cb662fa0f1bb8440"
         },
         "libavcodec/vulkan/ffv1_dec_golomb.comp.spv.c": {
-          "bytes": 39116,
-          "sha256": "f1e61e2eb261fbdaea1f9867f9411b80e20a3f1121a2c7e45d0f5c77f7986ec7"
+          "bytes": 66348,
+          "sha256": "8943075e0632c3d1114d85583ddac51d9cf022e58e007b7b611707f2337dff86"
         },
         "libavcodec/vulkan/ffv1_dec_reset.comp.spv.c": {
           "bytes": 3356,
@@ -1102,44 +1067,44 @@
           "sha256": "2c5fc7f96c44d08b58592be60d30944c00d5aef79943e67f98cd1df1aeab5861"
         },
         "libavcodec/vulkan/ffv1_dec_rgb.comp.spv.c": {
-          "bytes": 35744,
-          "sha256": "31dcd7524db450566de585f0af21810a1b1a49dbc1102f6f3a09b2868a94f762"
+          "bytes": 323012,
+          "sha256": "20c2f660494dd5b1ce99acf0d4081c262b0312bb10a0ed3edaafcf68c6c3d8ba"
         },
         "libavcodec/vulkan/ffv1_dec_rgb_float.comp.spv.c": {
-          "bytes": 38300,
-          "sha256": "fef59601047cb9c3f53c2f748364ed7fb09421c2466674581ed74d77e743d2f3"
+          "bytes": 325592,
+          "sha256": "1b1345defd8c22662a4990fa32d95b522ca8e80f9d108c29c9513c78de275adf"
         },
         "libavcodec/vulkan/ffv1_dec_rgb_float_golomb.comp.spv.c": {
-          "bytes": 44440,
-          "sha256": "6c957331c5aaf004e671d5ae9a2a69608e6e94ffa87c2724897d0cedc5af1e29"
+          "bytes": 71620,
+          "sha256": "98cc8be08b7b62f78481e4d8c2f05d26d3669eecd59489ecf266a247e8d629fb"
         },
         "libavcodec/vulkan/ffv1_dec_rgb_golomb.comp.spv.c": {
-          "bytes": 42744,
-          "sha256": "187df7b7c417fca8058c077b244460cce2fb55e5125a88955b0bfed353e2059e"
+          "bytes": 69924,
+          "sha256": "1b7af4ce2c32d515ff911c7f10bd49380345466814992fa7fb5720f4e076dc8a"
         },
         "libavcodec/vulkan/ffv1_dec_setup.comp.spv.c": {
-          "bytes": 94684,
-          "sha256": "591fb95809a20b1654ad3a53311ca86f51b3b364acf647d79d2613ab7519b9bf"
+          "bytes": 94748,
+          "sha256": "1d5728eeb46f4dc1a48d5d73ab6503eb0b7b5e96a9575f637c8083358161285b"
         },
         "libavcodec/vulkan/ffv1_enc.comp.spv.c": {
-          "bytes": 38144,
-          "sha256": "31cbf6d9d997f34f786356000e479a20054cde49351b3bcec4df3d4077994319"
+          "bytes": 145360,
+          "sha256": "66c927fef5e32cbdb12d341053a328485d0adc9c8c4adf2fd29342d9ed0c039f"
         },
         "libavcodec/vulkan/ffv1_enc_bayer.comp.spv.c": {
-          "bytes": 42120,
-          "sha256": "5d02018c40383c2e953eca0136502644b2dc1ad36230e828130cba792ab783be"
+          "bytes": 148600,
+          "sha256": "3dfd58860c5de765f62854e060aec44047c29441be4588bf19af010209e2eb2e"
         },
         "libavcodec/vulkan/ffv1_enc_bayer_golomb.comp.spv.c": {
-          "bytes": 46332,
-          "sha256": "359c5aaedb910c7858e57fd9cc398eb9367743a054a49c77c84b69e2e2db1b18"
+          "bytes": 47704,
+          "sha256": "c6d6463809fd19f3968429120cc60bcdcf04f856b550ac9db4f1cd3c7631b481"
         },
         "libavcodec/vulkan/ffv1_enc_golomb.comp.spv.c": {
-          "bytes": 43032,
-          "sha256": "433bde7888f6a1ee4e216922f241b206ec7a5f32e55bedd0cbe43e1e55b34be0"
+          "bytes": 44432,
+          "sha256": "49dd189641be0c1ed3bdd667b63363780beb88a124929ff5da75461f5c60a156"
         },
         "libavcodec/vulkan/ffv1_enc_rct_search.comp.spv.c": {
-          "bytes": 11396,
-          "sha256": "7bd6f4b841e727bd624568b978c75e1496344c76f7100ab9adfb52f0cab80995"
+          "bytes": 11388,
+          "sha256": "5a27c7ae56a9f85a347f0455ea25a0af51e48d494eeb6e619bd7d9843ebe5456"
         },
         "libavcodec/vulkan/ffv1_enc_remap.comp.spv.c": {
           "bytes": 6712,
@@ -1154,112 +1119,72 @@
           "sha256": "b389ad5a5449900fcc456054ec208dd211474781e7d8e8dba630ce6ad8cef5d2"
         },
         "libavcodec/vulkan/ffv1_enc_rgb.comp.spv.c": {
-          "bytes": 42392,
-          "sha256": "87e733fff3d9fcc9fd888a0a1653d110fe9e2c73a0fbac2a8ce5413722cd10f1"
+          "bytes": 152904,
+          "sha256": "e51fcb8033927eaeb0304bc0fbb9766bf084e190f31e7870afffd845d711a190"
         },
         "libavcodec/vulkan/ffv1_enc_rgb_float.comp.spv.c": {
-          "bytes": 45152,
-          "sha256": "23fd466c7f769f4782db0212fb8eea03e5379dd075275816256f2a64d3b83834"
+          "bytes": 154784,
+          "sha256": "fcb7158b80dd52adbd676564a1d5a6b90f8b6148730c6a497e778e309f1c3e0e"
         },
         "libavcodec/vulkan/ffv1_enc_rgb_float_golomb.comp.spv.c": {
-          "bytes": 48008,
-          "sha256": "8d1d71df36b002582cc7d224144d69128fbb521aef9fb3cd51c11fbca268e992"
+          "bytes": 52888,
+          "sha256": "78562d2f158252162a9eec3ac476037ff2d4f8ff0fc414e81b626f096983f5a2"
         },
         "libavcodec/vulkan/ffv1_enc_rgb_golomb.comp.spv.c": {
-          "bytes": 46116,
-          "sha256": "ffb3d7e7724bd9936b03b56286d25358bf6dffe7f575865cc8f3bd86cbe50150"
+          "bytes": 50936,
+          "sha256": "21430695f02614bff6a2d92dd8bd9e55eab53a4dc1041374707eb47910a5f8af"
         },
         "libavcodec/vulkan/ffv1_enc_setup.comp.spv.c": {
-          "bytes": 185212,
-          "sha256": "32d4e876d01cd734d3b293a67c90f6de0411878d267ca1a3efdf70a9b187da1a"
+          "bytes": 157092,
+          "sha256": "e787efc0e47385380a7f22be2959597b590735d573c8a7ecd04372d02c67a07b"
         },
         "libavcodec/vulkan/ffv1_enc_sort32.comp.spv.c": {
-          "bytes": 10140,
-          "sha256": "3c5c36a3013a3d4d5f5f72b9ebb1496f9a8604430699f12d7eae58be8bc29ce3"
+          "bytes": 13892,
+          "sha256": "c430af3b4455bb26db45f621106f6e6907d06d1c33b838403d8a0382ed4df84d"
         },
         "libavcodec/vulkan/prores_idct.comp.spv.c": {
-          "bytes": 18204,
-          "sha256": "9289c715ce27ae4bef949077a98e563ccc5133c8ff46dd870ae6801ea00c1e17"
+          "bytes": 16116,
+          "sha256": "f163a98cb049e7af7df790f5a6de809f84329c5d81b6981cfe6208557cf5b5ca"
         },
         "libavcodec/vulkan/prores_ks_alpha_data.comp.spv.c": {
           "bytes": 3460,
           "sha256": "f75ad59a537791e7374b02ea800caf4c145b9f78964462e61c16a3a4ffd40b09"
         },
         "libavcodec/vulkan/prores_ks_encode_slice.comp.spv.c": {
-          "bytes": 77824,
-          "sha256": "003b9cc01642588682d2161c064834e1af65383f191d9f9cfd74eb16ecbb9ba5"
+          "bytes": 77996,
+          "sha256": "a432ff5943c8a3b9894256af25bf6c023e0cce35ba4af2055e42bae10f557d0e"
         },
         "libavcodec/vulkan/prores_ks_estimate_slice.comp.spv.c": {
-          "bytes": 21800,
-          "sha256": "5399e54cbb8ca6451313573eeb521b4e01d07997415b5270aea72808438d8335"
+          "bytes": 24252,
+          "sha256": "a5e65fb16b73ffe047f15f343dd33c242388a589cc76bbb19e0a584eb7aca73f"
         },
         "libavcodec/vulkan/prores_ks_slice_data.comp.spv.c": {
           "bytes": 16212,
-          "sha256": "c10aef73b706d55956817ad35f3c149921707d411d96cf272a0be8e3cea64c40"
+          "sha256": "a5da779720e2f4f443512d500fdd99c6bb392f36a3f43a19d222e7c5cbc4936e"
         },
         "libavcodec/vulkan/prores_ks_trellis_node.comp.spv.c": {
-          "bytes": 7284,
-          "sha256": "c4a049609cd5e0e94faa22152fdb43000bd11ca059342ba1957264b4b9b2b644"
+          "bytes": 4816,
+          "sha256": "2a441d34834d7d243b9ab6da576500b9538ccf22b7f0c803936723b3258dcc01"
         },
         "libavcodec/vulkan/prores_raw_decode.comp.spv.c": {
-          "bytes": 51932,
-          "sha256": "3b2c5cc9842c657086f7f6847b450ec4a39058196b126a2dc0a8b63aa45030bd"
+          "bytes": 50756,
+          "sha256": "ebd16b98de3186fc37bf7a5675e3b6be2efa325d7ee7ea8f1796b421ef0e2a57"
         },
         "libavcodec/vulkan/prores_raw_idct.comp.spv.c": {
-          "bytes": 26656,
-          "sha256": "d79b4adb50ab6ff69a39e67ccfbfba7b79b466c771ad274ba69bc322e43d798c"
+          "bytes": 24604,
+          "sha256": "19d07b2c50c2b3cf2c3bccb299faaabf04013bf6674445b8bf5bbed13191ba41"
         },
         "libavcodec/vulkan/prores_vld.comp.spv.c": {
-          "bytes": 48084,
-          "sha256": "5751a2aaf497787030ef50f17f37d24b055e367de18e002300ed6a9f4be23258"
+          "bytes": 46260,
+          "sha256": "46eb293b95202ad543bd3c52fa81c77aef5df1077b2d9a220d171a29c40d3ee8"
         },
         "libavcodec/vulkan/seg_gather.comp.spv.c": {
-          "bytes": 5144,
-          "sha256": "3f951ec5cb3eb1a676efff6ac97cfbf12af65ade6b822d5a7465d483cfd52a22"
-        },
-        "libavfilter/vf_bilateral_cuda.ptx.c": {
-          "bytes": 13959,
-          "sha256": "5a9221f10fe8189cd542b9fb379d128c25e8190f2f8c6826ba9ea3086d5d4e4e"
-        },
-        "libavfilter/vf_bwdif_cuda.ptx.c": {
-          "bytes": 43888,
-          "sha256": "0b02d9567d8e4baf30c1d0a143fc7b6038a44cc6305e33048e2e7acea13e5422"
-        },
-        "libavfilter/vf_chromakey_cuda.ptx.c": {
-          "bytes": 18271,
-          "sha256": "dbe9f3607494648aa53cc049a8389d3842a894cb08a317be1b8440af7b89145a"
-        },
-        "libavfilter/vf_colorspace_cuda.ptx.c": {
-          "bytes": 5013,
-          "sha256": "cc4f5dc7040778bb68b61a0026c05b7f7bb6e2ae331326cb600e89fa4d8fbef6"
-        },
-        "libavfilter/vf_overlay_cuda.ptx.c": {
-          "bytes": 3232,
-          "sha256": "fbc7952366cf01f28e264bcb02c5f8c8b58461c33aa6397fe2c332bf8598db74"
-        },
-        "libavfilter/vf_pad_cuda.ptx.c": {
-          "bytes": 5206,
-          "sha256": "c60115a7ea65226c8bc792cd12cd9f27fa2646d3c2233256b176114651be29be"
-        },
-        "libavfilter/vf_scale_cuda.ptx.c": {
-          "bytes": 3030439,
-          "sha256": "9ddc4e01356ce9e99d248a8bae169d7349cb9816723c1b1a5653206623ef9fc6"
-        },
-        "libavfilter/vf_thumbnail_cuda.ptx.c": {
-          "bytes": 7009,
-          "sha256": "9f3c41e326ba7bfc594998c6132ae4088677faab4f8bdcf729d033cf6b59c5ef"
-        },
-        "libavfilter/vf_transpose_cuda.ptx.c": {
-          "bytes": 17470,
-          "sha256": "57523f3e58e892f2e9d2839756df9fc070e8e21483c7a9a32a43708a0e42061e"
-        },
-        "libavfilter/vf_yadif_cuda.ptx.c": {
-          "bytes": 49557,
-          "sha256": "144a4f48108f3812d185cda0e5065c64ca8c317164dd6b86f9ac3f03655c6568"
+          "bytes": 5792,
+          "sha256": "d2253bab413220bf59c69d43e8fbd5432896603f76d654795032e298e88ee34d"
         },
         "libavfilter/vulkan/avgblur.comp.spv.c": {
-          "bytes": 2432,
-          "sha256": "003e13119f1c3e99dcb287aa4090dd45963c611b77abd600d8c83691ec62df57"
+          "bytes": 2524,
+          "sha256": "b79d9989f65f7ed6aaa08ebe824d157475149b7adcd3f166e1ff3ad9cb7d6de2"
         },
         "libavfilter/vulkan/blackdetect.comp.spv.c": {
           "bytes": 2000,
@@ -1267,11 +1192,11 @@
         },
         "libavfilter/vulkan/blend.comp.spv.c": {
           "bytes": 10796,
-          "sha256": "1f951967d239a94d1f51b98c35411e6d34e8ba4c3bf9553430ffce38e3c17c3b"
+          "sha256": "62314491d89bd3b5993f81994f64757aa7fc15e8b1cfb8873a4ae8e001b63a98"
         },
         "libavfilter/vulkan/bwdif.comp.spv.c": {
           "bytes": 6784,
-          "sha256": "ebcd74904e283389aa4e840cd5b6f302115c681d271e32e67a6aba590adb9587"
+          "sha256": "a757ec48df770e6b40728ae22d4d224482b1a56e30ea9ba8babc627f3dce46c0"
         },
         "libavfilter/vulkan/chromaber.comp.spv.c": {
           "bytes": 2832,
@@ -1286,8 +1211,8 @@
           "sha256": "88f5a40046429da2405b9a510ac9b7f66b4b5b495863745d41447f688b5e5645"
         },
         "libavfilter/vulkan/flip.comp.spv.c": {
-          "bytes": 1804,
-          "sha256": "24bddd997ec4cf72e94a596c7d7bebbac5306c02c36dbb58995a57e8989b289a"
+          "bytes": 1900,
+          "sha256": "d15a20c7ec2a754b0a4a337d6b182cea119bcd211d665c208c0f527339ecc357"
         },
         "libavfilter/vulkan/fruc_grayscale.comp.spv.c": {
           "bytes": 2364,
@@ -1298,12 +1223,12 @@
           "sha256": "fdc106fc42cd70a0c0d4e3627e242a01a8c86acc4fa045ab5b53a20d4976e7a0"
         },
         "libavfilter/vulkan/gblur.comp.spv.c": {
-          "bytes": 2596,
-          "sha256": "183855ac499f9fbf9ce59d93853d199995b40c8a9b44468f14aa900cd2b3a489"
+          "bytes": 2712,
+          "sha256": "44042d8c4c9f5703a8e33feaf41f3801c6c0fcb3da86662e45cea0d45015e0e5"
         },
         "libavfilter/vulkan/interlace.comp.spv.c": {
           "bytes": 4044,
-          "sha256": "93fd90b46d9b766ba780e56fed047fae2383451818644cfe0345be0bd6ecfa81"
+          "sha256": "c320de5dc4ba4e380d8504e9a9a1f6051c254e8e8310b43536a01082c7e97b90"
         },
         "libavfilter/vulkan/nlmeans_denoise.comp.spv.c": {
           "bytes": 3196,
@@ -1323,40 +1248,40 @@
         },
         "libavfilter/vulkan/overlay.comp.spv.c": {
           "bytes": 3744,
-          "sha256": "1aacc2d7afda9ba5521c8d062d003209cd7cb756b9952fd24bd0fc9c425ee44e"
+          "sha256": "fa780e8a53b57083fcef4545fcb56cc8b4d7d531ea45409b33f92363230d2a87"
         },
         "libavfilter/vulkan/scale.comp.spv.c": {
-          "bytes": 4064,
-          "sha256": "460cd374ffff6f9f1cb57988d3a2e3a96adb7033fd0dcc8b78a44e798ef06df2"
+          "bytes": 5532,
+          "sha256": "79478a8238a1bf3a1dd95e99e52e8f0a8d83ecc864ec6df20f73e0ea09adee6d"
         },
         "libavfilter/vulkan/scdet.comp.spv.c": {
           "bytes": 2192,
           "sha256": "2d2c54a6e130df9efab92f66b76835f9bb118730ff8926246e9258791233aac1"
         },
         "libavfilter/vulkan/transpose.comp.spv.c": {
-          "bytes": 2352,
-          "sha256": "98c9979094adc6655e431a354211208d6ceb2d154be5895426cd1a48c42e6981"
+          "bytes": 1944,
+          "sha256": "998117735b00dd3ac31ffe23b1175caee180fa0cd42b83bfdfcf5d7434c87423"
         },
         "libavfilter/vulkan/v360.comp.spv.c": {
-          "bytes": 8176,
-          "sha256": "8da022f4f0ae19ed421a3dabdc6dbd5dcb31b667e8c90073e57ac41fff9f90d0"
+          "bytes": 14820,
+          "sha256": "310ed2dffde96f55332ec5ff942bbc8fbfbbf9f616f830c75810eed7418c2821"
         },
         "libavfilter/vulkan/xfade.comp.spv.c": {
-          "bytes": 13180,
-          "sha256": "e76eaa774724a97b3f454ae907447cf2f70c0ce59ccf06ff630981572929cb31"
+          "bytes": 13556,
+          "sha256": "833fc2cf5d82deea3bdc21004647840345926a71d6b30bd85abbf6378c799ed7"
         }
       }
     },
-    "ffmpeg_source_revision": "d01d7956c6d77e920bec3ae4f83db51ece13ed4b",
-    "configuration": "--prefix=/c/Users/fenetrino/source/repos/catermujo/vendor/ffmpeg/FFmpeg/build_windows_x86_64_static --arch=x86_64 --target-os=win64 --toolchain=msvc --enable-static --disable-shared --disable-programs --disable-doc --disable-debug --disable-avx --disable-avx2 --disable-iconv --enable-d3d12va --enable-nvenc --enable-amf --enable-libvpl --enable-zlib --disable-shader-compression --enable-vulkan --enable-encoder=prores_ks_vulkan --glslc='C:/VulkanSDK/1.4.357.0/Bin/glslc.EXE' --extra-cflags='-IC:/Users/fenetrino/source/repos/catermujo/vendor/ffmpeg/FFmpeg/.build-deps/AMF/header-root -IC:/Users/fenetrino/scoop/apps/vcpkg/current/installed/x64-windows/include -IC:/Users/fenetrino/source/repos/catermujo/vendor/ffmpeg/FFmpeg/.build-deps/DirectX-Headers/include/directx -I\"C:/VulkanSDK/1.4.357.0/Include\"' --extra-ldflags='-libpath:C:/Users/fenetrino/scoop/apps/vcpkg/current/installed/x64-windows/lib'",
+    "ffmpeg_source_revision": "398f931de9fdf56cef270f12833a74e1ce31cd7f",
+    "configuration": "--prefix=/c/Users/evaporei/source/repos/catermujo/vendor/ffmpeg/FFmpeg/build_windows_x86_64_static --arch=x86_64 --target-os=win64 --toolchain=msvc --enable-static --disable-shared --disable-programs --disable-doc --disable-debug --disable-avx --disable-avx2 --disable-iconv --enable-d3d12va --enable-nvenc --enable-amf --enable-libvpl --enable-zlib --disable-shader-compression --enable-vulkan --enable-encoder=prores_ks_vulkan --glslc='C:/VulkanSDK/1.4.357.0/Bin/glslc.exe' --extra-cflags='-IC:/Users/evaporei/source/repos/catermujo/odd/.tool_cache/ffmpeg-build-deps/amf-include -IC:/Users/evaporei/source/repos/catermujo/odd/.tool_cache/ffmpeg-build-deps/DirectX-Headers/include/directx -IC:/Users/evaporei/source/repos/catermujo/odd/.tool_cache/ffmpeg-build-deps/zlib-install/include -I\"C:/VulkanSDK/1.4.357.0/Include\"' --extra-ldflags='-libpath:C:/Users/evaporei/source/repos/catermujo/odd/.tool_cache/ffmpeg-build-deps/zlib-install/lib'",
     "artifacts_sha256": {
-      "avcodec_static.lib": "64fc15b9a31ec9e16ea261174ca3f69db2975e46dbf4cf665247ed0ea79f34a3",
-      "avdevice_static.lib": "81626d4b89bb7843cba16e6939c7796e8bf117bba3db3f356df68c16eaa5bbc3",
-      "avfilter_static.lib": "b0054d5368fe83b43718497e384e0bb931fe6f0783b877702b49e0b13f684c0f",
-      "avformat_static.lib": "6945dc175481a28e77588241c0d85cd36fe5206cb088430937b7a570b649b90a",
-      "avutil_static.lib": "f3d9549bf8e66b75f24ce8bc561e3bc0fbf4e305739554e5d39428e8db62975d",
-      "swresample_static.lib": "1822fe11676c7bf6fb5246c8e4b4f6a65663801d7c2036b8cdf7fd6139e0196d",
-      "swscale_static.lib": "e116575cc9f58f0c6b848d5aae395f6ebd90ca438592e7f2b384c831aacc2cdd"
+      "avcodec_static.lib": "4a533fd2e963c0168d2172919852b3ff0444f304d6ec6f52493b516bad334dbd",
+      "avdevice_static.lib": "3af07d6187b4a1c05264ac320f74040898554c1b0d6f3df0d02c9af617da7852",
+      "avfilter_static.lib": "9b95b251939614b99d9fc189cdbba023964398f101c70ad1b697dee83f2dce2d",
+      "avformat_static.lib": "e9d1d8918ff4b1632aed7d34f28dcbbcd78b549c7a3186c91e3d919b35defc93",
+      "avutil_static.lib": "35a40293ee64c07fd0ef52848bb5c7b83dc98ba2cf0c84f96217db052519b6c4",
+      "swresample_static.lib": "0332f2066ea2d8e9fd9cc6e3fd03e524c6dbe6299aa3ed0d95221961d15bfc74",
+      "swscale_static.lib": "3eba1b5f763f11dbfc7e1f4c0940529faf64f8377a140565dca38597311c5c65"
     }
   }
 }

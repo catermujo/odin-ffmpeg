@@ -1,0 +1,28 @@
+From 398f931de9fdf56cef270f12833a74e1ce31cd7f Mon Sep 17 00:00:00 2001
+From: Eva Pace <eba.pachi@gmail.com>
+Date: Wed, 21 Oct 2026 10:32:28 -0300
+Subject: [PATCH] ffmpeg: Write ProRes slice lengths with explicit byte
+ extraction
+
+Older Radeon Vulkan drivers miscompile the scalar uint16 to uint8 vector
+bitcast used by unpack8, corrupting the high byte of ProRes plane lengths.
+Extract both bytes with unsigned arithmetic instead of reinterpreting the
+packed scalar. The replacement passes every uint16 value on an RX 580 in
+both GLSL and Slang; the original operation fails for 65,266 values.
+---
+ libavcodec/vulkan/prores_ks_encode_slice.comp.glsl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libavcodec/vulkan/prores_ks_encode_slice.comp.glsl b/libavcodec/vulkan/prores_ks_encode_slice.comp.glsl
+index 456b0416..d04d9750 100644
+--- a/libavcodec/vulkan/prores_ks_encode_slice.comp.glsl
++++ b/libavcodec/vulkan/prores_ks_encode_slice.comp.glsl
+@@ -231,7 +231,7 @@ void encode_alpha_plane(inout PutBitContext pb)
+ 
+ u8vec2 byteswap16(int value)
+ {
+-    return unpack8(uint16_t(value)).yx;
++    return u8vec2(uint8_t(uint(value) >> 8), uint8_t(value));
+ }
+ 
+ void main()

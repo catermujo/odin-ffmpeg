@@ -76,6 +76,10 @@ fi
 
 for patch in "$BASE"/patches/*.patch; do
     [ -f "$patch" ] || continue
+    # DUMBAI: Upstream may already contain a patch; folded mail subjects are not reliable change identity.
+    if git -C "$SRC" apply --reverse --check "$patch" 2>/dev/null; then
+        continue
+    fi
     subject="$(sed -n 's/^Subject: \[PATCH\] //p' "$patch" | sed 's/\r$//' | head -n 1)"
     if [ -n "$subject" ] && git -C "$SRC" log --format=%s --all | grep -Fxe "$subject" >/dev/null; then
         continue
@@ -223,7 +227,7 @@ if [ "$MODE" = "shared" ]; then
         fi
     done
 
-    VPL_DLL="$SRC/.build-deps/oneVPL-install/bin/libvpl.dll"
+    VPL_DLL="${FFMPEG_VPL_RUNTIME:-$SRC/.build-deps/oneVPL-install/bin/libvpl.dll}"
     if [ -f "$VPL_DLL" ]; then
         cp -f "$VPL_DLL" "$BASE/$FFMPEG_OUTPUT_DIR/libvpl.dll"
         echo "    libvpl.dll"
