@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import ctypes
 import hashlib
 import json
 import os
@@ -244,29 +243,26 @@ def write_manifest(mode: str, arch: str) -> None:
         data["local_zconf_sha256"] = hashlib.sha256(zconf.read_bytes()).hexdigest()
     native_arch = normalize_arch(platform.machine())
     if mode == "shared" and arch == native_arch:
-        # DUMBAI: Enumerate without creating any hardware context or opening the costly Vulkan encoder.
-        with os.add_dll_directory(str(output)):
-            codec = ctypes.CDLL(str(next(output.glob("avcodec-*.dll"))))
-
-            class Codec(ctypes.Structure):
-                _fields_ = [("name", ctypes.c_char_p)]
-
-            codec.avcodec_configuration.restype = ctypes.c_char_p
-            data["configuration"] = codec.avcodec_configuration().decode()
-            codec.av_codec_iterate.argtypes = [ctypes.POINTER(ctypes.c_void_p)]
-            codec.av_codec_iterate.restype = ctypes.POINTER(Codec)
-            codec.av_codec_is_encoder.argtypes = [ctypes.c_void_p]
-            codec.av_codec_is_decoder.argtypes = [ctypes.c_void_p]
-            opaque = ctypes.c_void_p()
-            encoders, decoders = [], []
-            while item := codec.av_codec_iterate(ctypes.byref(opaque)):
-                name = item.contents.name.decode()
-                if codec.av_codec_is_encoder(item):
-                    encoders.append(name)
-                if codec.av_codec_is_decoder(item):
-                    decoders.append(name)
-            data["encoders"] = sorted(encoders)
-            data["decoders"] = sorted(decoders)
+        # DUMBAI: Cross-host builds must inspect the Windows DLL through Wine, not load it into host Python.
+        helper = ROOT / "codec_inventory_windows.py"
+        codec_dll = next(output.glob("avcodec-*.dll"))
+        if sys.platform == "win32":
+            command = [sys.executable, str(helper), str(codec_dll)]
+        else:
+            windows_python = os.environ.get("FFMPEG_WINDOWS_PYTHON")
+            if not windows_python:
+                raise RuntimeError(
+                    "Set FFMPEG_WINDOWS_PYTHON to a Windows Python executable for Wine codec inventory"
+                )
+            paths = [Path(windows_python), helper, codec_dll]
+            converted = [
+                subprocess.check_output(
+                    ["winepath", "-w", str(path.resolve())], text=True
+                ).strip()
+                for path in paths
+            ]
+            command = ["wine", *converted]
+        data.update(json.loads(subprocess.check_output(command, text=True)))
     manifest[mode] = data
     # DUMBAI: Keep generated manifests identical across host newline conventions.
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", newline="\n")

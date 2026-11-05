@@ -164,3 +164,27 @@ The RX 580 driver 31.0.21923.11000 miscompiles the scalar-to-byte-vector SPIR-V 
 Slang. A GPU probe over all 65,536 unsigned 16-bit values found 65,266 failures with the bitcast and none with explicit
 byte extraction. This corrupts plane lengths even when color conversion is correct. Rebuild shared and static payloads after the patch.
 The application shader compiler does not change FFmpeg's embedded shader.
+
+## Windows builds from Linux
+
+The Linux host needs native tools for FFmpeg build helpers and MSVC for Windows libraries.
+Configure MSVC with [msvc-wine](https://github.com/mstorsjo/msvc-wine).
+The recipe enables cross compilation on Linux and keeps the Windows hardware encoders enabled.
+
+Set `FFMPEG_GLSLC` to a compiler that passes FFmpeg's Vulkan 1.4 shader probe.
+The glslang source in `vendor/slang/external/glslang` can supply that compiler.
+Set `FFMPEG_WINDOWS_PYTHON` to a Windows Python executable for the codec inventory through Wine.
+The Linux build used Windows Python 3.11.9 for this check.
+The helper reads codec metadata without a hardware context or an initialized encoder.
+
+```sh
+export FFMPEG_GLSLC=/path/to/glslang
+export FFMPEG_WINDOWS_PYTHON=/path/to/windows-python/python.exe
+python3 build_windows.py shared x64
+python3 build_windows.py static x64
+```
+
+The build stops before compilation if configuration disables a required feature.
+Both variants require D3D12VA, zlib, Vulkan, and the ProRes Vulkan encoder.
+The full build also requires NVENC, AMF, and oneVPL.
+The manifest records codec names, shader payloads, source revisions, and artifact hashes.

@@ -122,6 +122,12 @@ fi
 FFMPEG_EXTRA_CFLAGS="${FFMPEG_EXTRA_CFLAGS:-}"
 FFMPEG_EXTRA_LDFLAGS="${FFMPEG_EXTRA_LDFLAGS:-}"
 
+# DUMBAI: Linux runs native build helpers while MSVC produces the Windows target libraries.
+CROSS_FLAGS=()
+if [ "$(uname -s)" = "Linux" ]; then
+    CROSS_FLAGS=(--enable-cross-compile --host-cc=cc)
+fi
+
 if [ "${FFMPEG_D3D12_ONLY:-0}" = "1" ]; then
     HW_FLAGS=(--enable-d3d12va --disable-nvenc --disable-amf --disable-libvpl)
 else
@@ -138,6 +144,7 @@ if ! ./configure \
     --arch="$FFMPEG_ARCH" \
     --target-os="$FFMPEG_TARGET_OS" \
     --toolchain=msvc \
+    "${CROSS_FLAGS[@]}" \
     "${MODE_FLAGS[@]}" \
     --disable-programs \
     --disable-doc \
@@ -158,6 +165,18 @@ if ! ./configure \
     echo "See README.md in the repository for the complete Windows hardware-encoder setup." >&2
     exit 1
 fi
+
+# DUMBAI: configure can silently disable an explicitly requested encoder when its shader compiler is too old.
+REQUIRED_FEATURES=(D3D12VA ZLIB VULKAN PRORES_KS_VULKAN_ENCODER)
+if [ "${FFMPEG_D3D12_ONLY:-0}" != "1" ]; then
+    REQUIRED_FEATURES+=(NVENC AMF LIBVPL)
+fi
+for feature in "${REQUIRED_FEATURES[@]}"; do
+    if ! grep -qx "CONFIG_${feature}=yes" ffbuild/config.mak; then
+        echo "Error: required FFmpeg feature CONFIG_${feature} is disabled; inspect ffbuild/config.log." >&2
+        exit 1
+    fi
+done
 
 python "$BASE/validate_shader_payloads.py" prepare "$SRC"
 
@@ -224,6 +243,13 @@ if [ "$MODE" = "shared" ]; then
     # DUMBAI: Stage the local zlib runtime alongside the codecs which require it.
     ZLIB_RUNTIME="${FFMPEG_ZLIB_RUNTIME:-$SRC/.build-deps/zlib-install/bin/zlib.dll}"
     if [ -f "$ZLIB_RUNTIME" ]; then
+        # DUMBAI: Keep only the selected zlib runtime so old DLL names cannot enter a package.
+        SELECTED_ZLIB="$(basename "$ZLIB_RUNTIME")"
+        for stale in libz.dll z.dll zlib.dll zlib1.dll; do
+            if [ "$stale" != "$SELECTED_ZLIB" ]; then
+                rm -f "$BASE/$FFMPEG_OUTPUT_DIR/$stale"
+            fi
+        done
         cp -f "$ZLIB_RUNTIME" "$BASE/$FFMPEG_OUTPUT_DIR/$(basename "$ZLIB_RUNTIME")"
         echo "    $(basename "$ZLIB_RUNTIME")"
     fi
