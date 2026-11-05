@@ -44,6 +44,9 @@ if [ ! -f "$SRC/configure" ]; then
     exit 1
 fi
 
+# DUMBAI: Keep shared and static builds on the same source patch stack.
+sh "$BASE/apply_patches.sh" "$SRC"
+
 HOST_OS="$(uname -s)"
 HOST_ARCH="$(uname -m)"
 TARGET_ARCH="${1:-$HOST_ARCH}"
@@ -183,5 +186,6 @@ Linux)
     echo "==> Done. Shared libs written to $OUT_DIR/"
     echo "    Build with: odin build . -define:FFMPEG_LINK=shared"
     echo "    Runtime:    LD_LIBRARY_PATH=$OUT_DIR:\$LD_LIBRARY_PATH ./your_binary"
+    python3 "$BASE/write_linux_manifest.py" "$SRC" "$BUILD_DIR" "$OUT_DIR" shared
     ;;
 esac

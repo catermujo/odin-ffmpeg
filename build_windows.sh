@@ -74,22 +74,8 @@ if [ ! -f "$SRC/configure" ]; then
     exit 1
 fi
 
-for patch in "$BASE"/patches/*.patch; do
-    [ -f "$patch" ] || continue
-    # DUMBAI: Upstream may already contain a patch; folded mail subjects are not reliable change identity.
-    if git -C "$SRC" apply --reverse --check "$patch" 2>/dev/null; then
-        continue
-    fi
-    subject="$(sed -n 's/^Subject: \[PATCH\] //p' "$patch" | sed 's/\r$//' | head -n 1)"
-    if [ -n "$subject" ] && git -C "$SRC" log --format=%s --all | grep -Fxe "$subject" >/dev/null; then
-        continue
-    fi
-    if ! git -C "$SRC" am --3way "$patch"; then
-        git -C "$SRC" am --abort || true
-        echo "Error: failed to apply FFmpeg patch $(basename "$patch")" >&2
-        exit 1
-    fi
-done
+# DUMBAI: Keep shared and static builds on the same source patch stack.
+sh "$BASE/apply_patches.sh" "$SRC"
 
 require_command() {
     local name="$1"

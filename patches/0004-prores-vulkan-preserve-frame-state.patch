@@ -1,0 +1,64 @@
+From 2dec38ee6ca3f8bca8570b75924bdf5cca527aaf Mon Sep 17 00:00:00 2001
+From: Isabella Basso <isabellabdoamaral@usp.br>
+Date: Thu, 5 Nov 2026 12:25:47 -0300
+Subject: [PATCH] prores: Preserve Vulkan frame state
+
+Keep the input images' queue owner when transitioning to GENERAL.
+Replacing an exclusive owner with IGNORED creates an ownership release
+instead of the intended layout dependency.
+
+Write each shared shader descriptor set before its first plane dispatch.
+Later planes reuse the set and change push constants, so earlier recorded
+commands remain valid.
+
+Native VIZZA capture validation passes MP4, ProRes and MP4 recording,
+window resizing, screenshots, and idle resource cleanup with zero Vulkan
+Core and Synchronization errors or warnings.
+
+Signed-off-by: Isabella Basso <isabellabdoamaral@usp.br>
+---
+ libavcodec/proresenc_kostya_vulkan.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/libavcodec/proresenc_kostya_vulkan.c b/libavcodec/proresenc_kostya_vulkan.c
+index 1f95bc90e2..c2d6a5b13d 100644
+--- a/libavcodec/proresenc_kostya_vulkan.c
++++ b/libavcodec/proresenc_kostya_vulkan.c
+@@ -504,12 +504,13 @@ static int vulkan_encode_prores_submit_frame(AVCodecContext *avctx, FFVkExecCont
+                                  VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT,
+                                  VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT));
+     RET(ff_vk_create_imageviews(vkctx, exec, views, frame, FF_VK_REP_INT));
++    /* DUMBAI: Preserve image ownership during the layout transition, including concurrent frames. */
+     ff_vk_frame_barrier(vkctx, exec, frame, img_bar, &nb_img_bar,
+                         VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT,
+                         VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT,
+                         VK_ACCESS_SHADER_READ_BIT,
+                         VK_IMAGE_LAYOUT_GENERAL,
+-                        VK_QUEUE_FAMILY_IGNORED);
++                        ((AVVkFrame *)frame->data[0])->queue_family[0]);
+ 
+     /* Submit the image barriers. */
+     vk->CmdPipelineBarrier2(exec->buf, &(VkDependencyInfo) {
+@@ -528,11 +529,14 @@ static int vulkan_encode_prores_submit_frame(AVCodecContext *avctx, FFVkExecCont
+         if (i < 3) {
+             slice_data_info.plane = i;
+             slice_data_info.bits_per_sample = desc->comp[i].depth;
+-            ff_vk_shader_update_desc_buffer(vkctx, exec, shd, 0, 0, 0,
+-                                            slice_data_buf, 0, slice_data_buf->size,
+-                                            VK_FORMAT_UNDEFINED);
+-            ff_vk_shader_update_img_array(vkctx, exec, shd, frame, views, 0, 1,
+-                                          VK_IMAGE_LAYOUT_GENERAL, VK_NULL_HANDLE);
++            /* DUMBAI: Planes share descriptor sets, so update each set before its first dispatch only. */
++            if (i == 0 || (i == 1 && ctx->chroma_factor != CFACTOR_Y444)) {
++                ff_vk_shader_update_desc_buffer(vkctx, exec, shd, 0, 0, 0,
++                                                slice_data_buf, 0, slice_data_buf->size,
++                                                VK_FORMAT_UNDEFINED);
++                ff_vk_shader_update_img_array(vkctx, exec, shd, frame, views, 0, 1,
++                                              VK_IMAGE_LAYOUT_GENERAL, VK_NULL_HANDLE);
++            }
+             ff_vk_exec_bind_shader(vkctx, exec, shd);
+             ff_vk_shader_update_push_const(vkctx, exec, shd, VK_SHADER_STAGE_COMPUTE_BIT,
+                                            0, sizeof(SliceDataInfo), &slice_data_info);
+-- 
+2.56.0
+

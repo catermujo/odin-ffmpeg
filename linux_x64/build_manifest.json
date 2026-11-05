@@ -1,22 +1,48 @@
 {
-  "source_revision": "9997fd060680d427bcc0c0715d163346da7ebd6f",
-  "vulkan_header_version": 357,
+  "source_revision": "2dec38ee6ca3f8bca8570b75924bdf5cca527aaf",
+  "vulkan_header_version": 363,
   "internally_synchronized_queues": true,
   "shared_configuration": "--prefix=/home/isinyaaa/pjs/catermujo/vendor/ffmpeg/FFmpeg/build_linux_x86_64_shared --arch=x86_64 --disable-static --enable-shared --disable-programs --disable-doc --disable-debug --disable-avx --disable-avx2 --disable-iconv --extra-cflags= --extra-ldflags=",
   "artifacts": {
-    "libavcodec.linux.a": "2395211cdf89447752916b1864f9ea3e25f273cdfd51479a8e540a724b8715f3",
-    "libavcodec.so.63.10.100": "79d236888d9db492690bc7537d3bee2831ce8c0c0f2f40ae539c869bfe9391eb",
-    "libavdevice.linux.a": "ab66192f18112e4aef7906fcb69c132219d3a55e0e79795a285ed3c38e911bce",
-    "libavdevice.so.63.2.100": "9e74439b244b683f4e060f3a7f72f358cedcb82542d71cb1c4db6e889cca2fff",
-    "libavfilter.linux.a": "374a3e6dd6fac115c60763596c60fd5f40598b055cf7adfa7a860b47354ddfd8",
-    "libavfilter.so.12.4.100": "e94655d98cbb5389ff279f7e6670914d97406ebab33f46024dedd84bdc5c450e",
-    "libavformat.linux.a": "0f853b227989c99884625cf246452ee03d8d9fe63420228b0356ee69ec27cf4b",
-    "libavformat.so.63.6.100": "a89a2110260a015786d04e3823cfdf09d0e9ecf61236ba185b5f341b0b664c5e",
-    "libavutil.linux.a": "d888d8b37b23452424f66bb4271b7d4ac7212d42022e8fa6956b33128a203228",
-    "libavutil.so.61.6.100": "f53706f581f6a09c1ee4862adc73abdf24611b5459ac333ccd4b020293cd8d45",
-    "libswresample.linux.a": "67cdb36df2655551f576b5640c9ea2013934fe278935e4452268b0217c65e297",
-    "libswresample.so.7.2.100": "faca97a352e9793878533dffb816851d7045bf6b4b9ce890f679dc35f3a3f654",
+    "libavcodec.linux.a": "5290ac34c72901121bca37df8349428da260292823b05900428aea57ba2f8876",
+    "libavcodec.so.63.10.100": "a00bb96b8ae077aada3f234e3fb5795d95b4638dd3ba457639cfe18e0b0955a0",
+    "libavdevice.linux.a": "e0a88f9f194dc73e690d0913ada6e4977eb0afb364c7010337972bf8865c0ccd",
+    "libavdevice.so.63.2.100": "55ca186d5f6e7c5169924d7c1a38cb336d4e9fbf73d50034a4086b9e088b8440",
+    "libavfilter.linux.a": "e6292486150a6a0b0fe4da488657e79be04329f22a2e597576eb097ed48993aa",
+    "libavfilter.so.12.4.100": "57ce0d9b9490c26349484bd3aae14f1c31e3a1ea00ef84818cb539d83caf8dc2",
+    "libavformat.linux.a": "1f075e4ad351bee6ece143557681f0c0605eca2d191bf51354e68f42a94517f1",
+    "libavformat.so.63.6.100": "e5c313aeb9e3ee83c11c2a16de1becd0c8068c1bc0522582b197959ddb6c9e34",
+    "libavutil.linux.a": "b02ef10b49d463dd4b12510d804a631405760e4c1772440431d25e7f7a104559",
+    "libavutil.so.61.6.100": "8f21cac32abfdbc702dab077c396f653f7f282686a5fa2e4f392e9e0a5a148d8",
+    "libswresample.linux.a": "db7b2c280b1a29354fbcdd78954320b9d5c9ea3b45744a05178c4631bde5d75b",
+    "libswresample.so.7.2.100": "a4a1ff59c776418925b0e93e7cdb19a60018fd69a87f49ba42d3f96a195d0271",
     "libswscale.linux.a": "3b49388e6166eca82030e82d5ce3a3778dd43dc218a54a47c62de250a0d7bcbe",
     "libswscale.so.10.2.100": "2a22e2336acce0aab4aebc066edd32e1fb5c950ffdf20903e193c9b6620dcfa8"
-  }
+  },
+  "builds": {
+    "shared": {
+      "source_revision": "2dec38ee6ca3f8bca8570b75924bdf5cca527aaf",
+      "source_tree": "4a1b2e654951b3da70b9bf93ec2775bc14859133",
+      "source_dirty": false,
+      "configuration": "--prefix=/home/isinyaaa/pjs/catermujo/vendor/ffmpeg/FFmpeg/build_linux_x86_64_shared --arch=x86_64 --disable-static --enable-shared --disable-programs --disable-doc --disable-debug --disable-avx --disable-avx2 --disable-iconv --extra-cflags= --extra-ldflags=",
+      "vulkan_header_version": 363,
+      "internally_synchronized_queues": true
+    },
+    "static": {
+      "source_revision": "2dec38ee6ca3f8bca8570b75924bdf5cca527aaf",
+      "source_tree": "4a1b2e654951b3da70b9bf93ec2775bc14859133",
+      "source_dirty": false,
+      "configuration": "--prefix=/home/isinyaaa/pjs/catermujo/vendor/ffmpeg/FFmpeg/build_linux_x86_64 --arch=x86_64 --enable-static --disable-shared --disable-programs --disable-doc --disable-debug --disable-avx --disable-avx2 --disable-iconv --extra-cflags= --extra-ldflags=",
+      "vulkan_header_version": 363,
+      "internally_synchronized_queues": true
+    }
+  },
+  "source_tree": "4a1b2e654951b3da70b9bf93ec2775bc14859133",
+  "patches": {
+    "0001-configure-use-64-bit-AMF-version-arithmetic.patch": "d0d80a579b9eaf934520b5629631d7c245f79791328dbc8327ab0f18e84530f7",
+    "0002-prores-vulkan-synchronize-input-before-dct.patch": "36070ade80c436d6d8a99c342f283b28e9039769efafd40aaafc799210139c34",
+    "0003-prores-vulkan-extract-slice-header-bytes-explicitly.patch": "270049e7c8faab5425cede2e8a8a4141eb081936f5f040340e01080f23b576e1",
+    "0004-prores-vulkan-preserve-frame-state.patch": "4738cc0159d20c47847b0f664d251cfe9720348d14ac774bfdb527b034ae69c7"
+  },
+  "static_configuration": "--prefix=/home/isinyaaa/pjs/catermujo/vendor/ffmpeg/FFmpeg/build_linux_x86_64 --arch=x86_64 --enable-static --disable-shared --disable-programs --disable-doc --disable-debug --disable-avx --disable-avx2 --disable-iconv --extra-cflags= --extra-ldflags="
 }

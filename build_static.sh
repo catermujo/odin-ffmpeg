@@ -36,6 +36,9 @@ if [ ! -f "$SRC/configure" ]; then
     exit 1
 fi
 
+# DUMBAI: Keep shared and static builds on the same source patch stack.
+sh "$BASE/apply_patches.sh" "$SRC"
+
 HOST_OS="$(uname -s)"
 HOST_ARCH="$(uname -m)"
 TARGET_ARCH="${1:-$HOST_ARCH}"
@@ -128,6 +131,7 @@ if [ "$HOST_OS" = "Linux" ]; then
             echo "    Warning: $src not found, skipping" >&2
         fi
     done
+    python3 "$BASE/write_linux_manifest.py" "$SRC" "$BUILD_DIR" "$OUT_DIR" static
     echo "==> Done. Static libs written to $OUT_DIR/"
 else
     ARCH_DIR="$(darwin_arch_dir "$TARGET_ARCH")"
