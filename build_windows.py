@@ -122,7 +122,7 @@ def run_with_msvc_env(
 
 
 def prepare_vulkan(env: dict[str, str]) -> None:
-    # DUMBAI: Reuse the monorepo's verified headers and host shader compiler sources without a system SDK install.
+    # Reuse the monorepo's verified headers and host shader compiler sources without a system SDK install.
     candidates = [
         Path(env["FFMPEG_VULKAN_INCLUDE"])
         if env.get("FFMPEG_VULKAN_INCLUDE")
@@ -243,7 +243,7 @@ def write_manifest(mode: str, arch: str) -> None:
         data["local_zconf_sha256"] = hashlib.sha256(zconf.read_bytes()).hexdigest()
     native_arch = normalize_arch(platform.machine())
     if mode == "shared" and arch == native_arch:
-        # DUMBAI: Cross-host builds must inspect the Windows DLL through Wine, not load it into host Python.
+        # Cross-host builds must inspect the Windows DLL through Wine, not load it into host Python.
         helper = ROOT / "codec_inventory_windows.py"
         codec_dll = next(output.glob("avcodec-*.dll"))
         if sys.platform == "win32":
@@ -264,7 +264,7 @@ def write_manifest(mode: str, arch: str) -> None:
             command = ["wine", *converted]
         data.update(json.loads(subprocess.check_output(command, text=True)))
     manifest[mode] = data
-    # DUMBAI: Keep generated manifests identical across host newline conventions.
+    # Keep generated manifests identical across host newline conventions.
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", newline="\n")
 
 

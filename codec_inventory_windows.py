@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 def inventory(dll_path: Path) -> dict:
-    # DUMBAI: Enumerate codec metadata without a hardware context or an initialized encoder.
+    # Enumerate codec metadata without a hardware context or an initialized encoder.
     with os.add_dll_directory(str(dll_path.parent)):
         codec = ctypes.CDLL(str(dll_path))
 

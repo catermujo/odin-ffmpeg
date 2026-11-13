@@ -274,7 +274,7 @@ CodecID :: enum c.int {
     BmvVideo,
     Vble,
     Dxtory,
-    // DUMBAI: FFmpeg 63 removes V410. Keep later codec IDs compatible with the selected library ABI.
+    // FFmpeg 63 removes V410. Keep later codec IDs compatible with the selected library ABI.
     Xwd = 157 when API_MAJOR < 63 else 156,
     Cdxl,
     Xbm,

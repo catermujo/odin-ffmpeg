@@ -74,7 +74,7 @@ if [ ! -f "$SRC/configure" ]; then
     exit 1
 fi
 
-# DUMBAI: Keep shared and static builds on the same source patch stack.
+# Keep shared and static builds on the same source patch stack.
 sh "$BASE/apply_patches.sh" "$SRC"
 
 require_command() {
@@ -122,7 +122,7 @@ fi
 FFMPEG_EXTRA_CFLAGS="${FFMPEG_EXTRA_CFLAGS:-}"
 FFMPEG_EXTRA_LDFLAGS="${FFMPEG_EXTRA_LDFLAGS:-}"
 
-# DUMBAI: Linux runs native build helpers while MSVC produces the Windows target libraries.
+# Linux runs native build helpers while MSVC produces the Windows target libraries.
 CROSS_FLAGS=()
 if [ "$(uname -s)" = "Linux" ]; then
     CROSS_FLAGS=(--enable-cross-compile --host-cc=cc)
@@ -166,7 +166,7 @@ if ! ./configure \
     exit 1
 fi
 
-# DUMBAI: configure can silently disable an explicitly requested encoder when its shader compiler is too old.
+# configure can silently disable an explicitly requested encoder when its shader compiler is too old.
 REQUIRED_FEATURES=(D3D12VA ZLIB VULKAN PRORES_KS_VULKAN_ENCODER)
 if [ "${FFMPEG_D3D12_ONLY:-0}" != "1" ]; then
     REQUIRED_FEATURES+=(NVENC AMF LIBVPL)
@@ -240,10 +240,10 @@ if [ "$MODE" = "shared" ]; then
         echo "    Warning: oneVPL dispatcher libvpl.dll not found at $VPL_DLL" >&2
     fi
 
-    # DUMBAI: Stage the local zlib runtime alongside the codecs which require it.
+    # Stage the local zlib runtime alongside the codecs which require it.
     ZLIB_RUNTIME="${FFMPEG_ZLIB_RUNTIME:-$SRC/.build-deps/zlib-install/bin/zlib.dll}"
     if [ -f "$ZLIB_RUNTIME" ]; then
-        # DUMBAI: Keep only the selected zlib runtime so old DLL names cannot enter a package.
+        # Keep only the selected zlib runtime so old DLL names cannot enter a package.
         SELECTED_ZLIB="$(basename "$ZLIB_RUNTIME")"
         for stale in libz.dll z.dll zlib.dll zlib1.dll; do
             if [ "$stale" != "$SELECTED_ZLIB" ]; then
@@ -253,7 +253,7 @@ if [ "$MODE" = "shared" ]; then
         cp -f "$ZLIB_RUNTIME" "$BASE/$FFMPEG_OUTPUT_DIR/$(basename "$ZLIB_RUNTIME")"
         echo "    $(basename "$ZLIB_RUNTIME")"
     fi
-    # DUMBAI: An autodetected shared bzip2 build also needs its runtime beside avformat.
+    # An autodetected shared bzip2 build also needs its runtime beside avformat.
     BZLIB_RUNTIME="${FFMPEG_BZLIB_RUNTIME:-$SRC/.build-deps/bzip2-install/bin/bz2.dll}"
     if [ -f "$BZLIB_RUNTIME" ]; then
         cp -f "$BZLIB_RUNTIME" "$BASE/$FFMPEG_OUTPUT_DIR/$(basename "$BZLIB_RUNTIME")"

@@ -37,7 +37,7 @@ def shader_configuration(source: Path) -> bool:
 
 
 def generated_shader_paths(source: Path) -> list[Path]:
-    # DUMBAI: Limit cleanup to FFmpeg-owned generated shader files, excluding source and dependency-install trees.
+    # Limit cleanup to FFmpeg-owned generated shader files, excluding source and dependency-install trees.
     paths = []
     for library in source.glob("lib*"):
         if library.is_dir():

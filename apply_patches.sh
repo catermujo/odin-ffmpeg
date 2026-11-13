@@ -6,7 +6,7 @@ SRC="${1:?FFmpeg source directory is required}"
 
 for patch in "$BASE"/patches/*.patch; do
     [ -f "$patch" ] || continue
-    # DUMBAI: Check patch contents because upstream can already include the change.
+    # Check patch contents because upstream can already include the change.
     if git -C "$SRC" apply --reverse --check "$patch" 2>/dev/null; then
         continue
     fi

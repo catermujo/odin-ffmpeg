@@ -36,7 +36,7 @@ if [ ! -f "$SRC/configure" ]; then
     exit 1
 fi
 
-# DUMBAI: Keep shared and static builds on the same source patch stack.
+# Keep shared and static builds on the same source patch stack.
 sh "$BASE/apply_patches.sh" "$SRC"
 
 HOST_OS="$(uname -s)"

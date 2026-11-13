@@ -62,7 +62,7 @@ def main():
         and path.name.startswith(("libav", "libsw"))
         and (path.suffix == ".a" or ".so" in path.name)
     }
-    # DUMBAI: Preserve source and artifact identity for each Linux build variant.
+    # Preserve source and artifact identity for each Linux build variant.
     manifest.setdefault("builds", {})[args.mode] = {
         "source_revision": revision,
         "source_tree": tree,
