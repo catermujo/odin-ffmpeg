@@ -102,7 +102,9 @@ hardware backends and their development-package checks.
 - `libvpl >= 2.6`: build oneVPL above and add its `lib\pkgconfig` directory to `PKG_CONFIG_PATH`.
 - AMF: use AMF 1.5.2+ headers and add the directory containing `AMF/core/*.h` to `FFMPEG_EXTRA_CFLAGS`.
 
-The build clones FFmpeg source automatically when `FFmpeg` is missing; set `FFMPEG_SRC_REMOTE` to use a mirror.
+The native build scripts fetch the pinned FFmpeg revision if the source directory does not exist.
+Set `FFMPEG_SRC_REMOTE` to select a mirror with that revision.
+The scripts can also use an existing FFmpeg checkout.
 
 
 ## Windows Vulkan compute encoding

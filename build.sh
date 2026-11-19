@@ -24,28 +24,7 @@ set -e
 
 BASE="$(cd "$(dirname "$0")" && pwd)"
 SRC="$BASE/FFmpeg"
-SRC_REMOTE="${FFMPEG_SRC_REMOTE:-https://github.com/FFmpeg/FFmpeg.git}"
-
-if [ ! -f "$SRC/configure" ]; then
-    if [ -e "$SRC" ] && [ ! -d "$SRC/.git" ]; then
-        echo "Error: $SRC exists but is not a git repository" >&2
-        echo "Remove it and re-run build.sh, or clone FFmpeg into that path." >&2
-        exit 1
-    fi
-    if [ ! -d "$SRC/.git" ]; then
-        echo "==> FFmpeg source missing. Cloning $SRC_REMOTE into $SRC"
-        git clone "$SRC_REMOTE" "$SRC"
-    fi
-fi
-
-if [ ! -f "$SRC/configure" ]; then
-    echo "Error: FFmpeg source not found at $SRC/configure after clone attempt" >&2
-    echo "Try: git -C $SRC checkout <valid-ffmpeg-ref>" >&2
-    exit 1
-fi
-
-# Keep shared and static builds on the same source patch stack.
-sh "$BASE/apply_patches.sh" "$SRC"
+sh "$BASE/prepare_source.sh"
 
 HOST_OS="$(uname -s)"
 HOST_ARCH="$(uname -m)"
