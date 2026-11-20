@@ -6,6 +6,10 @@ The canonical entry points are:
 - `build.sh` / `build_static.sh` — macOS or Linux shared or static libraries.
 - `build_wasm.sh` — Emscripten static libraries in `*.wasm.a`; Web has no shared-library mode.
 
+Native builds use the source revision in `prepare_source.sh` and the patches in `patches/`.
+If the revision or patches change, the build prepares the source again before it compiles the libraries.
+The build preserves the previous source commit under `refs/ffmpeg/previous/` and stops if tracked edits prevent a refresh.
+
 Linux Vulkan builds need headers that define `VK_KHR_internally_synchronized_queues` when applications share
 internally synchronized renderer queues with FFmpeg. Older builds retrieve those queues with incompatible flags.
 `linux_x64/build_manifest.json` records the source revision, header version, configuration, and rebuilt library hashes.

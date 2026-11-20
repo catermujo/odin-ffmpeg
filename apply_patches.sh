@@ -11,7 +11,7 @@ for patch in "$BASE"/patches/*.patch; do
         continue
     fi
     subject="$(sed -n 's/^Subject: \[PATCH\] //p' "$patch" | sed 's/\r$//' | head -n 1)"
-    if [ -n "$subject" ] && git -C "$SRC" log --format=%s --all | grep -Fxe "$subject" >/dev/null; then
+    if [ -n "$subject" ] && git -C "$SRC" log --format=%s HEAD | grep -Fxe "$subject" >/dev/null; then
         continue
     fi
     if ! git -C "$SRC" am --3way "$patch"; then
