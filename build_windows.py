@@ -15,13 +15,26 @@ from validate_shader_payloads import validate_shader_payloads
 
 ROOT = Path(__file__).resolve().parent
 BUILD_SCRIPT = ROOT / "build_windows.sh"
+WINDOWS_DEPS = ROOT / "FFmpeg" / ".build-deps"
+
+
+def scoop_app(name: str) -> Path:
+    scoop = Path(os.environ.get("SCOOP") or Path.home() / "scoop")
+    return scoop / "apps" / name / "current"
 
 
 def find_bash() -> Path | None:
-    program_files = os.environ.get("ProgramFiles", "")
+    program_files = Path(os.environ.get("ProgramFiles", ""))
+    msys2_roots = (
+        program_files.parent / "msys64",
+        program_files / "MSYS2",
+        scoop_app("msys2"),
+    )
+    if msys2_root := os.environ.get("FFMPEG_MSYS2_ROOT"):
+        msys2_roots = (Path(msys2_root), *msys2_roots)
     for candidate in (
-        Path(program_files) / "Git" / "bin" / "bash.exe",
-        Path(program_files) / "MSYS2" / "usr" / "bin" / "bash.exe",
+        *(root / "usr" / "bin" / "bash.exe" for root in msys2_roots),
+        program_files / "Git" / "bin" / "bash.exe",
     ):
         if candidate.exists():
             return candidate
@@ -45,6 +58,47 @@ def bash_env(bash_path: Path) -> dict[str, str]:
         path_entries.append(existing)
     env["PATH"] = os.pathsep.join(path_entries)
     return env
+
+
+def configure_windows_dependencies(env: dict[str, str], arch: str) -> None:
+    vcpkg = Path(env.get("VCPKG_ROOT") or scoop_app("vcpkg"))
+    triplet = vcpkg / "installed" / f"{arch}-windows"
+    vpl = WINDOWS_DEPS / "oneVPL-install"
+    amf = WINDOWS_DEPS / "amf-headers"
+    pkg_config = scoop_app("pkg-config")
+
+    tools = (pkg_config, vpl / "bin", triplet / "bin")
+    env["PATH"] = os.pathsep.join(
+        [str(path) for path in tools if path.is_dir()] + [env["PATH"]]
+    )
+    package_dirs = (vpl / "lib" / "pkgconfig", triplet / "lib" / "pkgconfig")
+    package_paths = [str(path) for path in package_dirs if path.is_dir()]
+    if existing := env.get("PKG_CONFIG_PATH"):
+        package_paths.insert(0, existing)
+    if package_paths:
+        env["PKG_CONFIG_PATH"] = os.pathsep.join(package_paths)
+
+    include_flags = [
+        f'-I"{path.as_posix()}"' for path in (amf, triplet / "include") if path.is_dir()
+    ]
+    env["FFMPEG_EXTRA_CFLAGS"] = " ".join(
+        filter(None, (env.get("FFMPEG_EXTRA_CFLAGS"), *include_flags))
+    )
+    if (triplet / "lib").is_dir():
+        lib_flag = f'-LIBPATH:"{(triplet / "lib").as_posix()}"'
+        env["FFMPEG_EXTRA_LDFLAGS"] = " ".join(
+            filter(None, (env.get("FFMPEG_EXTRA_LDFLAGS"), lib_flag))
+        )
+    for key, path in (
+        ("FFMPEG_VPL_RUNTIME", vpl / "bin" / "libvpl.dll"),
+        ("FFMPEG_ZLIB_RUNTIME", triplet / "bin" / "zlib1.dll"),
+        ("FFMPEG_BZLIB_RUNTIME", triplet / "bin" / "bz2.dll"),
+    ):
+        if path.is_file():
+            env.setdefault(key, path.as_posix())
+
+    # MSVC must print English /showIncludes output for the Make dependency rule.
+    env["VSLANG"] = "1033"
 
 
 def find_vsdevcmd() -> Path | None:
@@ -294,6 +348,8 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     env = bash_env(bash_path)
+    if sys.platform == "win32":
+        configure_windows_dependencies(env, arch)
     prepare_vulkan(env)
 
     if shutil.which("cl.exe"):

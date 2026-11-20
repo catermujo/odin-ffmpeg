@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Catermujo <noreply@catermujo.local>
+Subject: [PATCH] configure: fix native MSVC dependency paths
+
+Read the awk program from a file to avoid shell quoting in the generated
+Make recipe. Strip the MSVC carriage return and convert drive prefixes
+so GNU Make can read the dependencies.
+
+diff --git a/configure b/configure
+--- a/configure
++++ b/configure
+@@ -5486,6 +5486,6 @@
+         else
+-            _DEPCMD='$(DEP$(1)) $(DEP$(1)FLAGS) $($(1)DEP_FLAGS) $< 2>&1 | awk '\''/including/ { sub(/^.*file: */, ""); gsub(/\\/, "/"); if (!match($$0, / /)) print "$@:", $$0 }'\'' > $(@:.o=.d)'
++            _DEPCMD='$(DEP$(1)) $(DEP$(1)FLAGS) $($(1)DEP_FLAGS) $< 2>&1 | awk -v target=$@ -f $(SRC_PATH)/compat/windows/msvc-deps.awk > $(@:.o=.d)'
+         fi
+         _DEPFLAGS='$(CPPFLAGS) -showIncludes -Zs'
+         _DEPCCFLAGS='$(CFLAGS)'
+         _DEPCXXFLAGS='$(CXXFLAGS)'
+diff --git a/compat/windows/msvc-deps.awk b/compat/windows/msvc-deps.awk
+new file mode 100644
+--- /dev/null
++++ b/compat/windows/msvc-deps.awk
+@@ -0,0 +1,9 @@
++/including/ {
++    sub(/^.*file: */, "")
++    sub(/\r$/, "")
++    gsub(/\\/, "/")
++    if ($0 ~ /^[A-Za-z]:\//)
++        $0 = "/" tolower(substr($0, 1, 1)) substr($0, 3)
++    if (!match($0, / /))
++        print target ":", $0
++}

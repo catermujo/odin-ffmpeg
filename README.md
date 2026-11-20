@@ -34,9 +34,20 @@ the build needs their development headers and libraries.
 Install the Windows build tools and SDK headers from PowerShell:
 
 ```powershell
-scoop install git make pkg-config vcpkg cmake
+scoop install git msys2 pkg-config vcpkg cmake
 vcpkg install ffnvcodec:x64-windows amd-amf:x64-windows
 ```
+
+Install the MSYS2 Make package from the MSYS2 shell.
+
+```bash
+pacman -S --needed make
+```
+
+The Windows build uses MSYS2 Bash when it is available. Set `FFMPEG_MSYS2_ROOT` for an MSYS2 installation
+in a custom location. Set `VCPKG_ROOT` to the vcpkg installation if you do not install it with Scoop.
+The build also checks `FFmpeg/.build-deps/oneVPL-install` for oneVPL. Use `FFmpeg/.build-deps/amf-headers`
+as the parent directory of `AMF/core`.
 
 QSV needs oneVPL development files. Check the package before building:
 
@@ -66,8 +77,8 @@ mklink /J C:\deps\AMF\amf\public\include\AMF C:\deps\AMF\amf\public\include
 Run `mklink` from an elevated Command Prompt. Skip it when using an SDK that already has `include\AMF\core`;
 in that case, replace `C:/deps/AMF/amf/public/include` below with that SDK's include directory.
 
-Run the build from an **x64 Native Tools Command Prompt for VS 2022**. Expose both `.pc` directories and the
-development headers:
+Use the variables below for SDKs in other locations. Run these commands from an **x64 Native Tools Command Prompt
+for VS 2022**.
 
 ```bat
 cd /d C:\path\to\catermujo\vendor\ffmpeg
@@ -80,8 +91,7 @@ python build_windows.py shared x64
 python build_windows.py static x64
 ```
 
-From the catermujo root, `./tool vendor build ffmpeg` builds both shared and static variants. The direct commands above
-select either variant explicitly.
+From the catermujo root, `.\tool.bat vendor build ffmpeg` builds both shared and static variants.
 
 At runtime, keep `libvpl.dll` from `C:\deps\oneVPL-install\bin` beside the application or on `PATH` when using
 QSV. NVIDIA and AMD GPU drivers provide the NVENC and AMF runtime components. D3D12VA uses the Windows D3D12 video
@@ -98,8 +108,8 @@ hardware backends and their development-package checks.
 ### Missing dependency fixes
 
 - `cl.exe`: install Visual Studio 2022 Desktop development with C++ and use its x64 Native Tools prompt.
-- `bash.exe`: install Git for Windows or MSYS2; `scoop install git` provides Git Bash.
-- `make`: install GNU Make with `scoop install make`, or use MSYS2 Make.
+- `bash.exe`: install MSYS2.
+- `make`: install the MSYS2 `make` package.
 - `pkg-config`: install `scoop install pkg-config` and put its Scoop directory on `PATH`.
 - `vcpkg`: install `scoop install vcpkg`, or install vcpkg and put it on `PATH`.
 - `ffnvcodec`: run `vcpkg install ffnvcodec:x64-windows`; add its `lib\pkgconfig` directory to `PKG_CONFIG_PATH`.
