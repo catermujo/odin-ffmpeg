@@ -1,0 +1,305 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Dale Curtis <dalecurtis@chromium.org>
+Date: Tue, 20 Oct 2026 21:00:21 +0000
+Subject: [PATCH] lavf/oggparsevorbis: set stream start_time before applying
+ ts_offset
+
+Commit 63b7e4cefa91 stopped setting st->start_time on the BOS page while
+shifting the priming packet's timestamp by -ts_offset. Because the priming
+packet produces no PCM output, actual audio begins at the unshifted
+timestamp (0). Leaving start_time unset caused ogg_get_length() to subtract
+the negative pts from st->duration (inflating duration by ts_offset) and
+update_initial_timestamps() to set a negative start_time.
+
+Set st->start_time to os->lastpts on the BOS page before subtracting
+priv->ts_offset.
+
+Backport of upstream 1d83e7145c258730c09ae7e7d2b0eabc5e148571. The
+limited_input_seek reference differs at this base and the
+ogg-vorbis-ts-seek-1.5s test does not exist here, so those reference
+updates are dropped.
+---
+ libavformat/oggparsevorbis.c                  |  8 ++-
+ tests/ref/fate/mov-mp4-chapters               | 39 +++++++-------
+ tests/ref/fate/ogg-vorbis-bear                |  2 +-
+ .../fate/ogg-vorbis-initial-padding-chained   |  6 +--
+ tests/ref/fate/ogg-vorbis-libvorbis-1s        |  4 +-
+ tests/ref/fate/ogg-vorbis-libvorbis-30s       |  4 +-
+ tests/ref/fate/ogg-vorbis-ts-seek             |  6 +--
+ tests/ref/fate/webm-dash-chapters             | 54 +++++++++----------
+ 8 files changed, 65 insertions(+), 58 deletions(-)
+
+diff --git a/libavformat/oggparsevorbis.c b/libavformat/oggparsevorbis.c
+index b4a1cfb..3ad72cd 100644
+--- a/libavformat/oggparsevorbis.c
++++ b/libavformat/oggparsevorbis.c
+@@ -500,8 +500,14 @@ static int vorbis_packet(AVFormatContext *s, int idx)
+     /* Initial position shift to account for encoder delay, or page scan
+      * to recover the page start timestamp after a seek. */
+     if (bos) {
+-        if (os->lastpts != AV_NOPTS_VALUE)
++        if (os->lastpts != AV_NOPTS_VALUE) {
++            if (s->streams[idx]->start_time == AV_NOPTS_VALUE) {
++                s->streams[idx]->start_time = os->lastpts;
++                if (s->streams[idx]->duration != AV_NOPTS_VALUE)
++                    s->streams[idx]->duration -= s->streams[idx]->start_time;
++            }
+             os->lastpts -= priv->ts_offset;
++        }
+         if (os->lastdts != AV_NOPTS_VALUE)
+             os->lastdts -= priv->ts_offset;
+     } else if (os->page_start && os->lastpts == AV_NOPTS_VALUE &&
+diff --git a/tests/ref/fate/mov-mp4-chapters b/tests/ref/fate/mov-mp4-chapters
+index 067169f..02f267a 100644
+--- a/tests/ref/fate/mov-mp4-chapters
++++ b/tests/ref/fate/mov-mp4-chapters
+@@ -1,4 +1,4 @@
+-d3560e9ac82b30c4f59f357b94124a71 *tests/data/fate/mov-mp4-chapters.mp4
++f0289770c1fb126b195755ba7ccc1f50 *tests/data/fate/mov-mp4-chapters.mp4
+ 111288 tests/data/fate/mov-mp4-chapters.mp4
+ #extradata 0:     3469, 0xc6769ddc
+ #tb 0: 1/44100
+@@ -6,43 +6,44 @@ d3560e9ac82b30c4f59f357b94124a71 *tests/data/fate/mov-mp4-chapters.mp4
+ #codec_id 0: vorbis
+ #sample_rate 0: 44100
+ #channel_layout_name 0: mono
+-0,          0,          0,      256,       28, 0xefcf103e
+-0,        256,        256,     1152,      198, 0xfbbe5eb5
+-0,       1408,       1408,     2048,      198, 0xabd95c6c
+-0,       3456,       3456,     1152,       41, 0x954b12a5
++0,       -256,       -256,      256,       28, 0xefcf103e, F=0x5
++0,          0,          0,     1152,      198, 0xfbbe5eb5
++0,       1152,       1152,     2048,      198, 0xabd95c6c
++0,       3200,       3200,     1152,       41, 0x954b12a5
++0,       4352,       4352,      256,       41, 0xbccd1463
+ [CHAPTER]
+ id=0
+ time_base=1/44100
+ start=0
+ start_time=0.000000
+-end=220765
+-end_time=5.006009
++end=220500
++end_time=5.000000
+ TAG:title=start
+ [/CHAPTER]
+ [CHAPTER]
+ id=1
+ time_base=1/44100
+-start=220765
+-start_time=5.006009
+-end=463315
+-end_time=10.506009
++start=220500
++start_time=5.000000
++end=463050
++end_time=10.500000
+ TAG:title=Five Seconds
+ [/CHAPTER]
+ [CHAPTER]
+ id=2
+ time_base=1/44100
+-start=463315
+-start_time=10.506009
+-end=661765
+-end_time=15.006009
++start=463050
++start_time=10.500000
++end=661500
++end_time=15.000000
+ TAG:title=Ten point 5 seconds
+ [/CHAPTER]
+ [CHAPTER]
+ id=3
+ time_base=1/44100
+-start=661765
+-start_time=15.006009
+-end=875606
+-end_time=19.855011
++start=661500
++start_time=15.000000
++end=875341
++end_time=19.849002
+ TAG:title=15 sec - over soon
+ [/CHAPTER]
+diff --git a/tests/ref/fate/ogg-vorbis-bear b/tests/ref/fate/ogg-vorbis-bear
+index 3c4028c..9cbed52 100644
+--- a/tests/ref/fate/ogg-vorbis-bear
++++ b/tests/ref/fate/ogg-vorbis-bear
+@@ -92,7 +92,7 @@ nb_streams=2
+ nb_programs=0
+ nb_stream_groups=0
+ format_name=ogg
+-start_time=-0.005805
++start_time=0.000000
+ duration=1.011519
+ size=59943
+ bit_rate=474083
+diff --git a/tests/ref/fate/ogg-vorbis-initial-padding-chained b/tests/ref/fate/ogg-vorbis-initial-padding-chained
+index 1003b3b..afc0483 100644
+--- a/tests/ref/fate/ogg-vorbis-initial-padding-chained
++++ b/tests/ref/fate/ogg-vorbis-initial-padding-chained
+@@ -140,9 +140,9 @@ nb_streams=1
+ nb_programs=0
+ nb_stream_groups=0
+ format_name=ogg
+-start_time=-0.002902
+-duration=0.032902
++start_time=0.000000
++duration=0.030000
+ size=7151
+-bit_rate=1738739
++bit_rate=1906933
+ probe_score=100
+ [/FORMAT]
+diff --git a/tests/ref/fate/ogg-vorbis-libvorbis-1s b/tests/ref/fate/ogg-vorbis-libvorbis-1s
+index 038b9f3..333e9af 100644
+--- a/tests/ref/fate/ogg-vorbis-libvorbis-1s
++++ b/tests/ref/fate/ogg-vorbis-libvorbis-1s
+@@ -56,7 +56,7 @@ nb_streams=1
+ nb_programs=0
+ nb_stream_groups=0
+ format_name=ogg
+-start_time=-0.002902
+-duration=1.002902
++start_time=0.000000
++duration=1.000000
+ probe_score=100
+ [/FORMAT]
+diff --git a/tests/ref/fate/ogg-vorbis-libvorbis-30s b/tests/ref/fate/ogg-vorbis-libvorbis-30s
+index 299267e..d2b7877 100644
+--- a/tests/ref/fate/ogg-vorbis-libvorbis-30s
++++ b/tests/ref/fate/ogg-vorbis-libvorbis-30s
+@@ -56,7 +56,7 @@ nb_streams=1
+ nb_programs=0
+ nb_stream_groups=0
+ format_name=ogg
+-start_time=-0.002902
+-duration=30.002902
++start_time=0.000000
++duration=30.000000
+ probe_score=100
+ [/FORMAT]
+diff --git a/tests/ref/fate/ogg-vorbis-ts-seek b/tests/ref/fate/ogg-vorbis-ts-seek
+index 779dd1e..4b1828b 100644
+--- a/tests/ref/fate/ogg-vorbis-ts-seek
++++ b/tests/ref/fate/ogg-vorbis-ts-seek
+@@ -64,9 +64,9 @@ nb_streams=1
+ nb_programs=0
+ nb_stream_groups=0
+ format_name=ogg
+-start_time=-0.002902
+-duration=3.036009
++start_time=0.000000
++duration=3.033107
+ size=40295
+-bit_rate=106178
++bit_rate=106280
+ probe_score=100
+ [/FORMAT]
+diff --git a/tests/ref/fate/webm-dash-chapters b/tests/ref/fate/webm-dash-chapters
+index 9fcaec0..6b4fc9e 100644
+--- a/tests/ref/fate/webm-dash-chapters
++++ b/tests/ref/fate/webm-dash-chapters
+@@ -1,5 +1,5 @@
+-b72cac0fe6048d70685a43965c2c87c6 *tests/data/fate/webm-dash-chapters.webm
+-111155 tests/data/fate/webm-dash-chapters.webm
++ef1102edcd5393536206f921e02caf56 *tests/data/fate/webm-dash-chapters.webm
++111153 tests/data/fate/webm-dash-chapters.webm
+ #extradata 0:     3469, 0xc6769ddc
+ #tb 0: 1/1000
+ #media_type 0: audio
+@@ -9,65 +9,65 @@ b72cac0fe6048d70685a43965c2c87c6 *tests/data/fate/webm-dash-chapters.webm
+ 0,          0,          0,        5,       28, 0xefcf103e
+ 0,          6,          6,       26,      198, 0xfbbe5eb5
+ 0,         32,         32,       46,      198, 0xabd95c6c
+-0,         78,         78,       26,       41, 0x954b12a5
+-0,        104,        104,        5,       41, 0xbccd1463
++0,         79,         79,       26,       41, 0x954b12a5
++0,        105,        105,        5,       41, 0xbccd1463
+ 0,        110,        110,        5,       44, 0x4fa218a1
+ 0,        116,        116,        5,       43, 0xf87716d4
+ 0,        122,        122,        5,       32, 0x0fdc1057
+ 0,        128,        128,        5,       67, 0xd5352244
+ 0,        134,        134,        5,       68, 0x36e91faf
+-0,        139,        139,        5,       57, 0xe6f51928
++0,        140,        140,        5,       57, 0xe6f51928
+ 0,        145,        145,        5,       49, 0x3bb416e1
+ 0,        151,        151,        5,       54, 0x678f1777
+ 0,        157,        157,        5,       57, 0x56601ef3
+ 0,        163,        163,        5,       52, 0xc0fe1a12
+-0,        168,        168,       26,      236, 0xfe396f02
+-0,        194,        194,       46,      208, 0x018e62d3
++0,        169,        169,       26,      236, 0xfe396f02
++0,        195,        195,       46,      208, 0x018e62d3
+ 0,        241,        241,       46,      223, 0x9fa76917
+-0,        287,        287,       26,       46, 0xd8c314f9
+-0,        313,        313,        5,       46, 0x199018bc
++0,        288,        288,       26,       46, 0xd8c314f9
++0,        314,        314,        5,       46, 0x199018bc
+ 0,        319,        319,        5,       46, 0xbe8314cd
+ 0,        325,        325,        5,       45, 0xe0ad1622
+ 0,        331,        331,        5,       43, 0xe52a1659
+ 0,        337,        337,        5,       58, 0xd5e01f9c
+-0,        342,        342,        5,       67, 0x5bbc2201
++0,        343,        343,        5,       67, 0x5bbc2201
+ 0,        348,        348,       26,      226, 0x04887569
+-0,        374,        374,       46,      217, 0x4b6564ab
++0,        375,        375,       46,      217, 0x4b6564ab
+ 0,        421,        421,       46,      211, 0xb7e868da
+ 0,        467,        467,       46,      198, 0x7bf65d8a
+ [CHAPTER]
+ id=1
+ time_base=1/1000000000
+-start=6000000
+-start_time=0.006000
+-end=5006000000
+-end_time=5.006000
++start=0
++start_time=0.000000
++end=5000000000
++end_time=5.000000
+ TAG:title=start
+ [/CHAPTER]
+ [CHAPTER]
+ id=2
+ time_base=1/1000000000
+-start=5006000000
+-start_time=5.006000
+-end=10506000000
+-end_time=10.506000
++start=5000000000
++start_time=5.000000
++end=10500000000
++end_time=10.500000
+ TAG:title=Five Seconds
+ [/CHAPTER]
+ [CHAPTER]
+ id=3
+ time_base=1/1000000000
+-start=10506000000
+-start_time=10.506000
+-end=15006000000
+-end_time=15.006000
++start=10500000000
++start_time=10.500000
++end=15000000000
++end_time=15.000000
+ TAG:title=Ten point 5 seconds
+ [/CHAPTER]
+ [CHAPTER]
+ id=4
+ time_base=1/1000000000
+-start=15006000000
+-start_time=15.006000
+-end=19855000000
+-end_time=19.855000
++start=15000000000
++start_time=15.000000
++end=19849000000
++end_time=19.849000
+ TAG:title=15 sec - over soon
+ [/CHAPTER]
+-- 
+2.54.0 (Apple Git-157)
+
