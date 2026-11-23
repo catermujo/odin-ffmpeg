@@ -74,8 +74,15 @@ require_pkg_config() {
 }
 
 require_command cl.exe "Install Visual Studio 2022 C++ tools, then use an x64 Native Tools prompt."
-require_command make "scoop install make, or install make with MSYS2."
+MAKE="${FFMPEG_MAKE:-make}"
+require_command "$MAKE" "Install the MSYS2 Make package with: pacman -S --needed make."
 require_command pkg-config "scoop install pkg-config, or install pkgconf with MSYS2."
+case "$("$MAKE" --version)" in
+*"Built for Windows32"* | *"Built for "*mingw*)
+    echo "Error: FFmpeg dependency files use MSYS drive paths. Use MSYS2 Make or set FFMPEG_MAKE to its full path." >&2
+    exit 1
+    ;;
+esac
 
 CPUS="${NUMBER_OF_PROCESSORS:-}"
 if [ -z "$CPUS" ] && command -v nproc >/dev/null 2>&1; then
@@ -155,11 +162,11 @@ done
 python "$BASE/validate_shader_payloads.py" prepare "$SRC"
 
 echo "==> Building (using $CPUS cores)..."
-make -j"$CPUS"
+"$MAKE" -j"$CPUS"
 python "$BASE/validate_shader_payloads.py" verify "$SRC"
 
 echo "==> Installing to $BUILD_DIR..."
-make install-libs
+"$MAKE" install-libs
 
 LIBS=(avutil avcodec avformat avfilter swscale swresample avdevice)
 

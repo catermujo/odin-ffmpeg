@@ -57,6 +57,9 @@ def bash_env(bash_path: Path) -> dict[str, str]:
     if existing:
         path_entries.append(existing)
     env["PATH"] = os.pathsep.join(path_entries)
+    # VsDevCmd can restore its saved PATH. Keep the Make selected for this Bash explicitly.
+    if make_path := shutil.which("make", path=env["PATH"]):
+        env.setdefault("FFMPEG_MAKE", Path(make_path).as_posix())
     return env
 
 

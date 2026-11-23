@@ -45,7 +45,9 @@ pacman -S --needed make
 ```
 
 The Windows build uses MSYS2 Bash when it is available. Set `FFMPEG_MSYS2_ROOT` for an MSYS2 installation
-in a custom location. Set `VCPKG_ROOT` to the vcpkg installation if you do not install it with Scoop.
+in a custom location. Make must support the MSYS drive paths in the generated dependency files. If several Make
+executables are installed, set `FFMPEG_MAKE` to the full path of MSYS2 Make. Set `VCPKG_ROOT` to the vcpkg
+installation if you do not install it with Scoop.
 The build also checks `FFmpeg/.build-deps/oneVPL-install` for oneVPL. Use `FFmpeg/.build-deps/amf-headers`
 as the parent directory of `AMF/core`.
 
