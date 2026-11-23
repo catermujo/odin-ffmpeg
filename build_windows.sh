@@ -116,6 +116,10 @@ else
     require_pkg_config libvpl "vpl >= 2.6" "build and install oneVPL from source; see README.md"
     HW_FLAGS=(--enable-d3d12va --enable-nvenc --enable-amf --enable-libvpl)
 fi
+CUDA_FLAGS=()
+if [ -n "${FFMPEG_CUDA_CLANG:-}" ]; then
+    CUDA_FLAGS=(--enable-cuda-llvm "--nvcc=$FFMPEG_CUDA_CLANG")
+fi
 
 echo "==> Configuring FFmpeg ($MODE): os=windows arch=$FFMPEG_ARCH prefix=$BUILD_DIR"
 cd "$SRC"
@@ -134,6 +138,7 @@ if ! ./configure \
     --disable-avx2 \
     --disable-iconv \
     "${HW_FLAGS[@]}" \
+    "${CUDA_FLAGS[@]}" \
     --enable-zlib \
     --disable-shader-compression \
     --enable-vulkan \
@@ -151,6 +156,9 @@ fi
 REQUIRED_FEATURES=(D3D12VA ZLIB VULKAN PRORES_KS_VULKAN_ENCODER)
 if [ "${FFMPEG_D3D12_ONLY:-0}" != "1" ]; then
     REQUIRED_FEATURES+=(NVENC AMF LIBVPL)
+fi
+if [ -n "${FFMPEG_CUDA_CLANG:-}" ]; then
+    REQUIRED_FEATURES+=(CUDA_LLVM)
 fi
 for feature in "${REQUIRED_FEATURES[@]}"; do
     if ! grep -qx "CONFIG_${feature}=yes" ffbuild/config.mak; then

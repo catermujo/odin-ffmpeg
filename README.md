@@ -94,6 +94,9 @@ python build_windows.py static x64
 ```
 
 From the catermujo root, `.\tool.bat vendor build ffmpeg` builds both shared and static variants.
+For Windows artifacts that include CUDA filters, set `FFMPEG_CUDA_CLANG` to an NVPTX-capable `clang.exe` before
+building. Check for `nvptx64` in `clang --print-targets`. The build checks that FFmpeg enabled the CUDA compiler
+before compiling the libraries. [MSYS2 Clang](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-clang)
 
 At runtime, keep `libvpl.dll` from `C:\deps\oneVPL-install\bin` beside the application or on `PATH` when using
 QSV. NVIDIA and AMD GPU drivers provide the NVENC and AMF runtime components. D3D12VA uses the Windows D3D12 video
