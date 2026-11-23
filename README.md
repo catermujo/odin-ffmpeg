@@ -14,6 +14,9 @@ Linux Vulkan builds need headers that define `VK_KHR_internally_synchronized_que
 internally synchronized renderer queues with FFmpeg. Older builds retrieve those queues with incompatible flags.
 `linux_x64/build_manifest.json` records the source revision, header version, configuration, and rebuilt library hashes.
 Linux builds use Python 3 to record source revisions, patch hashes, and artifact hashes in the build manifest.
+Linux builds also require CMake 3.25 or later. They build pinned Kvazaar for CPU HEVC encoding and include it in
+both libavcodec variants. The runtime needs no separate Kvazaar library. Distribute `Kvazaar-LICENSE.txt` with
+applications that bundle these Linux binaries.
 
 The Web build stages one archive per FFmpeg library. Odin's WebAssembly branches import those archives, while the root
 build system adds them automatically to Emscripten application links when `vendor/ffmpeg` is a dependency.

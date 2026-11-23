@@ -1,0 +1,76 @@
+From 756ebfee97b43ef2ba1fb730c44daefd25a70523 Mon Sep 17 00:00:00 2001
+From: Isabella Basso <isabellabdoamaral@usp.br>
+Date: Mon, 23 Nov 2026 17:33:39 -0300
+Subject: [PATCH] avcodec/libkvazaar: Encode even frame dimensions
+
+Pad the input planes to complete edge blocks and preserve the configured dimensions in the HEVC conformance window.
+
+Signed-off-by: Isabella Basso <isabellabdoamaral@usp.br>
+---
+ libavcodec/libkvazaar.c | 31 ++++++++++++++++++++++---------
+ 1 file changed, 22 insertions(+), 9 deletions(-)
+
+diff --git a/libavcodec/libkvazaar.c b/libavcodec/libkvazaar.c
+index 908c7a0..eddec41 100644
+--- a/libavcodec/libkvazaar.c
++++ b/libavcodec/libkvazaar.c
+@@ -55,10 +55,9 @@ static av_cold int libkvazaar_init(AVCodecContext *avctx)
+     kvz_config *cfg = NULL;
+     kvz_encoder *enc = NULL;
+ 
+-    /* Kvazaar requires width and height to be multiples of eight. */
+-    if (avctx->width % 8 || avctx->height % 8) {
++    if (avctx->width % 2 || avctx->height % 2) {
+         av_log(avctx, AV_LOG_ERROR,
+-               "Video dimensions are not a multiple of 8 (%dx%d).\n",
++               "Video dimensions are not even (%dx%d).\n",
+                avctx->width, avctx->height);
+         return AVERROR(ENOSYS);
+     }
+@@ -197,8 +196,10 @@ static int libkvazaar_encode(AVCodecContext *avctx,
+             goto done;
+         }
+ 
+-        // Allocate input picture for kvazaar.
+-        input_pic = ctx->api->picture_alloc(frame->width, frame->height);
++        /* Kvazaar signals the configured size in the conformance window,
++         * but its input planes must include the full edge coding blocks. */
++        input_pic = ctx->api->picture_alloc(FFALIGN(frame->width, 8),
++                                           FFALIGN(frame->height, 8));
+         if (!input_pic) {
+             av_log(avctx, AV_LOG_ERROR, "Failed to allocate picture.\n");
+             retval = AVERROR(ENOMEM);
+@@ -214,14 +215,26 @@ static int libkvazaar_encode(AVCodecContext *avctx,
+                 NULL,
+             };
+             int dst_linesizes[4] = {
+-              frame->width,
+-              frame->width / 2,
+-              frame->width / 2,
+-              0
++                input_pic->stride,
++                input_pic->stride / 2,
++                input_pic->stride / 2,
++                0
+             };
+             av_image_copy2(dst, dst_linesizes,
+                            frame->data, frame->linesize,
+                            frame->format, frame->width, frame->height);
++            for (int plane = 0; plane < 3; plane++) {
++                const int chroma = plane != 0;
++                const int width  = frame->width >> chroma;
++                const int height = frame->height >> chroma;
++                const int stride = dst_linesizes[plane];
++                const int padded_height = input_pic->height >> chroma;
++                uint8_t *row = dst[plane];
++                for (int y = 0; y < height; y++, row += stride)
++                    memset(row + width, row[width - 1], stride - width);
++                for (int y = height; y < padded_height; y++, row += stride)
++                    memcpy(row, row - stride, stride);
++            }
+         }
+ 
+         input_pic->pts = frame->pts;
+-- 
+2.56.0
+

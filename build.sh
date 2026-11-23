@@ -75,6 +75,12 @@ if [ "$HOST_OS" = "Darwin" ] && [ "$TARGET_ARCH" != "$HOST_ARCH" ]; then
 fi
 
 set --
+if [ "$HOST_OS" = "Linux" ]; then
+    KVAZAAR_PREFIX="$BUILD_DIR/kvazaar"
+    sh "$BASE/build_kvazaar.sh" "$KVAZAAR_PREFIX" "$CPUS"
+    export PKG_CONFIG_PATH="$KVAZAAR_PREFIX/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+    set -- --enable-libkvazaar
+fi
 if [ "$HOST_OS" = "Darwin" ]; then
     export MACOSX_DEPLOYMENT_TARGET="${MACOSX_DEPLOYMENT_TARGET:-12.0}"
     EXTRA_CFLAGS="$EXTRA_CFLAGS -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"

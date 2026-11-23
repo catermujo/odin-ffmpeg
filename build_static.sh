@@ -67,6 +67,12 @@ if [ "$HOST_OS" = "Darwin" ] && [ "$TARGET_ARCH" != "$HOST_ARCH" ]; then
 fi
 
 set --
+if [ "$HOST_OS" = "Linux" ]; then
+    KVAZAAR_PREFIX="$BUILD_DIR/kvazaar"
+    sh "$BASE/build_kvazaar.sh" "$KVAZAAR_PREFIX" "$CPUS"
+    export PKG_CONFIG_PATH="$KVAZAAR_PREFIX/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+    set -- --enable-libkvazaar
+fi
 if [ "$HOST_OS" = "Darwin" ]; then
     export MACOSX_DEPLOYMENT_TARGET="${MACOSX_DEPLOYMENT_TARGET:-12.0}"
     EXTRA_CFLAGS="$EXTRA_CFLAGS -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
@@ -100,6 +106,19 @@ if [ "$HOST_OS" = "Linux" ]; then
     OUT_DIR="$BASE/$ARCH_DIR"
     mkdir -p "$OUT_DIR"
     echo "==> Copying static libs to $OUT_DIR/..."
+    # Keep the Odin static link self-contained, like the shared libavcodec.
+    (
+        cd "$BUILD_DIR/lib"
+        ln -sf "$KVAZAAR_PREFIX/lib/libkvazaar.a" libkvazaar.a
+        ar -M <<'MRI'
+CREATE libavcodec-bundled.a
+ADDLIB libavcodec.a
+ADDLIB libkvazaar.a
+SAVE
+END
+MRI
+        mv libavcodec-bundled.a libavcodec.a
+    )
     for lib in avutil avcodec avformat avfilter swscale swresample avdevice; do
         src="$BUILD_DIR/lib/lib${lib}.a"
         dst="$OUT_DIR/lib${lib}.${OS_EXT}.a"

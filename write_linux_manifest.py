@@ -32,6 +32,11 @@ def main():
     )
     header_version = None
     synchronized_queues = False
+    kvazaar_revision = None
+    if "#define CONFIG_LIBKVAZAAR 1" in config:
+        kvazaar_revision = subprocess.check_output(
+            ["git", "-C", str(args.build / "kvazaar/source"), "rev-parse", "HEAD"], text=True
+        ).strip()
     if "#define CONFIG_VULKAN 1" in config:
         make_config = (args.build / "ffbuild/config.mak").read_text()
         compiler = re.search(r"^CC=(.+)$", make_config, re.M).group(1)
@@ -70,6 +75,7 @@ def main():
         "configuration": configuration,
         "vulkan_header_version": header_version,
         "internally_synchronized_queues": synchronized_queues,
+        "kvazaar_revision": kvazaar_revision,
     }
     manifest.update(
         {
